@@ -15,6 +15,7 @@ function Question(props) {
   const [options, setoptions] = useState([]);
   const [question, setquestion] = useState("");
   const [answers, setanswers] = useState({});
+  const [userAnswer, setUserAnswer] = useState("");
 
   const submithandler = () => {
     let name = localStorage.getItem("name");
@@ -90,6 +91,7 @@ function Question(props) {
       ...res.results[ques].incorrect_answers,
     ]);
     shuffleArray(options);
+    setUserAnswer("");
   }, [ques]);
 
   const entities = {
@@ -109,10 +111,12 @@ function Question(props) {
     "&#038;": "&",
   };
 
-  const changeclass = (e) => {
-    // const domele = e.nativeEvent.path || (e.composedPath && e.composedPath());
-    // console.log(domele,"awdawdawd",e.nativeEvent.path)
-    // domele.reverse();
+  const handleAnswerChange = (e) => {
+    setUserAnswer(e.target.value);
+    setanswers({ ...answers, [ques]: e.target.value });
+  }
+
+  const handleOptionClick = (e) => {
     let path = [];
     let node = e.target;
     while (node !== document) {
@@ -120,9 +124,9 @@ function Question(props) {
       node = node.parentNode;
     }
     path.push(document);
-  
+
     console.log(path);
-    
+
     path.reverse();
     let ans = "";
     for (let ele of path) {
@@ -136,7 +140,42 @@ function Question(props) {
       }
     }
     setanswers({ ...answers, [ques]: ans });
+ };
+
+ const saveAnswer = () => {
+  let name = localStorage.getItem("name");
+  let email = localStorage.getItem("email");
+  let pin = localStorage.getItem("pin");
+
+  let score = 0;
+  for (let i = 0; i < length; i++) {
+    if (answers[i] == res.results[i].correct_answer) {
+      score += 1;
+    }
+  }
+  score = (score / length) * 100;
+  const options = {
+    headers: {
+      "Content-Type": "application/json",
+    },
   };
+  axios
+    .post(
+      "http://localhost:4000/api/test/saveanswer",
+      {
+        pin,
+        email,
+        name,
+        question: res.results[ques].question,
+        answer: userAnswer,
+      },
+      options
+    )
+    .then((res) => {
+      console.log(res);
+    })
+    .catch((err) => console.log(err));
+};
 
   return (
     <Fragment>
@@ -146,7 +185,7 @@ function Question(props) {
       </div>
       <div id="options">
         {options.map((option, index) => (
-          <div key={index} className={styles.container} onClick={changeclass}>
+          <div key={index} className={styles.container} onClick={handleOptionClick}>
             <input
               className={styles.radios}
               type="radio"
@@ -159,6 +198,15 @@ function Question(props) {
             </label>
           </div>
         ))}
+        <div>
+          <input
+            type="text"
+            placeholder="Enter your answer"
+            value={userAnswer}
+            onChange={handleAnswerChange}
+          />
+          <button onClick={saveAnswer}>Save Answer</button>
+        </div>
       </div>
       <div
         style={{
