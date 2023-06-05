@@ -25,6 +25,7 @@ router.route("/").post(async (req, res) => {
     },
   });
   questions.data.time = doc.time;
+  console.log(questions.data)
   if (questions.data.response_code == 0) return res.send(questions.data);
   else
     return res

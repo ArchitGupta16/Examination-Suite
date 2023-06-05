@@ -110,10 +110,22 @@ function Question(props) {
   };
 
   const changeclass = (e) => {
-    const domele = e.nativeEvent.path;
-    domele.reverse();
+    // const domele = e.nativeEvent.path || (e.composedPath && e.composedPath());
+    // console.log(domele,"awdawdawd",e.nativeEvent.path)
+    // domele.reverse();
+    let path = [];
+    let node = e.target;
+    while (node !== document) {
+      path.push(node);
+      node = node.parentNode;
+    }
+    path.push(document);
+  
+    console.log(path);
+    
+    path.reverse();
     let ans = "";
-    for (let ele of domele) {
+    for (let ele of path) {
       if (ele.id === "options") {
         for (let ans of ele.childNodes) {
           ans.className = styles.container;
@@ -171,12 +183,16 @@ function Question(props) {
         </a>
         <a
           onClick={(e) => {
-            if (ques == length - 1) {
+            if (ques === length - 1) {
+              submithandler();
             } else {
               setques(ques + 1);
-              let answeropt = e.nativeEvent.path[2].childNodes[2].childNodes;
-              for (let opt of answeropt) {
-                opt.className = styles.container;
+              let parentNode = e.target.parentNode.parentNode;
+              let answeropt = parentNode.querySelector(".options")?.childNodes;
+              if (answeropt) {
+                for (let opt of answeropt) {
+                  opt.className = styles.container;
+                }
               }
             }
           }}
