@@ -214,14 +214,24 @@ function Question(props) {
             placeholder="Enter your answer"
             value={userAnswer}
             onChange={handleAnswerChange}
+            style={{
+              display: "block",
+              margin: "0 auto",
+              width: "50%",
+              height: "80px",
+              fontSize: "20px",
+              textAlign: "center",
+              opacity: "0.6"
+            }}
           />
-          <button onClick={saveAnswer}>Save Answer</button>
+          
         </div>
         }
       <div
         style={{
           display: "flex",
           justifyContent: "center",
+          marginTop: "20px"
         }}
       >
         <a
