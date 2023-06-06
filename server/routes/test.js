@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const test = require("../models/test.model");
 const result = require("../models/result.model");
+const question = require("../models/question.model");
 const axios = require("axios");
 const verify = require("./verifyToken");
 
@@ -18,6 +19,14 @@ router.route("/").post(async (req, res) => {
   if (check) {
     return res.status(400).send({ message: "Test already taken!" });
   }
+  // console.log(doc.topic,"topic here")
+  let ques = {
+              response_code: 0
+            }
+  // console.log(ques.results)
+  ques.results = await question.find({ category: doc.topic }).exec()
+  ques.time = doc.time
+  // console.log("finally",ques)
   const questions = await axios.get("https://opentdb.com/api.php", {
     params: {
       amount: doc.amount,
@@ -25,8 +34,10 @@ router.route("/").post(async (req, res) => {
     },
   });
   questions.data.time = doc.time;
-  console.log(questions.data)
-  if (questions.data.response_code == 0) return res.send(questions.data);
+  // console.log(questions.data)
+  // console.log(questions.data.time,"hmmmmmmmm")
+  // console.log(ques==questions)
+  if (questions.data.response_code == 0) return res.send(ques);
   else
     return res
       .status(400)
