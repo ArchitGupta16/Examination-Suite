@@ -11,12 +11,14 @@ function Question(props) {
   const mins = res.time.split(":")[0];
   const secs = (res.time.split(":")[1])? res.time.split(":")[1] : 0 ;
   const length = res.results.length;
+  const [questype, settype] = useState(false);
   const [ques, setques] = useState(0);
   const [options, setoptions] = useState([]);
   const [question, setquestion] = useState("");
   const [answers, setanswers] = useState({});
   const [userAnswer, setUserAnswer] = useState("");
 
+  console.log(res.results[ques].type,"awdihaowdk")
   const submithandler = () => {
     let name = localStorage.getItem("name");
     let email = localStorage.getItem("email");
@@ -85,6 +87,10 @@ function Question(props) {
   }, []);
 
   useEffect(() => {
+    if (res.results[ques].type === "text"){
+      settype(true);
+    }
+    console.log(questype)
     setquestion(res.results[ques].question);
     setoptions([
       res.results[ques].correct_answer,
@@ -183,7 +189,8 @@ function Question(props) {
       <div className={styles.qcontainer}>
         {ques + 1}. {question}
       </div>
-      <div id="options">
+      {!questype &&
+      <div id="options" >
         {options.map((option, index) => (
           <div key={index} className={styles.container} onClick={handleOptionClick}>
             <input
@@ -198,7 +205,10 @@ function Question(props) {
             </label>
           </div>
         ))}
-        <div>
+      </div>
+      }
+      {questype &&
+        <div >
           <input
             type="text"
             placeholder="Enter your answer"
@@ -207,7 +217,7 @@ function Question(props) {
           />
           <button onClick={saveAnswer}>Save Answer</button>
         </div>
-      </div>
+        }
       <div
         style={{
           display: "flex",
@@ -232,6 +242,7 @@ function Question(props) {
         <a
           onClick={(e) => {
             if (ques === length - 1) {
+              alert("This is the last question");
               submithandler();
             } else {
               setques(ques + 1);

@@ -26,7 +26,12 @@ const questionSchema = new Schema({
     incorrect_answers: {
     type: Array,
     required: false,
-    }
+    },
+  img :{
+      data: Buffer,
+      contentType: String,
+      required: false,
+  }
 });
 
 const question = mongoose.model("question", questionSchema);

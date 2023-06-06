@@ -24,6 +24,7 @@ router.route("/").post(async (req, res) => {
               response_code: 0
             }
   // console.log(ques.results)
+  console.log(doc.topic,"topic here")
   ques.results = await question.find({ category: doc.topic }).exec()
   ques.time = doc.time
   // console.log("finally",ques)
