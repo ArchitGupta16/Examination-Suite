@@ -18,7 +18,6 @@ function Question(props) {
   const [answers, setanswers] = useState({});
   const [userAnswer, setUserAnswer] = useState("");
 
-  console.log(res.results[ques].type,"awdihaowdk")
   const submithandler = () => {
     let name = localStorage.getItem("name");
     let email = localStorage.getItem("email");
@@ -26,9 +25,21 @@ function Question(props) {
 
     let score = 0;
     for (let i = 0; i < length; i++) {
-      if (answers[i] == res.results[i].correct_answer) {
-        score += 1;
+      
+      if (res.results[i].correct_answer.length > 1) {
+        const temp = answers[i].split(" ")
+        for (let j=0 ; j<res.results[i].correct_answer.length ; j++){          
+          if (temp[j] == res.results[i].correct_answer[j]) {
+            score += 1;
+          }
+        }
       }
+      else{
+        if (answers[i] == res.results[i].correct_answer) {
+          score += 1;
+        }
+      }
+      
     }
     score = (score / length) * 100;
     const options = {
@@ -74,21 +85,23 @@ function Question(props) {
         /&#?\w+;/g,
         (match) => entities[match]
       );
-      res.results[i].correct_answer = res.results[i].correct_answer.replace(
-        /&#?\w+;/g,
-        (match) => entities[match]
+      res.results[i].correct_answer = res.results[i].correct_answer.map((x) =>
+      x.replace(/&#?\w+;/g, (match) => entities[match])
       );
       res.results[ques].incorrect_answers = res.results[
         ques
       ].incorrect_answers.map((x) =>
         x.replace(/&#?\w+;/g, (match) => entities[match])
       );
-    }
-  }, []);
+    }
+  }, []);
 
   useEffect(() => {
     if (res.results[ques].type === "text"){
       settype(true);
+    }
+    else{
+      settype(false);
     }
     console.log(questype)
     setquestion(res.results[ques].question);
@@ -148,41 +161,6 @@ function Question(props) {
     setanswers({ ...answers, [ques]: ans });
  };
 
- const saveAnswer = () => {
-  let name = localStorage.getItem("name");
-  let email = localStorage.getItem("email");
-  let pin = localStorage.getItem("pin");
-
-  let score = 0;
-  for (let i = 0; i < length; i++) {
-    if (answers[i] == res.results[i].correct_answer) {
-      score += 1;
-    }
-  }
-  score = (score / length) * 100;
-  const options = {
-    headers: {
-      "Content-Type": "application/json",
-    },
-  };
-  axios
-    .post(
-      "http://localhost:4000/api/test/saveanswer",
-      {
-        pin,
-        email,
-        name,
-        question: res.results[ques].question,
-        answer: userAnswer,
-      },
-      options
-    )
-    .then((res) => {
-      console.log(res);
-    })
-    .catch((err) => console.log(err));
-};
-
   return (
     <Fragment>
       <TestNav mins={mins} secs={secs} submithandler={submithandler} />
@@ -239,11 +217,14 @@ function Question(props) {
             if (ques == 0) {
             } else {
               setques(ques - 1);
-              let answeropt = e.nativeEvent.path[2].childNodes[2].childNodes;
-              for (let opt of answeropt) {
-                opt.className = styles.container;
-              }
+              let parentNode = e.target.parentNode.parentNode;
+              let answeropt = parentNode.querySelector(".options")?.childNodes;
+              if (answeropt) {
+                for (let opt of answeropt) {
+                  opt.className = styles.container;
+                }
             }
+          }
           }}
           className={styles.buttons1}
         >
