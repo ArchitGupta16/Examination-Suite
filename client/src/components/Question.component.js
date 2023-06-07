@@ -17,6 +17,7 @@ function Question(props) {
   const [question, setquestion] = useState("");
   const [answers, setanswers] = useState({});
   const [userAnswer, setUserAnswer] = useState("");
+  const [image, setImage] = useState("");
 
   const submithandler = () => {
     let name = localStorage.getItem("name");
@@ -111,6 +112,7 @@ function Question(props) {
     ]);
     shuffleArray(options);
     setUserAnswer("");
+    setImage(res.results[ques]?.image || "");
   }, [ques]);
 
   const entities = {
@@ -167,6 +169,7 @@ function Question(props) {
       <div className={styles.qcontainer}>
         {ques + 1}. {question}
       </div>
+      
       {!questype &&
       <div id="options" >
         {options.map((option, index) => (
@@ -250,6 +253,10 @@ function Question(props) {
         >
           &#8250;
         </a>
+        
+        {image && (
+          <img src={image} alt="Question Image" />
+        )}
       </div>
     </Fragment>
   );

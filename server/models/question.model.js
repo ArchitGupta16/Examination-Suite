@@ -27,9 +27,8 @@ const questionSchema = new Schema({
     type: Array,
     required: false,
     },
-  img :{
-      data: Buffer,
-      contentType: String,
+  image :{
+      type:String,
       required: false,
   }
 });
