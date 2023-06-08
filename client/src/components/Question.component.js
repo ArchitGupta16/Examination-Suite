@@ -28,15 +28,14 @@ function Question(props) {
     for (let i = 0; i < length; i++) {
       
       if (res.results[i].correct_answer.length > 1) {
-        if (answers[i] != undefined) {
-        const temp = answers[i].split(" ")
+        const temp = answers[i] ? answers[i].split(" ") : []
         for (let j=0 ; j<res.results[i].correct_answer.length ; j++){ 
           console.log(temp)         
           if (temp.includes(res.results[i].correct_answer[j])) {
             score += 1/res.results[i].correct_answer.length;
           }
         }
-      }
+      
     }
       else{
         if (answers[i] == res.results[i].correct_answer) {
