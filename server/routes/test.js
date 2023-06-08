@@ -24,9 +24,9 @@ router.route("/").post(async (req, res) => {
               response_code: 0,
             }
   //console.log(ques.results)
-  console.log(doc.topic,"topic here")
+  // console.log(doc.topic,"topic here")
   ques.results = await question.find({ category: doc.topic }).exec()
-  console.log(ques.results)
+  // console.log(ques.results)
   ques.time = doc.time
   // console.log("finally",ques)
   const questions = await axios.get("https://opentdb.com/api.php", {
