@@ -171,7 +171,11 @@ function Question(props) {
       <div className={styles.qcontainer}>
         {ques + 1}. {question}
       </div>
-      
+      <div>
+        {image && (
+          <img src={image} alt="Question Image" />
+        )}
+        </div>
       {!questype &&
       <div id="options" >
         {options.map((option, index) => (
@@ -217,6 +221,7 @@ function Question(props) {
           marginTop: "20px"
         }}
       >
+        
         <a
           onClick={(e) => {
             if (ques == 0) {
@@ -256,9 +261,7 @@ function Question(props) {
           &#8250;
         </a>
         
-        {image && (
-          <img src={image} alt="Question Image" />
-        )}
+        
       </div>
     </Fragment>
   );
