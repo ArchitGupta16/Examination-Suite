@@ -17,7 +17,7 @@ router.route("/").post(async (req, res) => {
   }
   const check = await result.findOne({ pin: testid, email }).exec();
   if (check) {
-    return res.status(400).send({ message: "Test already taken!" });
+    return res.status(400).send({message:"Test already taken!"});
   }
   // console.log(doc.topic,"topic here")
   let ques = {
@@ -51,7 +51,7 @@ router.route("/submittest").post(async (req, res) => {
   resultEntry
     .save()
     .then(() => res.send("result added!"))
-    .catch((err) => res.status(400).json("error : " + err));
+    .catch((err) => res.status(400).json("Could not add to database: " + err));
 });
 
 router.use("/gettests", verify);

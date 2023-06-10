@@ -22,14 +22,13 @@ function Taketest() {
         localStorage.setItem("name", name);
         localStorage.setItem("email", email);
         localStorage.setItem("pin", pin);
-        console.log("good");
         history.push({
           pathname: "/test",
           state: { res: res.data },
         });
       })
       .catch((err) => {
-        alert(err);
+        alert(err.response.data.message);
       });
   };
 

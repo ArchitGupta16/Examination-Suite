@@ -21,6 +21,10 @@ function Question(props) {
   const [answered, setAnswered] = useState(false);
 
   const submithandler = () => {
+    if (!answered) {
+      alert("Please answer all the questions before submitting the test.");
+      return;
+    }
     let name = localStorage.getItem("name");
     let email = localStorage.getItem("email");
     let pin = localStorage.getItem("pin");
@@ -85,10 +89,10 @@ function Question(props) {
 
   useEffect(() => {
     for (let i = 0; i < length; i++) {
-      res.results[i].question = res.results[i].question.replace(
-        /&#?\w+;/g,
-        (match) => entities[match]
-      );
+      // res.results[i].question = res.results[i].question.replace(
+      //   /&#?\w+;/g,
+      //   (match) => entities[match]
+      // );
       res.results[i].correct_answer = res.results[i].correct_answer.map((x) =>
       x.replace(/&#?\w+;/g, (match) => entities[match])
       );
@@ -118,15 +122,6 @@ function Question(props) {
     setUserAnswer("");
     setImage(res.results[ques]?.image || "");
 
-    // console.log(questype)
-    // setquestion(res.results[ques].question);
-    // setoptions([
-    //   res.results[ques].correct_answer,
-    //   ...res.results[ques].incorrect_answers,
-    // ]);
-    // shuffleArray(options);
-    // setUserAnswer("");
-    // setImage(res.results[ques]?.image || "");
   }, [ques]);
 
   const entities = {
@@ -173,7 +168,6 @@ function Question(props) {
       if (ele.id === "options") {
         for (let ans of ele.childNodes) {
           ans.className = styles.container;
-          // ans.classList.remove(styles.containeractive);
         }
       } else if (ele.localName === "div" && ele.id === "") {
         ele.className = styles.containeractive;
