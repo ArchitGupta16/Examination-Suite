@@ -18,6 +18,7 @@ function Question(props) {
   const [answers, setanswers] = useState({});
   const [userAnswer, setUserAnswer] = useState("");
   const [image, setImage] = useState("");
+  const [answered, setAnswered] = useState(false);
 
   const submithandler = () => {
     let name = localStorage.getItem("name");
@@ -26,23 +27,23 @@ function Question(props) {
 
     let score = 0;
     for (let i = 0; i < length; i++) {
-      
+
       if (res.results[i].correct_answer.length > 1) {
         const temp = answers[i] ? answers[i].split(" ") : []
-        for (let j=0 ; j<res.results[i].correct_answer.length ; j++){ 
-          console.log(temp)         
+        for (let j=0 ; j<res.results[i].correct_answer.length ; j++){
+          console.log(temp)
           if (temp.includes(res.results[i].correct_answer[j])) {
             score += 1/res.results[i].correct_answer.length;
           }
         }
-      
+
     }
       else{
         if (answers[i] == res.results[i].correct_answer) {
           score += 1;
         }
       }
-      
+
     }
     score = (score / length) * 100;
     const options = {
@@ -134,9 +135,14 @@ function Question(props) {
     "&#038;": "&",
   };
 
+  useEffect(() => {
+    setAnswered(false);
+  }, [ques]);
+
   const handleAnswerChange = (e) => {
     setUserAnswer(e.target.value);
     setanswers({ ...answers, [ques]: e.target.value });
+    setAnswered(true);
   }
 
   const handleOptionClick = (e) => {
@@ -163,6 +169,7 @@ function Question(props) {
       }
     }
     setanswers({ ...answers, [ques]: ans });
+    setAnswered(true);
  };
 
   return (
@@ -211,7 +218,7 @@ function Question(props) {
               opacity: "0.6"
             }}
           />
-          
+
         </div>
         }
       <div
@@ -221,7 +228,7 @@ function Question(props) {
           marginTop: "20px"
         }}
       >
-        
+
         <a
           onClick={(e) => {
             if (ques == 0) {
@@ -242,6 +249,10 @@ function Question(props) {
         </a>
         <a
           onClick={(e) => {
+            if (!answered) {
+              alert("Please answer the current question before going to the next one.");
+              return;
+            }
             if (ques === length - 1) {
               alert("This is the last question");
               submithandler();
@@ -257,11 +268,12 @@ function Question(props) {
             }
           }}
           className={styles.buttons2}
+          disabled={!answered}
         >
           &#8250;
         </a>
-        
-        
+
+
       </div>
     </Fragment>
   );
