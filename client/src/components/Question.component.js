@@ -109,13 +109,24 @@ function Question(props) {
     }
     console.log(questype)
     setquestion(res.results[ques].question);
-    setoptions([
+    const shuffledOptions = shuffleArray([
       res.results[ques].correct_answer,
       ...res.results[ques].incorrect_answers,
     ]);
-    shuffleArray(options);
+    // shuffleArray(options);
+    setoptions(shuffledOptions);
     setUserAnswer("");
-    setImage(res.results[ques]?.image || "");
+    setImage(res.results[ques]?.image || "");
+
+    // console.log(questype)
+    // setquestion(res.results[ques].question);
+    // setoptions([
+    //   res.results[ques].correct_answer,
+    //   ...res.results[ques].incorrect_answers,
+    // ]);
+    // shuffleArray(options);
+    // setUserAnswer("");
+    // setImage(res.results[ques]?.image || "");
   }, [ques]);
 
   const entities = {
@@ -162,6 +173,7 @@ function Question(props) {
       if (ele.id === "options") {
         for (let ans of ele.childNodes) {
           ans.className = styles.container;
+          // ans.classList.remove(styles.containeractive);
         }
       } else if (ele.localName === "div" && ele.id === "") {
         ele.className = styles.containeractive;
@@ -170,7 +182,9 @@ function Question(props) {
     }
     setanswers({ ...answers, [ques]: ans });
     setAnswered(true);
+    
  };
+ 
 
   return (
     <Fragment>
