@@ -33,6 +33,7 @@ function Taketest() {
   };
 
   return (
+    <div className={styles.container}>
     <div className={styles.parent}>
       <div className={styles.taketest}>
         <h1 className={styles.heading}>Take Test</h1>
@@ -78,6 +79,7 @@ function Taketest() {
           <br />
         </form>
       </div>
+    </div>
     </div>
   );
 }
