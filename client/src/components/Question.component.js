@@ -19,6 +19,7 @@ function Question(props) {
   const [userAnswer, setUserAnswer] = useState("");
   const [image, setImage] = useState("");
   const [answered, setAnswered] = useState(false);
+  
 
   const submithandler = () => {
     if (!answered) {
@@ -167,17 +168,23 @@ function Question(props) {
     for (let ele of path) {
       if (ele.id === "options") {
         for (let ans of ele.childNodes) {
+          
           ans.className = styles.container;
+            
         }
       } else if (ele.localName === "div" && ele.id === "") {
+        
         ele.className = styles.containeractive;
         ans = ele.childNodes[0].value;
       }
     }
     setanswers({ ...answers, [ques]: ans });
     setAnswered(true);
+  
+    
     
  };
+  
  
 
   return (
