@@ -1,7 +1,6 @@
 * {
   font-family: Georgia, serif;
   box-sizing: border-box;
-
   margin: 0 auto;
 }
 
@@ -17,13 +16,38 @@ body {
   width: 80vw;
   height: 80vh;
   display: flex;
-  justify-content: space-around;
+  flex-direction: column;
+  justify-content: center;
   align-items: center;
 }
 
+.buttons-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.button {
+  background: #575DFB;
+  border: none;
+  border-radius: 4px;
+  color: #fff;
+  cursor: pointer;
+  font-size: 16px;
+  padding: 12px 26px;
+  transition: background 0.2s ease-in-out;
+  margin: 0 10px;
+}
+
+.button:hover {
+  background: #3d8b8b;
+}
+
 .parent {
-  padding: 7.5% 5%;
-  margin: 0 0;
+  padding: 5%;
+  margin: 0;
+  width: 100%;
 }
 
 .child {
@@ -32,103 +56,67 @@ body {
   border: 2px solid black;
   border-radius: 10px;
   width: 35vw;
+  max-width: 500px;
   height: auto;
-  padding: 10% 10% 10% 10%;
-  line-height: 22px;
+  padding: 5%;
+  line-height: 1.5;
 }
 
 .labels {
-  padding: 2.5% 0%;
-  margin: 8px 0;
+  display: block;
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 8px;
   text-align: left;
 }
+
 .inputs {
   width: 100%;
-  padding: 2.5% 2.5%;
-  margin: 8px 0;
+  padding: 8px;
+  margin-bottom: 16px;
   border: 1px solid #ccc;
   border-radius: 4px;
 }
 
+.inputs:focus {
+  outline: none;
+  border-color: #575DFB;
+}
+
 .inputs_pass {
   width: 100%;
-  padding: 2.5% 2.5%;
-  margin: 8px 0;
+  padding: 8px;
+  margin-bottom: 16px;
   border: 1px solid red;
   border-radius: 4px;
   outline: none;
 }
 
 .buttons {
-  float: right;
-  margin: 8px 0;
-  background: #4caf50;
-  border: 1px solid #ccc;
+  background: #575DFB;
+  border: none;
   border-radius: 4px;
-  padding: 3.5% 5%;
-  color: white;
+  color: #fff;
+  cursor: pointer;
+  font-size: 16px;
+  margin-top: 16px;
+  padding: 12px 26px;
+  transition: background 0.2s ease-in-out;
+}
+.buttons:hover {
+  background: #3d8b8b;
 }
 
 @media screen and (max-width: 600px) {
-  * {
-    font-family: Georgia, serif;
-    box-sizing: border-box;
-
-    margin: 0 auto;
-  }
-
-  .heading {
-    text-align: center;
-  }
-
-  body {
-    background: #f1f1f1;
-  }
-
   .container {
-    width: 80vw;
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-    justify-content: flex-start;
-  }
-
-  .parent {
-    padding: 5% 5% 0 5%;
+    width: 100%;
     height: auto;
-    margin: 0 0;
+    padding: 20px;
   }
 
   .child {
-    margin: auto;
-    background: white;
-    border: 2px solid black;
-    border-radius: 10px;
-    width: 80vw;
-    height: auto;
-    padding: 10% 10% 10% 10%;
-    line-height: 22px;
-  }
-
-  .labels {
-    padding: 2.5% 0%;
-    margin: 8px 0;
-    text-align: left;
-  }
-  .inputs {
     width: 100%;
-    padding: 2.5% 2.5%;
-    margin: 8px 0;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-  }
-
-  .inputs_pass {
-    width: 100%;
-    padding: 2.5% 2.5%;
-    margin: 8px 0;
-    border: 1px solid red;
-    border-radius: 4px;
-    outline: none;
+    max-width: none;
+    padding: 5%;
   }
 }

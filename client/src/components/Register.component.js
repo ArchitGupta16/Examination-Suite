@@ -8,7 +8,7 @@ function Register() {
   const [email, setemail] = useState("");
   const [password, setpassword] = useState("");
   const [c_password, setc_password] = useState("");
-
+  
   let history = useHistory();
 
   const check = (e) => {
