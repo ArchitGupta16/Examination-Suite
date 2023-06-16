@@ -6,7 +6,6 @@ import { useHistory } from "react-router-dom";
 
 function Question(props) {
   let history = useHistory();
-
   const res = props.location.state.res;
   const mins = res.time.split(":")[0];
   const secs = (res.time.split(":")[1])? res.time.split(":")[1] : 0 ;
@@ -19,9 +18,10 @@ function Question(props) {
   const [userAnswer, setUserAnswer] = useState("");
   const [image, setImage] = useState("");
   const [answered, setAnswered] = useState(false);
-  
+  const category = res.category;
 
   const submithandler = () => {
+    console.log(answers)
     if (!answered) {
       alert("Please answer all the questions before submitting the test.");
       return;
@@ -29,8 +29,9 @@ function Question(props) {
     let name = localStorage.getItem("name");
     let email = localStorage.getItem("email");
     let pin = localStorage.getItem("pin");
-
     let score = 0;
+    if (category === "2" || category === "3" || category === "4") {
+    
     for (let i = 0; i < length; i++) {
 
       if (res.results[i].correct_answer.length > 1) {
@@ -50,7 +51,16 @@ function Question(props) {
       }
 
     }
+  }
+  else if(category === "5"){
+    for (let i = 0; i < length; i++) {
+      if (res.results[i].correct_answer.includes(answers[i])) {
+        score += 1;
+        }
+      }
+  }
     score = (score / length) * 100;
+
     const options = {
       headers: {
         "Content-Type": "application/json",
@@ -64,6 +74,7 @@ function Question(props) {
           email,
           name,
           score,
+          answers
         },
         options
       )
@@ -71,7 +82,7 @@ function Question(props) {
         console.log(res);
         history.push("/");
       })
-      .catch((err) => console.log(err));
+      .catch((err) => console.log(err.response.data));
     console.log(score);
   };
 
@@ -90,10 +101,10 @@ function Question(props) {
 
   useEffect(() => {
     for (let i = 0; i < length; i++) {
-      // res.results[i].question = res.results[i].question.replace(
-      //   /&#?\w+;/g,
-      //   (match) => entities[match]
-      // );
+      res.results[i].question = res.results[i].question.replace(
+        /&#?\w+;/g,
+        (match) => entities[match]
+      );
       res.results[i].correct_answer = res.results[i].correct_answer.map((x) =>
       x.replace(/&#?\w+;/g, (match) => entities[match])
       );

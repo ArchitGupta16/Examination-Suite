@@ -33,7 +33,7 @@ router.route("/").post(async (req, res) => {
     console.log("failed")
   }
   ques.time = doc.time
-
+  ques.category = doc.topic
   if (ques.response_code == 1) return res.send(ques);
   else
     return res
@@ -46,8 +46,8 @@ router.route("/submittest").post(async (req, res) => {
   const email = req.body.email.toLowerCase();
   const name = req.body.name;
   const pin = req.body.pin;
-
-  const resultEntry = new result({ email, name, pin, score });
+  const resu = req.body.answers;
+  const resultEntry = new result({ email, name, pin, score, result:resu });
   resultEntry
     .save()
     .then(() => res.send("result added!"))

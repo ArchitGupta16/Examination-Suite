@@ -19,6 +19,10 @@ const resultSchema = new Schema({
     type: String,
     required: true,
   },
+  result: {
+    type: Object,
+    required: true,
+  }
 });
 
 const result = mongoose.model("result", resultSchema);
