@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styles from "../componentsStyles/Taketest.module.css";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
@@ -8,6 +8,20 @@ function Taketest() {
   const [name, setname] = useState("");
   const [email, setemail] = useState("");
   const [pin, setpin] = useState("");
+  const [imageIndex, setImageIndex] = useState(0);
+
+  const images = [
+    "https://niitfoundation.org/wp-content/uploads/2023/02/lifeChangesBanner-1024x409.jpg",
+    "https://niitfoundation.org/wp-content/uploads/2022/02/niitfoundatinLogo.png",
+    
+  ];
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setImageIndex((imageIndex + 1) % images.length);
+    }, 3000);
+    return () => clearInterval(interval);
+  }, [imageIndex, images.length]);
 
   const submithandler = (e) => {
     e.preventDefault();
@@ -33,8 +47,7 @@ function Taketest() {
   };
 
   return (
-    <div className={styles.formWrapper}>
-      <div className={styles.parent}>
+    <div className={styles.container}>
       <div className={styles.taketest}>
         <h1 className={styles.heading}>Take Test</h1>
         <br />
@@ -79,6 +92,12 @@ function Taketest() {
           <br />
         </form>
       </div>
+      <div className={styles.line}></div>
+      <div className={styles.slideshowContainer}>
+        <h1 className={styles.headingother}>NIIT FOUNDATION : Fastest growing education NGO in India</h1>
+        <div className={styles.slideshow}>
+          <img src={images[imageIndex]} alt={`image${imageIndex+1}`} />
+        </div>
       </div>
     </div>
   );

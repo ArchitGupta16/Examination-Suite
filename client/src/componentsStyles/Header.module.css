@@ -5,7 +5,7 @@
 }
 .header {
   background: linear-gradient(rgba(0, 2, 105), rgb(20, 1, 190));
-  background: #575DFB;
+  background: #005b93;
   padding: 0 0;
   display: block;
   position: relative;
@@ -23,8 +23,6 @@
   grid-column: 1/2;
   margin: auto;
   padding: 2% 10% 2% 10%;
-  border-radius: 20px;
-  border: 2px solid white;
 }
 
 .navlinks1 {
@@ -32,16 +30,12 @@
   margin: auto;
 
   padding: 2% 10% 2% 10%;
-  border-radius: 20px;
-  border: 2px solid white;
 }
 .navlinks2 {
   grid-column-start: 5;
   margin: auto;
 
   padding: 2% 10% 2% 10%;
-  border-radius: 20px;
-  border: 2px solid white;
 }
 
 @media screen and (max-width: 600px) {
