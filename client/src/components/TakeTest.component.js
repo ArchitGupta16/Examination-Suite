@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import styles from "../componentsStyles/Taketest.module.css";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
-
+import picture from "../resources/1.jpg"
 function Taketest() {
   let history = useHistory();
   const [name, setname] = useState("");
@@ -11,8 +11,8 @@ function Taketest() {
   const [imageIndex, setImageIndex] = useState(0);
 
   const images = [
-    "https://niitfoundation.org/wp-content/uploads/2023/02/lifeChangesBanner-1024x409.jpg",
-    "https://niitfoundation.org/wp-content/uploads/2022/02/niitfoundatinLogo.png",
+    
+    picture,
     
   ];
 
@@ -49,6 +49,7 @@ function Taketest() {
   return (
     <div className={styles.container}>
       <div className={styles.taketest}>
+        <div className={styles.box}>
         <h1 className={styles.heading}>Take Test</h1>
         <br />
         <form onSubmit={submithandler}>
@@ -91,10 +92,10 @@ function Taketest() {
           <br />
           <br />
         </form>
+        </div> 
       </div>
-      <div className={styles.line}></div>
+      
       <div className={styles.slideshowContainer}>
-        <h1 className={styles.headingother}>NIIT FOUNDATION : Fastest growing education NGO in India</h1>
         <div className={styles.slideshow}>
           <img src={images[imageIndex]} alt={`image${imageIndex+1}`} />
         </div>

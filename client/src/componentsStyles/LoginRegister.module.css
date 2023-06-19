@@ -20,12 +20,22 @@ body {
   justify-content: center;
   align-items: center;
 }
+.formWrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: white;
+  padding: 2% 1% 1% 1%;
+  border-radius: 10px;
+  box-shadow: 3px 3px 3px 3px rgba(0, 0, 0, 0.1);
+}
 
 .buttons-container {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-bottom: 20px;
+  /* margin-bottom: 20px; */
 }
 
 .button {
@@ -34,7 +44,8 @@ body {
   border-radius: 4px;
   color: #fff;
   cursor: pointer;
-  font-size: 16px;
+  font-size: 20px;
+  width:200px;
   padding: 12px 26px;
   transition: background 0.2s ease-in-out;
   margin: 0 10px;
@@ -44,22 +55,30 @@ body {
   background: #3d8b8b;
 }
 
+.activeButton {
+  background: grey;
+  color: white;
+}
 .parent {
   padding: 5%;
   margin: 0;
   width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .child {
   margin: auto;
-  background: white;
-  border: 2px solid black;
+  /* background: white; */
+  /* border: 2px solid black; */
   border-radius: 10px;
   width: 35vw;
   max-width: 500px;
   height: auto;
   padding: 5%;
   line-height: 1.5;
+
 }
 
 .labels {
@@ -76,6 +95,7 @@ body {
   margin-bottom: 16px;
   border: 1px solid #ccc;
   border-radius: 4px;
+  text-align: left;
 }
 
 .inputs:focus {
@@ -98,11 +118,13 @@ body {
   border-radius: 4px;
   color: #fff;
   cursor: pointer;
-  font-size: 16px;
+  font-size: 20px;
+  width:250px;
   margin-top: 16px;
   padding: 12px 26px;
   transition: background 0.2s ease-in-out;
 }
+
 .buttons:hover {
   background: #3d8b8b;
 }
@@ -119,4 +141,7 @@ body {
     max-width: none;
     padding: 5%;
   }
+
+  
+
 }

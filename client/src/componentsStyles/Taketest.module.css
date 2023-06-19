@@ -1,46 +1,5 @@
-.formWrapper{
-  background-image: url("../resources/1.jpg");
-  background-size:cover;
-  background-repeat: no-repeat;
-  font-family: 'Open Sans', sans-serif;
-  box-sizing: border-box;
-  /* margin: 0;*/
-  padding-top: 100px; 
-  font-family: 'Open Sans', sans-serif;
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: -1;
-  
-}
-
 body {
   font-family: 'Open Sans', sans-serif;
- 
-  
-}
-
-.parent {
-  /* display: flex; */
-  /* background-color: aqua; */
-  justify-content: center;
-  align-items: center;
-  margin-top: 50px;
-}
-
-.taketest {
-  background: #fff;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  max-width: 600px;
-  padding: 80px;
-  text-align: center;
-  transition: transform 0.1s ease-in-out;
-  position: relative;
-  z-index: 1;
 }
 
 .taketest:hover {
@@ -49,11 +8,12 @@ body {
 
 .labels {
   display: block;
-  font-size: 16px;
+  font-size: 20px;
   font-weight: bold;
   margin-bottom: 8px;
   text-align: left;
 }
+
 .heading {
   font-size: 30px;
   font-weight: bold;
@@ -69,7 +29,7 @@ body {
 .inputs {
   border: 1px solid #ddd;
   border-radius: 4px;
-  font-size: 18px;
+  font-size: 25px;
   margin-bottom: 16px;
   padding: 12px;
   transition: border-color 0.2s ease-in-out;
@@ -105,61 +65,79 @@ body {
 .container {
   display: flex;
   justify-content: center;
-  align-items: flex-start;
+  align-items: stretch; /* Stretch the items vertically */
   height: 100%;
 }
 
-.taketest {
-  width: 40%;
+.parent {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-start;
+  width: 100%;
+}
+
+.taketest { 
+  flex: 1; /* Take up 50% of the container */
+  width: 100%;
+  /* border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); */
   height: fit-content;
-  padding: 20px;
-  margin-top: 10%;
-  margin-right: 20px;
-  margin-left: auto;
+  padding: 30px;
+  margin-top: 100px;
+  margin-left: 20px; /* Add some margin between the two sections */
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: flex-start;
-  background-color: #f5f5f5;
+  /* background-color: #f5f5f5; */
+  order:2;
+}
+.box{
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background-color: #f5f5f5; 
+  padding: 30px;
+  width:50%;
 }
 
 .slideshowContainer {
-  margin-top: 150px;
-  width: fit-content;
-  height: fit-content;
-  padding: 20px;
-  margin-right: 10px;
+  flex: 1; /* Take up 50% of the container */
+  width: 100%;
+  height: auto;
+  /* padding: 20px; */
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  order:1;
 }
 
 .slideshow {
   display: flex;
   align-items: center;
-  width: fit-content ;
+  width: 100%; /* Make the slideshow container take up the full width */
+  height: 100%; /* Make the slideshow container take up the full height */
   overflow: hidden;
 }
 
 .slideshow img {
-  width: auto;
+  /* width: auto; */
   align-items: center;
-  max-width: 800px;
-  margin-right: 20px;
+  width: 100%;
+  height:100%;
+  margin-right: 10px;
   transition: transform 0.3s ease-in-out;
 }
 
-.slideshow img:hover {
+/* .slideshow img:hover {
   transform: scale(1.1);
-}
+} */
 
-.line {
-  width: 1px;
-  background-color: #ccc;
-  height: auto;
-}
-@media screen and (max-width: 600px) {
+
+@media screen and (max-width: 900px) {
   .taketest {
     padding: 20px;
   }
