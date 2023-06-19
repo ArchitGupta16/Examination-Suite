@@ -2,18 +2,24 @@ import React, { useState, useEffect } from "react";
 import styles from "../componentsStyles/Taketest.module.css";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
-import picture from "../resources/1.jpg"
+import p from "../resources/2.jpg"
+import p2 from "../resources/3.jpg"
+import p3 from "../resources/4.jpg"
+import p4 from "../resources/5.jpg"
+import { useAlert } from 'react-alert'
+
 function Taketest() {
   let history = useHistory();
   const [name, setname] = useState("");
   const [email, setemail] = useState("");
   const [pin, setpin] = useState("");
   const [imageIndex, setImageIndex] = useState(0);
-
+  const alert = useAlert()
   const images = [
-    
-    picture,
-    
+    p,
+    p2,
+    p3,
+    p4,
   ];
 
   useEffect(() => {
@@ -42,7 +48,7 @@ function Taketest() {
         });
       })
       .catch((err) => {
-        alert(err.response.data.message);
+        alert.show(err.response.data.message, { type: "error" });
       });
   };
 

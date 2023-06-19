@@ -2,13 +2,13 @@ import React, { useState } from "react";
 import styles from "../componentsStyles/LoginRegister.module.css";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
-
+import { useAlert } from 'react-alert'
 function Register() {
   const [name, setname] = useState("");
   const [email, setemail] = useState("");
   const [password, setpassword] = useState("");
   const [c_password, setc_password] = useState("");
-  
+  const alert = useAlert()
   let history = useHistory();
 
   const check = (e) => {
@@ -28,12 +28,12 @@ function Register() {
     axios
       .post("http://localhost:4000/api/user/add", { name, email, password }, options)
       .then((res) => {
-        alert("account created");
+        alert.show("account created", { type: "error" });
         history.push('/login');
       })
       .catch((err) => {
         console.log(err.response)
-        alert(err.response.data.message);
+        alert.show(err.response.data.message, { type: "error" });
       });
   };
 

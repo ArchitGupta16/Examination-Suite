@@ -2,10 +2,11 @@ import React, { useState } from "react";
 import axios from "axios";
 import styles from "../componentsStyles/LoginRegister.module.css";
 import { useHistory } from "react-router-dom";
-
+import { useAlert } from 'react-alert'
 function Login(props) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const alert = useAlert()
   let history = useHistory();
   if (localStorage.getItem("auth-token")) history.push("/dashboard");
 
@@ -30,7 +31,7 @@ function Login(props) {
       })
       .catch((err) => {
         console.log(err);
-        alert("Wrong Credentials!");
+        alert.show(err.response.data.message, { type: "error" });
       });
   };
 

@@ -106,7 +106,7 @@ body {
 .slideshowContainer {
   flex: 1; /* Take up 50% of the container */
   width: 100%;
-  height: auto;
+  height: 100vh;
   /* padding: 20px; */
   display: flex;
   flex-direction: column;

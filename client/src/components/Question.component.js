@@ -3,27 +3,36 @@ import styles from "../componentsStyles/Question.module.css";
 import TestNav from "./TestNav.component";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
+import { useAlert } from "react-alert";
 
 function Question(props) {
   let history = useHistory();
+  const alert = useAlert();
   const res = props.location.state.res;
   const mins = res.time.split(":")[0];
-  const secs = (res.time.split(":")[1])? res.time.split(":")[1] : 0 ;
+  const secs = res.time.split(":")[1] ? res.time.split(":")[1] : 0;
   const length = res.results.length;
   const [questype, settype] = useState(false);
-  const [ques, setques] = useState(0);
+  const [ques, setques] = useState(
+    parseInt(localStorage.getItem("currentQuestionIndex")) || 0
+  );
   const [options, setoptions] = useState([]);
   const [question, setquestion] = useState("");
-  const [answers, setanswers] = useState({});
-  const [userAnswer, setUserAnswer] = useState("");
+  const [answers, setanswers] = useState(
+    JSON.parse(localStorage.getItem("answers")) || {}
+  );
+  const [userAnswer, setUserAnswer] = useState(
+    answers[ques] || ""
+  );
   const [image, setImage] = useState("");
   const [answered, setAnswered] = useState(false);
   const category = res.category;
 
   const submithandler = () => {
-    console.log(answers)
     if (!answered) {
-      alert("Please answer all the questions before submitting the test.");
+      alert.show("Please answer all the questions before submitting the test.", {
+        type: "warning",
+      });
       return;
     }
     let name = localStorage.getItem("name");
@@ -31,34 +40,28 @@ function Question(props) {
     let pin = localStorage.getItem("pin");
     let score = 0;
     if (category === "2" || category === "3" || category === "4") {
-    
-    for (let i = 0; i < length; i++) {
-
-      if (res.results[i].correct_answer.length > 1) {
-        const temp = answers[i] ? answers[i].split(" ") : []
-        for (let j=0 ; j<res.results[i].correct_answer.length ; j++){
-          console.log(temp)
-          if (temp.includes(res.results[i].correct_answer[j])) {
-            score += 1/res.results[i].correct_answer.length;
+      for (let i = 0; i < length; i++) {
+        if (res.results[i].correct_answer.length > 1) {
+          const temp = answers[i] ? answers[i].split(" ") : [];
+          for (let j = 0; j < res.results[i].correct_answer.length; j++) {
+            console.log(temp);
+            if (temp.includes(res.results[i].correct_answer[j])) {
+              score += 1 / res.results[i].correct_answer.length;
+            }
+          }
+        } else {
+          if (answers[i] == res.results[i].correct_answer) {
+            score += 1;
           }
         }
-
-    }
-      else{
-        if (answers[i] == res.results[i].correct_answer) {
+      }
+    } else if (category === "5") {
+      for (let i = 0; i < length; i++) {
+        if (res.results[i].correct_answer.includes(answers[i])) {
           score += 1;
         }
       }
-
     }
-  }
-  else if(category === "5"){
-    for (let i = 0; i < length; i++) {
-      if (res.results[i].correct_answer.includes(answers[i])) {
-        score += 1;
-        }
-      }
-  }
     score = (score / length) * 100;
 
     const options = {
@@ -74,21 +77,21 @@ function Question(props) {
           email,
           name,
           score,
-          answers
+          answers,
         },
         options
       )
       .then((res) => {
         console.log(res);
         history.push("/");
+        alert.show("Test Submitted Successfully", { type: "success" });
       })
       .catch((err) => console.log(err.response.data));
-    console.log(score);
+      localStorage.clear()
   };
 
   function shuffleArray(array) {
     for (var i = array.length - 1; i > 0; i--) {
-      // Generate random number
       var j = Math.floor(Math.random() * (i + 1));
 
       var temp = array[i];
@@ -100,39 +103,42 @@ function Question(props) {
   }
 
   useEffect(() => {
+    localStorage.setItem("currentQuestionIndex", ques);
+    localStorage.setItem("answers", JSON.stringify(answers));
+  }, [ques, answers]);
+
+  useEffect(() => {
     for (let i = 0; i < length; i++) {
       res.results[i].question = res.results[i].question.replace(
         /&#?\w+;/g,
         (match) => entities[match]
       );
       res.results[i].correct_answer = res.results[i].correct_answer.map((x) =>
-      x.replace(/&#?\w+;/g, (match) => entities[match])
+        x.replace(/&#?\w+;/g, (match) => entities[match])
       );
-      res.results[ques].incorrect_answers = res.results[
-        ques
+      res.results[i].incorrect_answers = res.results[
+        i
       ].incorrect_answers.map((x) =>
         x.replace(/&#?\w+;/g, (match) => entities[match])
       );
-    }
-  }, []);
+    }
+  }, []);
 
   useEffect(() => {
-    if (res.results[ques].type === "text"){
+    if (res.results[ques].type === "text") {
       settype(true);
-    }
-    else{
+    } else {
       settype(false);
     }
-    console.log(questype)
+    console.log(questype);
     setquestion(res.results[ques].question);
     const shuffledOptions = shuffleArray([
       res.results[ques].correct_answer,
       ...res.results[ques].incorrect_answers,
     ]);
-    // shuffleArray(options);
     setoptions(shuffledOptions);
-    setUserAnswer("");
-    setImage(res.results[ques]?.image || "");
+    setUserAnswer(answers[ques] || "");
+    setImage(res.results[ques]?.image || "");
 
   }, [ques]);
 
@@ -154,14 +160,14 @@ function Question(props) {
   };
 
   useEffect(() => {
-    setAnswered(false);
-  }, [ques]);
+    setAnswered(answers[ques] !== undefined);
+  }, [ques, answers]);
 
   const handleAnswerChange = (e) => {
     setUserAnswer(e.target.value);
     setanswers({ ...answers, [ques]: e.target.value });
     setAnswered(true);
-  }
+  };
 
   const handleOptionClick = (e) => {
     let path = [];
@@ -179,24 +185,17 @@ function Question(props) {
     for (let ele of path) {
       if (ele.id === "options") {
         for (let ans of ele.childNodes) {
-          
           ans.className = styles.container;
-            
         }
       } else if (ele.localName === "div" && ele.id === "") {
-        
         ele.className = styles.containeractive;
         ans = ele.childNodes[0].value;
       }
     }
     setanswers({ ...answers, [ques]: ans });
     setAnswered(true);
-  
-    
-    
- };
-  
- 
+  };
+
 
   return (
     <Fragment>
@@ -276,11 +275,11 @@ function Question(props) {
         <a
           onClick={(e) => {
             if (!answered) {
-              alert("Please answer the current question before going to the next one.");
+              alert.show("Please answer the current question before going to the next one.",{type:"warning"});
               return;
             }
             if (ques === length - 1) {
-              alert("This is the last question");
+              alert.show("This is the last question, Submitting the test.", { type: "warning" });
               submithandler();
             } else {
               setques(ques + 1);

@@ -7,7 +7,7 @@ import modalstyles from "../componentsStyles/Modal.module.css";
 import teststyles from "../componentsStyles/Testelement.module.css";
 import { useHistory } from "react-router-dom";
 import resultstyles from "../componentsStyles/TestResult.module.css";
-
+import { useAlert } from 'react-alert'
 const topics = [
   { id: 1, name: "<--select category-->" },
   { id: 2, name: "EVS" },
@@ -29,6 +29,7 @@ function Dashboard() {
   const [amount, setamount] = useState("");
   const [time, settime] = useState("");
   const [expiry, setexpiry] = useState(new Date());
+  const alert = useAlert()
 
   const options = {
     headers: {
@@ -50,7 +51,7 @@ function Dashboard() {
       })
       .catch((err) => {
         if (!localStorage.getItem("auth-token")) history.push("/");
-        else alert("couldn't fetch please reload");
+       else alert.show("couldn't fetch please reload",{type:"error"});
       });
   }, [modalIsOpen]);
 
@@ -69,7 +70,7 @@ function Dashboard() {
       })
       .catch((err) => {
         console.log(err);
-        alert("error!");
+        alert.show("Error : Test Not Added, Try again!", { type: "error" });
       });
   };
 

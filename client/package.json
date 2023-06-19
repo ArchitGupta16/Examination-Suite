@@ -1,5 +1,5 @@
 {
-  "name": "Quizapp",
+  "name": "ExaminationSuite",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -8,6 +8,8 @@
     "@testing-library/user-event": "^7.2.1",
     "axios": "^0.20.0",
     "react": "^16.13.1",
+    "react-alert": "^7.0.3",
+    "react-alert-template-mui": "^1.0.7",
     "react-carousel": "^4.3.0",
     "react-dom": "^16.13.1",
     "react-modal": "^3.11.2",

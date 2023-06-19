@@ -5,9 +5,11 @@ import axios from "axios";
 import Resultelement from "./ResultElement.component";
 import styles from "../componentsStyles/Dashboard.module.css";
 import resultstyles from "../componentsStyles/TestResult.module.css";
+import { useAlert } from "react-alert";
 
 function Testresult(props) {
   let history = useHistory();
+  const alert = useAlert()
 
   const [result, setresult] = useState([]);
   let expiry = new Date(props.location.state.expiry);
@@ -24,7 +26,7 @@ function Testresult(props) {
       .then((res) => setresult(res.data))
       .catch((err) => {
         console.log(err);
-        alert("Couldn't Fetch!");
+        alert.show("Couldn't Fetch!",{type:"error"});
         history.push("/dashboard");
       });
   }, []);
