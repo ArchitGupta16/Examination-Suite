@@ -14,7 +14,7 @@
 .navitems {
   display: grid;
   grid-template-columns: 1fr 2fr 1fr 1fr 2fr;
-  grid-template-rows: 80px;
+  grid-template-rows: 60px;
   color: white;
   font-size: 1.2em;
 }

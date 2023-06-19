@@ -1,27 +1,120 @@
 * {
-  font-family: Georgia, serif;
+  margin: 0;
+  padding: 0;
   box-sizing: border-box;
-
-  margin: 0 auto;
 }
+
+body {
+  font-family: 'Open Sans', sans-serif;
+  background-color: white;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
 .heading {
   text-align: center;
+  margin-bottom: 50px;
 }
-.testcontainer {
+
+.section {
+  background-color: #fff;
+  padding: 30px;
+  margin-bottom: 50px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.Testelement_parent__4mlAX {
   display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-  text-align: justify;
-  width: 80vw;
+  justify-content: center;
+  align-items: center;
+}
+
+.section h2 {
+  font-size: 30px;
+  font-weight: 600;
+  margin-bottom: 20px;
+  color: #333;
 }
 
 .buttons {
-  float: right;
-  margin: 0.5% 4%;
-  background: #4caf50;
-  border: 1px solid #ccc;
+  display: inline-block;
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
+  text-decoration: none;
+  background-color: #005b93;
+  color: #fff;
   border-radius: 4px;
-  padding: 1% 1%;
-  display: block;
-  color: white;
+  transition: background-color 0.3s ease;
+  border: none;
+  cursor: pointer;
+  margin: 0 auto;
+}
+
+.buttons:hover {
+  background-color: #00796b;
+}
+
+.section p {
+  font-size: 18px;
+  line-height: 1.5;
+  color: #666;
+}
+
+
+.button {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #009688;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+}
+
+.button:hover {
+  background-color: #00796b;
+}
+
+.icon {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+}
+
+.resultstyles.row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  background-color: #f8f8f8;
+  border-radius: 4px;
+  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+}
+
+.resultstyles.row:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.resultstyles.element {
+  width: 20%;
+  padding: 8px;
+  font-weight: bold;
+  text-align: center;
+  border-right: 1px solid #ccc;
+}
+
+.resultstyles.element:last-child {
+  border-right: none;
 }

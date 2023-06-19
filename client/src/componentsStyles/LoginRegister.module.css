@@ -39,7 +39,7 @@ body {
 }
 
 .button {
-  background: #575DFB;
+  background: #005b93;
   border: none;
   border-radius: 4px;
   color: #fff;
@@ -100,7 +100,7 @@ body {
 
 .inputs:focus {
   outline: none;
-  border-color: #575DFB;
+  border-color: #005b93;
 }
 
 .inputs_pass {
@@ -113,7 +113,7 @@ body {
 }
 
 .buttons {
-  background: #575DFB;
+  background: #005b93;
   border: none;
   border-radius: 4px;
   color: #fff;
