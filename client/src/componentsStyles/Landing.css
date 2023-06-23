@@ -1,0 +1,16 @@
+.hr-custom {
+    border-top: 3px solid #000000;
+    margin: 20px auto 50px auto;
+    width: 80%
+  }
+
+
+.img-1 {
+    object-fit: cover;
+    height: calc(100vh - 150px);
+}
+
+.img-2 {
+    object-fit: cover;
+    height: calc(100vh - 150px);
+}
