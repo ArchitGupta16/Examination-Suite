@@ -2,7 +2,7 @@ import React, { Fragment, useState } from "react";
 import { Route, Switch, useLocation, Redirect } from "react-router-dom";
 import Homenav from "./components/HomeHeader.component";
 import Loginnav from "./components/LoginNav.component";
-import Taketest from "./components/TakeTest.component";
+import Taketest from "./components/TakeTest";
 import Login from "./components/LoginRegister.component";
 import dashboard from "./components/Dashboard.component";
 import Testresult from "./components/TestResult.component";

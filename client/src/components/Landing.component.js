@@ -10,17 +10,17 @@ function Landing() {
 
   return (
 
-    <div>
+    <div style={{height: "100vh", overflow: "hidden"}}>
 
       <CustomNavbar />
 
       <hr className="hr-custom" />
 
-      <h1> Welcome To Examination Suite by NIIT Foundation</h1>
+      <h1 style={{textAlign:"center",paddingBottom:"1vh"}}> Welcome To Examination Suite by NIIT Foundation</h1>
 
       <div>
         <Carousel>
-          <Carousel.Item interval={100}>
+          <Carousel.Item interval={1000}>
           <img
             className="d-block w-100 img-1"
             src= {img1}
@@ -29,7 +29,7 @@ function Landing() {
             <Carousel.Caption>
             </Carousel.Caption>
           </Carousel.Item>
-          <Carousel.Item interval={100}>
+          <Carousel.Item interval={1000}>
             <img
               className="d-block w-100 img-2"
               src= {img2}
@@ -38,7 +38,7 @@ function Landing() {
             <Carousel.Caption>
             </Carousel.Caption>
           </Carousel.Item>
-          <Carousel.Item interval={5}>
+          <Carousel.Item interval={500}>
             <img
               className="d-block w-100"
               src="holder.js/800x400?text=Third slide&bg=20232a"
