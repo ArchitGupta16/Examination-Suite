@@ -1,0 +1,27 @@
+.bnn{
+  min-width: fit-content;
+  width: 6vw;
+  height: 5vh;
+  background-color: #00896B; 
+  border-color: #00896B; 
+  color: #FFFFFF;
+}
+
+.bnn:hover {
+background-color: #4e9e8d;
+border-color: #4e9e8d; 
+color: #FFFFFF;
+}
+.mymodal{
+  align-items: center;
+  margin-top: 25vh;
+  margin-left: 25vw;
+  box-sizing: border-box;
+  width:50vw;
+  max-width: 50vw;
+}
+.fieldss{
+  border-radius: 10px;
+  border-color:  #073d31;
+}
+

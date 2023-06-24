@@ -3,7 +3,7 @@ import { Route, Switch, useLocation, Redirect } from "react-router-dom";
 import Homenav from "./components/HomeHeader.component";
 import Loginnav from "./components/LoginNav.component";
 import Taketest from "./components/TakeTest";
-import Login from "./components/LoginRegister.component";
+// import Login from "./components/LoginRegister.component";
 import dashboard from "./components/Dashboard.component";
 import Testresult from "./components/TestResult.component";
 import Ques from "./components/Question.component";
@@ -29,11 +29,11 @@ function App() {
       <main>
         <Switch>
           <Route exact path="/" component={Landing} />
-          <Route
+          {/* <Route
             exact
             path={["/login", "/register"]}
             render={() => <Login setloggedin={setloggedin} />}
-          />
+          /> */}
           <Route exact path="/taketest" component={Taketest} />
           <Route exact path="/dashboard" component={dashboard} />
           <Route exact path="/abouttest" component={Testresult} />

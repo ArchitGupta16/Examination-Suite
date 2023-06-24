@@ -1,0 +1,26 @@
+.bn{
+    min-width: fit-content;
+    width: 6vw;
+    height: 5vh;
+    background-color: #00896B; 
+    border-color: #00896B; 
+    color: #FFFFFF;
+  }
+
+.bn:hover {
+    background-color: #4e9e8d;
+    border-color: #4e9e8d; 
+    color: #FFFFFF;
+}
+
+.text{
+    color: #0d421f;
+    text-emphasis: bold;
+    text-align: center;
+  }
+
+.fieldss{
+    border-radius: 10px;
+    border-color: #073d31;
+}
+  
