@@ -1,13 +1,9 @@
-import React, { useState, useEffect, Fragment } from "react";
+import React, { useState, useEffect } from "react";
 import Test from "./TestElement.component";
-import styles from "../componentsStyles/Dashboard.module.css";
-import axios from "axios";
-import Modal from "react-modal";
-import modalstyles from "../componentsStyles/Modal.module.css";
-import teststyles from "../componentsStyles/Testelement.module.css";
 import { useHistory } from "react-router-dom";
-import resultstyles from "../componentsStyles/TestResult.module.css";
-import { useAlert } from 'react-alert'
+import axios from "axios";
+import { Alert, Button, Card, Form, Modal } from "react-bootstrap";
+
 const topics = [
   { id: 1, name: "<--select category-->" },
   { id: 2, name: "EVS" },
@@ -16,7 +12,6 @@ const topics = [
   { id: 5, name: "Computer" },
 ];
 
-Modal.setAppElement("#root");
 function Dashboard() {
   let history = useHistory();
   if (!localStorage.getItem("auth-token")) {
@@ -29,7 +24,7 @@ function Dashboard() {
   const [amount, setamount] = useState("");
   const [time, settime] = useState("");
   const [expiry, setexpiry] = useState(new Date());
-  const alert = useAlert()
+  const [alert, setAlert] = useState({ show: false, message: "", variant: "" });
 
   const options = {
     headers: {
@@ -51,7 +46,7 @@ function Dashboard() {
       })
       .catch((err) => {
         if (!localStorage.getItem("auth-token")) history.push("/");
-       else alert.show("couldn't fetch please reload",{type:"error"});
+        else setAlert({ show: true, message: "Couldn't fetch tests. Please reload the page.", variant: "danger" });
       });
   }, [modalIsOpen]);
 
@@ -65,128 +60,80 @@ function Dashboard() {
       )
       .then((res) => {
         console.log("added");
-
         setmodalIsOpen(false);
       })
       .catch((err) => {
         console.log(err);
-        alert.show("Error : Test Not Added, Try again!", { type: "error" });
+        setAlert({ show: true, message: "Error: Test not added. Please try again.", variant: "danger" })
       });
   };
 
   return (
-    <React.Fragment>
-      <div>
-        <h1
-          className={styles.heading}
-          style={{ background: "white", fontSize: "2em", padding: "2%" }}
-        >
-          Welcome {localStorage.getItem("name")}
-        </h1>
+    <div className="container mt-5">
+      <h1 className="text-center mb-4">Welcome {localStorage.getItem("name")}</h1>
+      <div className="d-flex justify-content-end mb-4">
+        <Button variant="primary" onClick={() => setmodalIsOpen(true)}>
+          + Add Test
+        </Button>
       </div>
-      <button
-        className={styles.buttons}
-        style={{ float: "left", display: "block" }}
-        onClick={() => setmodalIsOpen(true)}
-      >
-        + Add Test
-      </button>
-
-      <br />
-      <br />
-      <br />
-      <Modal
-        isOpen={modalIsOpen}
-        onRequestClose={() => setmodalIsOpen(false)}
-        className={modalstyles.modal}
-        overlayClassName={modalstyles.overlay}
-      >
-        <Fragment>
-          <h1 className={modalstyles.heading}>Create Test</h1>
-          <form onSubmit={onSubmit}>
-            <label className={modalstyles.labels} htmlFor="topic">
-              Topic:
-            </label>
-            <select
-              id="topic"
-              name="topic"
-              className={modalstyles.inputs}
-              onChange={(e) => settopic(e.target.value.toString())}
-            >
-              {topics.map((obj) => (
-                <option key={obj.id} value={obj.id}>
-                  {obj.name}
-                </option>
-              ))}
-            </select>
-            <br />
-            <label className={modalstyles.labels} htmlFor="amount">
-              Number of Questions:
-            </label>
-            <input
-              type="text"
-              id="amount"
-              name="amount"
-              className={modalstyles.inputs}
-              onChange={(e) => setamount(e.target.value)}
-            />
-            <br />
-            <label className={modalstyles.labels} htmlFor="time">
-              Time Duration (Mins):
-            </label>
-            <input
-              type="text"
-              id="time"
-              name="time"
-              className={modalstyles.inputs}
-              onChange={(e) => settime(e.target.value)}
-            />
-            <br />
-            <label className={modalstyles.labels} htmlFor="expiry">
-              Expiry:
-            </label>
-            <input
-              type="date"
-              id="expiry"
-              name="expiry"
-              className={modalstyles.inputs}
-              onChange={(e) => setexpiry(e.target.value)}
-            />
-            <br />
-            <button className={modalstyles.buttons} type="submit">
-              Submit
-            </button>
-            <br />
-          </form>
-        </Fragment>
+      <div className="row row-cols-1 row-cols-md-3 g-4">
+        {tests.map((test) => (
+          <div className="col" key={test._id}>
+            <Card>
+              <Card.Body>
+                <Card.Title>{test.topicname}</Card.Title>
+                <Card.Text>
+                  <strong>Pin:</strong> {test.pin}<br />
+                  <strong>Number of Questions:</strong> {test.amount}<br />
+                  <strong>Time Duration (Mins):</strong> {test.time}<br />
+                  <strong>Expiry:</strong> {new Date(test.expiry).toLocaleDateString()}
+                </Card.Text>
+                <Button variant="primary" onClick={() => history.push(`/test/${test._id}`)}>Start Test</Button>
+              </Card.Body>
+            </Card>
+          </div>
+        ))}
+      </div>
+      <Modal show={modalIsOpen} onHide={() => setmodalIsOpen(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Create Test</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form onSubmit={onSubmit}>
+            <Form.Group controlId="topic">
+              <Form.Label>Topic:</Form.Label>
+              <Form.Control as="select" value={topic} onChange={(e) => settopic(e.target.value)}>
+                {topics.map((obj) => (
+                  <option key={obj.id} value={obj.id}>
+                    {obj.name}
+                  </option>
+                ))}
+              </Form.Control>
+            </Form.Group>
+            <Form.Group controlId="amount">
+              <Form.Label>Number of Questions:</Form.Label>
+              <Form.Control type="text" value={amount} onChange={(e) => setamount(e.target.value)} />
+            </Form.Group>        
+              <Form.Group controlId="time">
+              <Form.Label>Time Duration (Mins):</Form.Label>
+              <Form.Control type="text" value={time} onChange={(e) => settime(e.target.value)} />
+            </Form.Group>
+            <Form.Group controlId="expiry">
+              <Form.Label>Expiry:</Form.Label>
+              <Form.Control type="date" value={expiry} onChange={(e) => setexpiry(e.target.value)} />
+            </Form.Group>
+            <Button variant="primary" type="submit">
+              Create
+            </Button>
+          </Form>
+        </Modal.Body>
       </Modal>
-      <div className={teststyles.parent}>
-        <div className={resultstyles.row}>
-          <div className={teststyles.element}>
-            <strong>Pin</strong>
-          </div>
-          <div className={teststyles.element}>
-            <strong>Topic</strong>
-          </div>
-          <div className={teststyles.element}>
-            <strong>No. of Ques</strong>
-          </div>
-          <div className={teststyles.element}>
-            <strong>Time Duration (Mins)</strong>
-          </div>
-          <div className={teststyles.element}>
-            <strong>Expiry</strong>
-          </div>
-        </div>
-        <div className={styles.testcontainer}>
-          {tests.map((obj) => (
-            <Test key={obj._id} {...obj} />
-          ))}
-        </div>
-      </div>
-      <br />
-      <br />
-    </React.Fragment>
+      {alert.show && (
+        <Alert variant={alert.variant} className="mt-4">
+          {alert.message}
+        </Alert>
+      )}
+    </div>
   );
 }
 

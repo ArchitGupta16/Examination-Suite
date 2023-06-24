@@ -1,12 +1,12 @@
+// Register.js
 import React, { useState } from "react";
-import styles from "../componentsStyles/Register.css";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
 import { useAlert } from 'react-alert'
-import {Form,Button,FloatingLabel} from "react-bootstrap";
+import { Form, Button, FloatingLabel } from "react-bootstrap";
 import Login from "./Login";
 
-function Register() {
+function Register(props) {
   const [name, setname] = useState("");
   const [email, setemail] = useState("");
   const [password, setpassword] = useState("");
@@ -16,12 +16,14 @@ function Register() {
   const alert = useAlert()
   let history = useHistory();
 
-  const handleShowRegister = () => setShowReg(false);
-  const handleShowLogin = () => setShowReg(true);
+  const handleClose = () => {
+    setShowReg(true);
+    props.handleClose();
+  };
 
-  const check = (e) => {
-    if (password !== c_password) e.target.className = styles.inputs_pass;
-    else e.target.className = styles.inputs;
+  const handleShowRegister = () => {
+    setShowReg(true);
+    props.handleShowLogin();
   };
 
   const submithandler = (e) => {
@@ -45,92 +47,89 @@ function Register() {
       });
   };
 
-  return (
-    <div style={{padding:'40px'}}>
-      {showReg && (
-      <Form onSubmit={submithandler}>
-        <Form.Group controlId="name">
-          <FloatingLabel
-            controlId="floatingInput"
-            label="Name"
-            className="mb-3"
-          >
-          <Form.Control
-            className="fieldss"
-            placeholder="Enter your name"
-            required
-            type="text"
-            onChange={(e) => setname(e.target.value)}
-          />
-          </FloatingLabel>
-        </Form.Group>
-        
-        <Form.Group controlId="email">
-          <FloatingLabel
-            controlId="floatingInput"
-            label="Email Address"
-            className="mb-3"
-          >
-          <Form.Control
-            className="fieldss"
-            placeholder="Enter your email"
-            required
-            type="email"
-            onChange={(e) => setemail(e.target.value)}
-          />
-          </FloatingLabel>
-        </Form.Group>
+  // const check = (e) => {
+  //   if (password !== c_password) e.target.className = styles.inputs_pass;
+  //   else e.target.className = styles.inputs;
+  // };
 
-        <Form.Group controlId="password">
-          <FloatingLabel
+  return (
+    <div style={{ padding: '40px' }}>
+      {showReg && (
+        <Form onSubmit={submithandler}>
+          <Form.Group controlId="name">
+            <FloatingLabel
+              controlId="floatingInput"
+              label="Name"
+              className="mb-3"
+            >
+              <Form.Control
+                className="fieldss"
+                placeholder="Enter your name"
+                required
+                type="text"
+                onChange={(e) => setname(e.target.value)}
+              />
+            </FloatingLabel>
+          </Form.Group>
+
+          <Form.Group controlId="email">
+            <FloatingLabel
+              controlId="floatingInput"
+              label="Email Address"
+              className="mb-3"
+            >
+              <Form.Control
+                className="fieldss"
+                placeholder="Enter your email"
+                required
+                type="email"
+                onChange={(e) => setemail(e.target.value)}
+              />
+            </FloatingLabel>
+          </Form.Group>
+
+          <Form.Group controlId="password">
+            <FloatingLabel
               controlId="floatingInput"
               label="Password"
               className="mb-3"
             >
-          <Form.Control
-            className="fieldss"
-            placeholder="Enter your password"
-            required
-            type="password"
-            onChange={(e) => setpassword(e.target.value)}
-          />
-          </FloatingLabel>
-        </Form.Group>
+              <Form.Control
+                className="fieldss"
+                placeholder="Enter your password"
+                required
+                type="password"
+                onChange={(e) => setpassword(e.target.value)}
+              />
+            </FloatingLabel>
+          </Form.Group>
 
-        <Form.Group controlId="c_password">
-        <FloatingLabel
-            controlId="floatingInput"
-            label="Confirm Password"
-            className="mb-3"
-          >
-          <Form.Control
-            className="fieldss"
-            placeholder="Confirm your password"
-            required
-            type="password"
-            onChange={(e) => setc_password(e.target.value)}
-            onKeyUp={check}
-          />
-          </FloatingLabel>
-        </Form.Group>
+          <Form.Group controlId="c_password">
+            <FloatingLabel
+              controlId="floatingInput"
+              label="Confirm Password"
+              className="mb-3"
+            >
+              <Form.Control
+                className="fieldss"
+                placeholder="Confirm your password"
+                required
+                type="password"
+                onChange={(e) => setc_password(e.target.value)}
+              />
+            </FloatingLabel>
+          </Form.Group>
 
-        <br/>
-        <div style={{textAlign:"center"}}>
-        <Button variant="custom" type="submit" className="bn">
-          Create Account
-        </Button>
-        </div>
-
-        <p>
-          Already have an account? 
-          <a href="#" onClick={handleShowLogin}>
-            Login
-            </a>
-        </p>
-      </Form>
-      )}:
+          <br />
+          <div style={{ textAlign: "center" }}>
+            <Button variant="custom" type="submit" className="bn">
+              Create Account
+            </Button>
+          </div>
+        </Form>
+      )}
       {!showReg && (
-        <Login />
+        <Login handleClose={handleClose} handleShowRegister={handleShowRegister} />
       )}
     </div>
   );

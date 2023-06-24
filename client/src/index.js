@@ -3,6 +3,8 @@ import ReactDOM from "react-dom";
 import App from "./App.js";
 import { BrowserRouter } from "react-router-dom";
 import { transitions, positions, Provider as AlertProvider } from 'react-alert'
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/js/bootstrap.min.js';
 
 const options = {
   position: positions.TOP_CENTER,
