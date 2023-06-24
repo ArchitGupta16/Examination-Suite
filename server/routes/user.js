@@ -27,7 +27,7 @@ router.route("/add").post(async (req, res) => {
       .then(() => res.send("user added!"))
       .catch((err) => res.status(400).json("error : " + err));
   } catch (err) {
-    return res.status(400).send();
+    return res.status(400).send({message:"Something went wrong! Please try again"});
   }
 });
 
@@ -37,12 +37,12 @@ router.route("/login").post(async (req, res) => {
 
   const doc = await user.findOne({ email }).exec();
   if (!doc) {
-    return res.status(400).send();
+    return res.status(400).send({message:"Account does not exist!"});
   }
 
   const passwordCheck = bcrypt.compareSync(password, doc.password);
   if (!passwordCheck) {
-    return res.status(400).send();
+    return res.status(400).send({message:"Incorrect password!"});
   } else {
     const token = jwt.sign(
       { id: doc._id, email: doc.email },
