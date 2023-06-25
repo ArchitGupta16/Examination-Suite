@@ -7,6 +7,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { useHistory } from "react-router-dom";
 import { useAlert } from 'react-alert'
 import {Card,Button,Form,FloatingLabel } from 'react-bootstrap';
+import TakeTestNavbar from "./TakeTestNavbar";
 
 function Taketest() {
   let history = useHistory();
@@ -41,7 +42,7 @@ function Taketest() {
 
   return (
     <div style={{height: "100vh", overflow: "hidden"}}>
-    <CustomNavbar />
+    <TakeTestNavbar />
     <div className="bgg">
         <Card className="containerr"> 
           <Card.Body>

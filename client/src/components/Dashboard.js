@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-// import Test from "./TestElement.component";
 import { useHistory } from "react-router-dom";
 import axios from "axios";
 import { Alert, Button, Card, Form, Modal } from "react-bootstrap";
+import DashboardNavbar from "./DashboardNavbar";
 
 const topics = [
   { id: 1, name: "<--select category-->" },
@@ -12,7 +12,7 @@ const topics = [
   { id: 5, name: "Computer" },
 ];
 
-function Dashboard() {
+function Dashboard(props) {
   let history = useHistory();
   if (!localStorage.getItem("auth-token")) {
     localStorage.clear();
@@ -85,70 +85,90 @@ function Dashboard() {
   };
 
   return (
-    <div className="container mt-5">
-      <h1 className="text-center mb-4">Welcome {localStorage.getItem("name")}</h1>
-      <div className="d-flex justify-content-end mb-4">
-        <Button variant="primary" onClick={() => setmodalIsOpen(true)}>
-          + Add Test
-        </Button>
+    <div>
+      <DashboardNavbar loggedin={props.loggedin} setloggedin={props.setloggedin} />
+      <hr className="hr-custom" />
+      <div className="container mt-5">
+        <h1 className="text-center mb-4">Welcome {localStorage.getItem("name")}</h1>
+        <div className="d-flex justify-content-end mb-4">
+          <Button variant="primary" onClick={() => setmodalIsOpen(true)}>
+            + Add Test
+          </Button>
+        </div>
+        <div className="row row-cols-1 row-cols-md-3 g-4">
+          {tests.map((test) => (
+            <div className="col" key={test._id}>
+              <Card>
+                <Card.Body>
+                  <Card.Title>{test.topicname}</Card.Title>
+                  <Card.Text>
+                    <strong>Pin:</strong> {test.pin}<br />
+                    <strong>Number of Questions:</strong> {test.amount}<br />
+                    <strong>Time Duration (Mins):</strong> {test.time}<br />
+                    <strong>Expiry:</strong> {new Date(test.expiry).toLocaleDateString()}
+                  </Card.Text>
+                  <Button variant="primary" onClick={()=>getResults(test.pin)} >View Results</Button>
+                </Card.Body>
+                </Card>
+              </div>
+          ))}
+
+        </div>
       </div>
-      <div className="row row-cols-1 row-cols-md-3 g-4">
-        {tests.map((test) => (
-          <div className="col" key={test._id}>
-            <Card>
-              <Card.Body>
-                <Card.Title>{test.topicname}</Card.Title>
-                <Card.Text>
-                  <strong>Pin:</strong> {test.pin}<br />
-                  <strong>Number of Questions:</strong> {test.amount}<br />
-                  <strong>Time Duration (Mins):</strong> {test.time}<br />
-                  <strong>Expiry:</strong> {new Date(test.expiry).toLocaleDateString()}
-                </Card.Text>
-                <Button variant="primary" onClick={()=>getResults(test.pin)} >View Results</Button>
-              </Card.Body>
-            </Card>
-          </div>
-        ))}
-      </div>
+
+      {/* Add Test Modal */}
       <Modal show={modalIsOpen} onHide={() => setmodalIsOpen(false)}>
         <Modal.Header closeButton>
-          <Modal.Title>Create Test</Modal.Title>
+          <Modal.Title>Add Test</Modal.Title>
         </Modal.Header>
         <Modal.Body>
+          {alert.show && <Alert variant={alert.variant}>{alert.message}</Alert>}
           <Form onSubmit={onSubmit}>
-            <Form.Group controlId="topic">
-              <Form.Label>Topic:</Form.Label>
-              <Form.Control as="select" value={topic} onChange={(e) => settopic(e.target.value)}>
-                {topics.map((obj) => (
-                  <option key={obj.id} value={obj.id}>
-                    {obj.name}
+            <Form.Group controlId="exampleForm.SelectCustom">
+              <Form.Label>Select Category</Form.Label>
+              <Form.Control as="select" custom value={topic} onChange={(event) => settopic(event.target.value)}>
+                {topics.map((topic) => (
+                  <option key={topic.id} value={topic.id}>
+                    {topic.name}
                   </option>
                 ))}
               </Form.Control>
             </Form.Group>
-            <Form.Group controlId="amount">
-              <Form.Label>Number of Questions:</Form.Label>
-              <Form.Control type="text" value={amount} onChange={(e) => setamount(e.target.value)} />
-            </Form.Group>        
-              <Form.Group controlId="time">
-              <Form.Label>Time Duration (Mins):</Form.Label>
-              <Form.Control type="text" value={time} onChange={(e) => settime(e.target.value)} />
+            <Form.Group controlId="formBasicNumber">
+              <Form.Label>Number of Questions</Form.Label>
+              <Form.Control
+                type="number"
+                placeholder="Enter number of questions"
+                min="1"
+                value={amount}
+                onChange={(event) => setamount(event.target.value)}
+              />
             </Form.Group>
-            <Form.Group controlId="expiry">
-              <Form.Label>Expiry:</Form.Label>
-              <Form.Control type="date" value={expiry} onChange={(e) => setexpiry(e.target.value)} />
+            <Form.Group controlId="formBasicTime">
+              <Form.Label>Time Duration (in minutes)</Form.Label>
+              <Form.Control
+                type="number"
+                placeholder="Enter time duration (in minutes)"
+                min="1"
+                value={time}
+                onChange={(event) => settime(event.target.value)}
+              />
+            </Form.Group>
+            <Form.Group controlId="formBasicExpiry">
+              <Form.Label>Expiry Date</Form.Label>
+              <Form.Control
+                type="date"
+                min={new Date().toISOString().split("T")[0]}
+                value={expiry}
+                onChange={(event) => setexpiry(event.target.value)}
+              />
             </Form.Group>
             <Button variant="primary" type="submit">
-              Create
+              Add Test
             </Button>
           </Form>
         </Modal.Body>
       </Modal>
-      {alert.show && (
-        <Alert variant={alert.variant} className="mt-4">
-          {alert.message}
-        </Alert>
-      )}
     </div>
   );
 }
