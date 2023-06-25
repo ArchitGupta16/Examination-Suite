@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import Test from "./TestElement.component";
+// import Test from "./TestElement.component";
 import { useHistory } from "react-router-dom";
 import axios from "axios";
 import { Alert, Button, Card, Form, Modal } from "react-bootstrap";
@@ -32,6 +32,20 @@ function Dashboard() {
       "auth-token": localStorage.getItem("auth-token"),
     },
   };
+  const getResults = (pin) => {
+    axios.post(
+      "http://localhost:4000/api/test/getresults",
+      {pin},
+      options
+    )
+    .then((res) => {
+      console.log(res,"got the results guyss",);
+      history.push("/test-results", { data: res.data, testdetails : tests.find((test) => test.pin === pin) });
+    })
+    .catch((err) => {
+      console.log("error here buddy",err.response.body)
+    })
+  }
 
   useEffect(() => {
     axios
@@ -49,6 +63,8 @@ function Dashboard() {
         else setAlert({ show: true, message: "Couldn't fetch tests. Please reload the page.", variant: "danger" });
       });
   }, [modalIsOpen]);
+
+  
 
   const onSubmit = (event) => {
     event.preventDefault();
@@ -88,7 +104,7 @@ function Dashboard() {
                   <strong>Time Duration (Mins):</strong> {test.time}<br />
                   <strong>Expiry:</strong> {new Date(test.expiry).toLocaleDateString()}
                 </Card.Text>
-                <Button variant="primary" onClick={() => history.push(`/test/${test._id}`)}>Start Test</Button>
+                <Button variant="primary" onClick={()=>getResults(test.pin)} >View Results</Button>
               </Card.Body>
             </Card>
           </div>

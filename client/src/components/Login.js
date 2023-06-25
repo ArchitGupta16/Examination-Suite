@@ -1,6 +1,7 @@
 // Login.js
 import React, { useState } from "react";
 import axios from "axios";
+import  "../componentsStyles/Login.css"
 import { useHistory } from "react-router-dom";
 import { useAlert } from 'react-alert'
 import { Modal, Form, Button, FloatingLabel } from "react-bootstrap";
