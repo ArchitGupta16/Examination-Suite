@@ -5,7 +5,7 @@ import dashboard from "./components/Dashboard";
 import Ques from "./components/Question.component";
 import Landing from "./components/Landing";
 import TestResults from "./components/Results";
-
+import Grade from "./components/Grade";
 function App() {
   const [loggedin, setloggedin] = useState(false);
 
@@ -19,6 +19,7 @@ function App() {
           <Route exact path="/dashboard" component={dashboard} />
           <Route exact path="/test" component={Ques} />
           <Route exact path="/test-results" component={TestResults} />
+          <Route exact path="/grade" component={Grade} />
           <Route render={() => <Redirect to="/" />} />
         </Switch>
       </main>

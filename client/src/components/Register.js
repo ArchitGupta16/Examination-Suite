@@ -1,5 +1,6 @@
 // Register.js
 import React, { useState } from "react";
+import "../componentsStyles/Register.css"
 import axios from "axios";
 import { useHistory } from "react-router-dom";
 import { useAlert } from 'react-alert'

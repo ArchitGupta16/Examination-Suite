@@ -60,11 +60,11 @@ function TestResults({ location }) {
                     <td>
                       <Link
                         to={{
-                          pathname: "/viewresult",
-                          state: { result },
+                          pathname: "/grade",
+                          state: {  student : result },
                         }}
                       >
-                        <Button variant="primary">View Result</Button>
+                        <Button variant="primary">Edit Score</Button>
                       </Link>
                     </td>
                   </tr>

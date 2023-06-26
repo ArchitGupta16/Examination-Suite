@@ -103,4 +103,24 @@ router.route("/addtest").post(async (req, res) => {
     .catch((err) => res.status(400).json("error : " + err));
 });
 
+router.route("/getquestions").post(async (req, res) => {
+  const pin = req.body.pin;
+  const doc = await test.findOne({ pin: pin }).exec();
+  const ques = await question.find({ category: doc.topic }).exec()
+  let response_code = 0
+  if (ques.length > 0) {
+    response_code = 1
+  }
+  else{
+    console.log("failed")
+  }
+
+  if (response_code == 1) return res.send(ques);
+  else
+    return res
+      .status(400)
+      .send({ message: "Couldn't fetch test details. Try again!" });
+
+});
+
 module.exports = router;

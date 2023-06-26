@@ -20,7 +20,7 @@ function Landing() {
 
       <div>
         <Carousel>
-          <Carousel.Item interval={1000}>
+          <Carousel.Item interval={5000}>
           <img
             className="d-block w-100 img-1"
             src= {img1}
@@ -29,7 +29,7 @@ function Landing() {
             <Carousel.Caption>
             </Carousel.Caption>
           </Carousel.Item>
-          <Carousel.Item interval={1000}>
+          <Carousel.Item interval={5000}>
             <img
               className="d-block w-100 img-2"
               src= {img2}
@@ -38,7 +38,7 @@ function Landing() {
             <Carousel.Caption>
             </Carousel.Caption>
           </Carousel.Item>
-          <Carousel.Item interval={500}>
+          <Carousel.Item interval={5000}>
             <img
               className="d-block w-100"
               src="holder.js/800x400?text=Third slide&bg=20232a"
