@@ -6,12 +6,16 @@ import Ques from "./components/Question.component";
 import Landing from "./components/Landing";
 import TestResults from "./components/Results";
 import Grade from "./components/Grade";
+import CustomNavbar from "./components/CustomNavbar";
 function App() {
   const [loggedin, setloggedin] = useState(false);
 
   let location = useLocation();
+
+  const isTaketestPage = location.pathname === "/taketest";
   return (
     <React.Fragment>
+      {!isTaketestPage && <CustomNavbar  />}
       <main>
         <Switch>
           <Route exact path="/" component={Landing} />

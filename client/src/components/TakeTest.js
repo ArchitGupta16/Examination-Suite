@@ -2,12 +2,13 @@ import React, { useState, useEffect } from "react";
 // import styles from "../componentsStyles/TakeTest.css";
 import  "../componentsStyles/TakeTest.css"
 import axios from "axios";
-import CustomNavbar from './LandingNavbar';
+
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useHistory } from "react-router-dom";
 import { useAlert } from 'react-alert'
+import CustomNavbar from "./CustomNavbar"
 import {Card,Button,Form,FloatingLabel } from 'react-bootstrap';
-import TakeTestNavbar from "./TakeTestNavbar";
+
 
 function Taketest() {
   let history = useHistory();
@@ -41,9 +42,20 @@ function Taketest() {
   };
 
   return (
+
     <div style={{height: "100vh", overflow: "hidden"}}>
-    <TakeTestNavbar />
+    {/* <CustomNavbar page="TakeTest"/> */}
     <div className="bgg">
+      <div className="image-container">
+        <a href="/">
+        <img
+          src="https://i.ibb.co/wp6QBSZ/niitfoundatin-Logo.png"
+          alt="Logo"
+          height="100"
+          className="top-right-image"
+        />
+        </a>
+       </div>
         <Card className="containerr"> 
           <Card.Body>
             <Card.Title as="h3" className="text">Take Test</Card.Title>

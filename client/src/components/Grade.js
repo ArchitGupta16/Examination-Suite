@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import axios from "axios";
 import { Alert, Button, Card, Form, Modal, ListGroup } from "react-bootstrap";
-import DashboardNavbar from "./DashboardNavbar";
+
 
 function Grade({ location }) {
   const answers = location.state && location.state.student.result;
@@ -101,7 +101,7 @@ function Grade({ location }) {
 
   return (
     <div>
-      <DashboardNavbar />
+      {/* <CustomNavbar /> */}
       <br />
       <div className="container">
         {data.map((question, index) => renderQuestion(question, index))}

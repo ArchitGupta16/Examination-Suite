@@ -1,7 +1,7 @@
 import React from "react";
 import { Container, Row, Col, Table, Button, Card } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import ResultsNavbar from "./ResultsNavbar";
+
 
 function TestResults({ location }) {
   const data = location.state && location.state.data;
@@ -10,7 +10,7 @@ function TestResults({ location }) {
   if (!data || data.length === 0) {
     return (
       <div >
-      <ResultsNavbar />
+      {/* <CustomNavbar  /> */}
       <hr className="hr-custom" />
       <Container className="mt-5">
         <h1 className="text-center">Test Results</h1>
@@ -22,7 +22,7 @@ function TestResults({ location }) {
 
   return (
     <div >
-      <ResultsNavbar />
+      {/* <CustomNavbar  /> */}
       <hr className="hr-custom" />
     <Container fluid className="mt-5">
       

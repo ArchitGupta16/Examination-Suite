@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import axios from "axios";
 import { Alert, Button, Card, Form, Modal } from "react-bootstrap";
-import DashboardNavbar from "./DashboardNavbar";
 
 const topics = [
   { id: 1, name: "<--select category-->" },
@@ -86,7 +85,8 @@ function Dashboard(props) {
 
   return (
     <div>
-      <DashboardNavbar loggedin={props.loggedin} setloggedin={props.setloggedin} />
+      {/* <CustomNavbar page="dashboard"/> */}
+      {/* <CustomNavbar  loggedin={props.loggedin} setloggedin={props.setloggedin} /> */}
       <hr className="hr-custom" />
       <div className="container mt-5">
         <h1 className="text-center mb-4">Welcome {localStorage.getItem("name")}</h1>
