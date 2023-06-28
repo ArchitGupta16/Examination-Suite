@@ -22,6 +22,10 @@ const resultSchema = new Schema({
   result: {
     type: Object,
     required: true,
+  },
+  individualScore: {
+    type: Object,
+    required: true,
   }
 });
 

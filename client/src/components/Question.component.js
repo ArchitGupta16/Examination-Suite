@@ -26,44 +26,59 @@ function Question(props) {
   );
   const [image, setImage] = useState("");
   const [answered, setAnswered] = useState(false);
+  const [allScore, setAllScore] = useState();
   const category = res.category;
 
   const submithandler = () => {
-    if (!answered) {
-      alert.show("Please answer all the questions before submitting the test.", {
-        type: "warning",
-      });
-      return;
-    }
+    // if (!answered) {
+    //   alert.show("Please answer all the questions before submitting the test.", {
+    //     type: "warning",
+    //   });
+    //   return;
+    // }
     let name = localStorage.getItem("name");
-    let aadhaar = localStorage.getItem("aadhaar");
+    let email = localStorage.getItem("email");
     let pin = localStorage.getItem("pin");
     let score = 0;
+    let loc = {}
     if (category === "2" || category === "3" || category === "4") {
+      
       for (let i = 0; i < length; i++) {
+        loc[i] = 0
         if (res.results[i].correct_answer.length > 1) {
           const temp = answers[i] ? answers[i].split(" ") : [];
           for (let j = 0; j < res.results[i].correct_answer.length; j++) {
             console.log(temp);
             if (temp.includes(res.results[i].correct_answer[j])) {
               score += 1 / res.results[i].correct_answer.length;
+              loc[i] = 1            
             }
           }
         } else {
           if (answers[i] == res.results[i].correct_answer) {
             score += 1;
+            loc[i] = 1   
           }
         }
+        console.log(loc,"awdawdawdawd")
+        
       }
+      setAllScore(loc)
     } else if (category === "5") {
+      let loc= {}
       for (let i = 0; i < length; i++) {
+        loc[i] = 0
         if (res.results[i].correct_answer.includes(answers[i])) {
           score += 1;
+          loc[i] = 1   
         }
+        
       }
+      setAllScore(loc)
     }
+    
     score = (score / length) * 100;
-
+    console.log(allScore,"llslsl");
     const options = {
       headers: {
         "Content-Type": "application/json",
@@ -74,10 +89,11 @@ function Question(props) {
         "http://localhost:4000/api/test/submittest",
         {
           pin,
-          aadhaar,
+          email,
           name,
           score,
           answers,
+          loc,
         },
         options
       )
@@ -205,7 +221,7 @@ function Question(props) {
       </div>
       <div>
         {image && (
-          <img src={image} alt="Question Image" />
+          <img src={image} style={{alignContent:"center"}} alt="Question Image" />
         )}
         </div>
       {!questype &&

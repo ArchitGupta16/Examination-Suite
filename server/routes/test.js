@@ -43,7 +43,8 @@ router.route("/submittest").post(async (req, res) => {
   const name = req.body.name;
   const pin = req.body.pin;
   const resu = req.body.answers;
-  const resultEntry = new result({ aadhaar, name, pin, score, result:resu });
+  const indi = req.body.loc;
+  const resultEntry = new result({ email, name, pin, score, result:resu, individualScore:indi });
   resultEntry
     .save()
     .then(() => res.send("result added!"))
