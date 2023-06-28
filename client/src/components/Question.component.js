@@ -36,7 +36,7 @@ function Question(props) {
       return;
     }
     let name = localStorage.getItem("name");
-    let email = localStorage.getItem("email");
+    let aadhaar = localStorage.getItem("aadhaar");
     let pin = localStorage.getItem("pin");
     let score = 0;
     if (category === "2" || category === "3" || category === "4") {
@@ -74,7 +74,7 @@ function Question(props) {
         "http://localhost:4000/api/test/submittest",
         {
           pin,
-          email,
+          aadhaar,
           name,
           score,
           answers,

@@ -8,28 +8,35 @@ import { useHistory } from "react-router-dom";
 import { useAlert } from 'react-alert'
 import CustomNavbar from "./CustomNavbar"
 import {Card,Button,Form,FloatingLabel } from 'react-bootstrap';
+import aadhaarValidator from "aadhaar-validator";
 
 
 function Taketest() {
   let history = useHistory();
   const [name, setname] = useState("");
-  const [email, setemail] = useState("");
+  const [aadhaar, setAadhaar] = useState("");
   const [pin, setpin] = useState("");
   const alert = useAlert()
   
 
   const submithandler = (e) => {
     e.preventDefault();
+    const aadhaarString = String(aadhaar);
+    const isAadhaarValid = aadhaarValidator.isValidNumber(aadhaarString);
+    if (!isAadhaarValid) {
+      alert.show("Invalid Aadhaar number. Please enter a valid 12-digit Aadhaar number.", { type: "error" });
+      return;
+    }
     const options = {
       headers: {
         "Content-Type": "application/json",
       },
     };
     axios
-      .post("http://localhost:4000/api/test/", { pin, email, name }, options)
+      .post("http://localhost:4000/api/test/", { pin, aadhaar, name }, options)
       .then((res) => {
         localStorage.setItem("name", name);
-        localStorage.setItem("email", email);
+        localStorage.setItem("aadhaar", aadhaar);
         localStorage.setItem("pin", pin);
         history.push({
           pathname: "/test",
@@ -80,19 +87,19 @@ function Taketest() {
 
               <br />
               </Form.Group>
-                <Form.Group controlId="email">
+                <Form.Group controlId="aadhaar">
                     <FloatingLabel
                       controlId="floatingInput"
-                      label="Email Address"
+                      label="Aadhaar Number"
                       className="mb-3"
                     >
                   <Form.Control
                     className="fieldss"
                     required
-                    type="email"
-                    placeholder="name@example.com"
-                    value={email}
-                    onChange={(e) => setemail(e.target.value)}
+                    type="number"
+                    placeholder="Enter Aadhaar number"
+                    value={aadhaar}
+                    onChange={(e) => setAadhaar(e.target.value)}
                   />
                   </FloatingLabel>
               </Form.Group>

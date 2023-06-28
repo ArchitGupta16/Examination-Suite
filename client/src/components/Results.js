@@ -46,7 +46,7 @@ function TestResults({ location }) {
               <thead>
                 <tr>
                   <th>Name</th>
-                  <th>Email</th>
+                  <th>Aadhaar</th>
                   <th>Score</th>
                   <th>Actions</th>
                 </tr>
@@ -55,7 +55,7 @@ function TestResults({ location }) {
                 {data.map((result, index) => (
                   <tr key={index}>
                     <td>{result.name}</td>
-                    <td>{result.email}</td>
+                    <td>{result.aadhaar}</td>
                     <td>{result.score}%</td>
                     <td>
                       <Link

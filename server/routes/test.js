@@ -7,7 +7,7 @@ const verify = require("./verifyToken");
 
 router.route("/").post(async (req, res) => {
   const testid = req.body.pin;
-  const email = req.body.email.toLowerCase();
+  const aadhaar = req.body.aadhaar;
   const doc = await test.findOne({ pin: testid }).exec();
   if (!doc) {
     return res.status(400).send({ message: "Test doesn't exist!" });
@@ -15,25 +15,21 @@ router.route("/").post(async (req, res) => {
   if (Date.parse(doc.expiry) < Date.now()) {
     return res.status(400).send({ message: "Test has expired!! " });
   }
-  const check = await result.findOne({ pin: testid, email }).exec();
+  const check = await result.findOne({ pin: testid, aadhaar }).exec();
   if (check) {
     return res.status(400).send({message:"Test already taken!"});
   }
-  // console.log(doc.topic,"topic here")
   let ques = {
-              response_code: 0,
-            }
-
-  ques.results = await question.find({ category: doc.topic }).exec()
-  // console.log(ques.results)
+    response_code: 0,
+  };
+  ques.results = await question.find({ category: doc.topic }).exec();
   if (ques.results.length > 0) {
-    ques.response_code = 1
+    ques.response_code = 1;
+  } else {
+    console.log("failed");
   }
-  else{
-    console.log("failed")
-  }
-  ques.time = doc.time
-  ques.category = doc.topic
+  ques.time = doc.time;
+  ques.category = doc.topic;
   if (ques.response_code == 1) return res.send(ques);
   else
     return res
@@ -43,11 +39,11 @@ router.route("/").post(async (req, res) => {
 
 router.route("/submittest").post(async (req, res) => {
   const score = parseInt(req.body.score);
-  const email = req.body.email.toLowerCase();
+  const aadhaar = req.body.aadhaar;
   const name = req.body.name;
   const pin = req.body.pin;
   const resu = req.body.answers;
-  const resultEntry = new result({ email, name, pin, score, result:resu });
+  const resultEntry = new result({ aadhaar, name, pin, score, result:resu });
   resultEntry
     .save()
     .then(() => res.send("result added!"))
@@ -59,9 +55,9 @@ router.use("/getresults", verify);
 router.use("/addtest", verify);
 
 router.route("/gettests").post(async (req, res) => {
-  const email = req.user.email;
+  const aadhaar = req.user.aadhaar;
   try {
-    const doc = await test.find({ email }).sort("-created").exec();
+    const doc = await test.find({ aadhaar }).sort("-created").exec();
     return res.send(doc);
   } catch (err) {
     console.log(err);
@@ -81,7 +77,7 @@ router.route("/getresults").post(async (req, res) => {
 
 router.route("/addtest").post(async (req, res) => {
   const pin = (await test.countDocuments({}).exec()) + 1000;
-  const email = req.user.email.toLowerCase();
+  const aadhaar = req.user.aadhaar;
   const amount = req.body.amount;
   const topic = req.body.topic;
   const time = req.body.time;
@@ -90,7 +86,7 @@ router.route("/addtest").post(async (req, res) => {
 
   const newtest = new test({
     pin,
-    email,
+    aadhaar,
     amount,
     topic,
     time,
@@ -106,13 +102,12 @@ router.route("/addtest").post(async (req, res) => {
 router.route("/getquestions").post(async (req, res) => {
   const pin = req.body.pin;
   const doc = await test.findOne({ pin: pin }).exec();
-  const ques = await question.find({ category: doc.topic }).exec()
-  let response_code = 0
+  const ques = await question.find({ category: doc.topic }).exec();
+  let response_code = 0;
   if (ques.length > 0) {
-    response_code = 1
-  }
-  else{
-    console.log("failed")
+    response_code = 1;
+  } else {
+    console.log("failed");
   }
 
   if (response_code == 1) return res.send(ques);
@@ -120,7 +115,6 @@ router.route("/getquestions").post(async (req, res) => {
     return res
       .status(400)
       .send({ message: "Couldn't fetch test details. Try again!" });
-
 });
 
 module.exports = router;

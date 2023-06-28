@@ -7,10 +7,6 @@ const testSchema = new Schema({
     type: String,
     required: true,
   },
-  email: {
-    type: String,
-    required: true,
-  },
   amount: {
     type: String,
     required: true,
@@ -31,6 +27,10 @@ const testSchema = new Schema({
     type: Date,
     required: true,
   },
+  aadhaar: {
+    type: String,
+    required: true,
+  }
 });
 
 const test = mongoose.model("test", testSchema);

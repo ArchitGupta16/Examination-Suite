@@ -11,7 +11,7 @@ const resultSchema = new Schema({
     type: String,
     required: true,
   },
-  email: {
+  aadhaar: {
     type: String,
     required: true,
   },
