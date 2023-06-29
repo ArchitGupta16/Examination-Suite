@@ -30,17 +30,13 @@ function Question(props) {
   const category = res.category;
 
   const submithandler = () => {
-    // if (!answered) {
-    //   alert.show("Please answer all the questions before submitting the test.", {
-    //     type: "warning",
-    //   });
-    //   return;
-    // }
+    let aadhaar = localStorage.getItem("aadhaar");
     let name = localStorage.getItem("name");
     let email = localStorage.getItem("email");
     let pin = localStorage.getItem("pin");
     let score = 0;
     let loc = {}
+    console.log("aadawdawaarrrr",aadhaar)
     if (category === "2" || category === "3" || category === "4") {
       
       for (let i = 0; i < length; i++) {
@@ -89,7 +85,7 @@ function Question(props) {
         "http://localhost:4000/api/test/submittest",
         {
           pin,
-          email,
+          aadhaar,
           name,
           score,
           answers,

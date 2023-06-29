@@ -2,18 +2,21 @@ import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import axios from "axios";
 import { Alert, Button, Card, Form, Modal, ListGroup } from "react-bootstrap";
+import { useAlert } from "react-alert";
 
 function Grade({ location }) {
   const answers = location.state && location.state.student.result;
   const testPin = location.state && location.state.student.pin;
   const individual = location.state && location.state.student.individualScore;
-  console.log("individual", individual.length);
+  const aadhaar = location.state && location.state.student.aadhaar;
   const [data, setData] = useState([]);
   const [scores, setScores] = useState({});
   const [updatedScores, setUpdatedScores] = useState({});
   const [showResult, setShowResult] = useState(false);
   const [previousScore, setPreviousScore] = useState(0);
   const [updatedScore, setUpdatedScore] = useState(0);
+  const alert = useAlert();
+  const history = useHistory();
 
   const options = {
     headers: {
@@ -26,7 +29,6 @@ function Grade({ location }) {
       .post("http://localhost:4000/api/test/getquestions", { pin: testPin }, options)
       .then((res) => {
         setData(res.data);
-        console.log(data[0], "Test questions and answer here");
       })
       .catch((err) => {
         console.log("error here", err.response.body);
@@ -48,6 +50,22 @@ function Grade({ location }) {
     }));
   };
 
+  const updateDB = () => {
+    Object.entries(updatedScores).forEach(([index, score]) => {
+      individual[index] = Number(score);
+    });
+    axios.put("http://localhost:4000/api/test/updateScore", {  pin:testPin ,aadhaar:aadhaar,score:updatedScore*100,indi:individual}, options)
+    .then((res) => { 
+      console.log("Successfully updated result")
+      alert.show("Successfully updated result", { type: "success" })
+      history.push("dashboard")
+      
+    })
+    .catch((err) => {
+      console.log(err.response.data)
+    })
+    }
+
   const calculatePreviousScore = () => {
     if (typeof individual === "object" && individual !== null) {
       const scores = Object.values(individual);
@@ -59,7 +77,6 @@ function Grade({ location }) {
   const calculateFinalScore = () => {
     let sum = 0;
     let count = 0;
-    console.log("updated scores", individual.length);
     for (let i = 0; i < Object.keys(individual).length; i++) {
       if (updatedScores[i] === undefined) {
         sum += individual[i];
@@ -161,10 +178,13 @@ function Grade({ location }) {
       <br />
       <Button onClick={calculateFinalScore}>Calculate Final Score</Button>
       {showResult && (
-        <div>
+        <div className="text-center mt-5">
           <h3>Final Score:</h3>
-          <div>Previous Score: {previousScore*100}</div>
-          <div>Updated Score: {updatedScore*100}</div>
+          <div>Previous Score: {previousScore * 100}</div>
+          <div>Updated Score: {updatedScore * 100}</div>
+          <Button variant="primary" className="mt-3" onClick={() => updateDB()}>
+            Update
+          </Button>
         </div>
       )}
     </div>

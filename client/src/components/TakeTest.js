@@ -23,10 +23,10 @@ function Taketest() {
     e.preventDefault();
     const aadhaarString = String(aadhaar);
     const isAadhaarValid = aadhaarValidator.isValidNumber(aadhaarString);
-    if (!isAadhaarValid) {
-      alert.show("Invalid Aadhaar number. Please enter a valid 12-digit Aadhaar number.", { type: "error" });
-      return;
-    }
+    // if (!isAadhaarValid) {
+    //   alert.show("Invalid Aadhaar number. Please enter a valid 12-digit Aadhaar number.", { type: "error" });
+    //   return;
+    // }
     const options = {
       headers: {
         "Content-Type": "application/json",

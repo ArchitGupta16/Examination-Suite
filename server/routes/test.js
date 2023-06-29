@@ -44,7 +44,7 @@ router.route("/submittest").post(async (req, res) => {
   const pin = req.body.pin;
   const resu = req.body.answers;
   const indi = req.body.loc;
-  const resultEntry = new result({ email, name, pin, score, result:resu, individualScore:indi });
+  const resultEntry = new result({ aadhaar, name, pin, score, result:resu, individualScore:indi });
   resultEntry
     .save()
     .then(() => res.send("result added!"))
@@ -116,6 +116,21 @@ router.route("/getquestions").post(async (req, res) => {
     return res
       .status(400)
       .send({ message: "Couldn't fetch test details. Try again!" });
+});
+
+router.route("/updateScore").put(async (req, res) => {
+  const pin = req.body.pin;
+  const aadhaar = req.body.aadhaar;
+  const score = req.body.score;
+  const indi = req.body.indi;
+  result.findOneAndUpdate({pin:pin,aadhaar:aadhaar},{score:score,individualScore:indi})
+  .then((result) => {
+    res.send("Score updated");
+  })
+  .catch((err) => {
+    console.log(err);
+    res.status(400).send("Error updating score");
+  });
 });
 
 module.exports = router;
