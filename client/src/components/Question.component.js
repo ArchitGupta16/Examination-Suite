@@ -4,6 +4,7 @@ import TestNav from "./TestNav.component";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
 import { useAlert } from "react-alert";
+import { Card, Button, Form, FloatingLabel, ListGroup } from 'react-bootstrap';
 
 function Question(props) {
   let history = useHistory();
@@ -13,68 +14,57 @@ function Question(props) {
   const secs = res.time.split(":")[1] ? res.time.split(":")[1] : 0;
   const length = res.results.length;
   const [questype, settype] = useState(false);
-  const [ques, setques] = useState(
-    parseInt(localStorage.getItem("currentQuestionIndex")) || 0
-  );
+  const [ques, setques] = useState(parseInt(localStorage.getItem("currentQuestionIndex")) || 0);
   const [options, setoptions] = useState([]);
   const [question, setquestion] = useState("");
-  const [answers, setanswers] = useState(
-    JSON.parse(localStorage.getItem("answers")) || {}
-  );
-  const [userAnswer, setUserAnswer] = useState(
-    answers[ques] || ""
-  );
+  const [answers, setanswers] = useState(JSON.parse(localStorage.getItem("answers")) || {});
+  const [userAnswer, setUserAnswer] = useState(answers[ques] || "");
   const [image, setImage] = useState("");
   const [answered, setAnswered] = useState(false);
   const [allScore, setAllScore] = useState();
+
   const category = res.category;
 
   const submithandler = () => {
-    let aadhaar = localStorage.getItem("aadhaar");
+    
     let name = localStorage.getItem("name");
-    let email = localStorage.getItem("email");
+    let aadhaar = localStorage.getItem("aadhaar");
     let pin = localStorage.getItem("pin");
     let score = 0;
-    let loc = {}
-    console.log("aadawdawaarrrr",aadhaar)
+    let loc = {};
     if (category === "2" || category === "3" || category === "4") {
-      
       for (let i = 0; i < length; i++) {
-        loc[i] = 0
+        loc[i] = 0;
         if (res.results[i].correct_answer.length > 1) {
           const temp = answers[i] ? answers[i].split(" ") : [];
           for (let j = 0; j < res.results[i].correct_answer.length; j++) {
             console.log(temp);
             if (temp.includes(res.results[i].correct_answer[j])) {
               score += 1 / res.results[i].correct_answer.length;
-              loc[i] = 1            
+              loc[i] = 1 / res.results[i].correct_answer.length  
             }
           }
         } else {
           if (answers[i] == res.results[i].correct_answer) {
             score += 1;
-            loc[i] = 1   
           }
         }
-        console.log(loc,"awdawdawdawd")
-        
       }
       setAllScore(loc)
+
     } else if (category === "5") {
       let loc= {}
       for (let i = 0; i < length; i++) {
         loc[i] = 0
         if (res.results[i].correct_answer.includes(answers[i])) {
           score += 1;
-          loc[i] = 1   
+          loc[i] = 1
         }
-        
       }
       setAllScore(loc)
     }
-    
     score = (score / length) * 100;
-    console.log(allScore,"llslsl");
+
     const options = {
       headers: {
         "Content-Type": "application/json",
@@ -99,7 +89,7 @@ function Question(props) {
         alert.show("Test Submitted Successfully", { type: "success" });
       })
       .catch((err) => console.log(err.response.data));
-      localStorage.clear()
+    localStorage.clear();
   };
 
   function shuffleArray(array) {
@@ -119,22 +109,6 @@ function Question(props) {
     localStorage.setItem("answers", JSON.stringify(answers));
   }, [ques, answers]);
 
-  useEffect(() => {
-    for (let i = 0; i < length; i++) {
-      res.results[i].question = res.results[i].question.replace(
-        /&#?\w+;/g,
-        (match) => entities[match]
-      );
-      res.results[i].correct_answer = res.results[i].correct_answer.map((x) =>
-        x.replace(/&#?\w+;/g, (match) => entities[match])
-      );
-      res.results[i].incorrect_answers = res.results[
-        i
-      ].incorrect_answers.map((x) =>
-        x.replace(/&#?\w+;/g, (match) => entities[match])
-      );
-    }
-  }, []);
 
   useEffect(() => {
     if (res.results[ques].type === "text") {
@@ -154,22 +128,6 @@ function Question(props) {
 
   }, [ques]);
 
-  const entities = {
-    "&#039;": "'",
-    "&quot;": '"',
-    "&lt;": "<",
-    "&gt;": ">",
-    "&#39;": "'",
-    "&#34;": "'",
-    "&#034;": '"',
-    "&#60;": "<",
-    "&#060;": "<",
-    "&#62;": ">",
-    "&#062;": ">",
-    "&amp;": "&",
-    "&#38;": "&",
-    "&#038;": "&",
-  };
 
   useEffect(() => {
     setAnswered(answers[ques] !== undefined);
@@ -181,30 +139,8 @@ function Question(props) {
     setAnswered(true);
   };
 
-  const handleOptionClick = (e) => {
-    let path = [];
-    let node = e.target;
-    while (node !== document) {
-      path.push(node);
-      node = node.parentNode;
-    }
-    path.push(document);
-
-    console.log(path);
-
-    path.reverse();
-    let ans = "";
-    for (let ele of path) {
-      if (ele.id === "options") {
-        for (let ans of ele.childNodes) {
-          ans.className = styles.container;
-        }
-      } else if (ele.localName === "div" && ele.id === "") {
-        ele.className = styles.containeractive;
-        ans = ele.childNodes[0].value;
-      }
-    }
-    setanswers({ ...answers, [ques]: ans });
+  const handleOptionClick = (option) => {
+    setanswers({ ...answers, [ques]: option[0] });
     setAnswered(true);
   };
 
@@ -212,105 +148,69 @@ function Question(props) {
   return (
     <Fragment>
       <TestNav mins={mins} secs={secs} submithandler={submithandler} />
-      <div className={styles.qcontainer}>
-        {ques + 1}. {question}
+      <Card className="mt-3">
+        <Card.Title className="text-center mt-3 ">Question {ques + 1}</Card.Title>
+        <Card.Text className="text-center">{question}</Card.Text>
+      </Card>
+      <div className="text-center mt-3">
+        {image && <img src={image} alt="Question Image" />}
       </div>
-      <div>
-        {image && (
-          <img src={image} style={{alignContent:"center"}} alt="Question Image" />
-        )}
-        </div>
       {!questype &&
-      <div id="options" >
-        {options.map((option, index) => (
-          <div key={index} className={styles.container} onClick={handleOptionClick}>
-            <input
-              className={styles.radios}
-              type="radio"
-              value={option}
-              name="options"
-              id={index.toString()}
-            />
-            <label htmlFor={index.toString()}>
-              {String.fromCharCode("A".charCodeAt(0) + index)}. {option}
-            </label>
-          </div>
-        ))}
-      </div>
+        <div id="options" className="mt-3">
+          <ListGroup>
+            {options.map((option, index) => (
+              <ListGroup.Item
+                key={index}
+                onClick={() => handleOptionClick(option)}
+                className="cursor-pointer"
+              >
+                <Form.Check
+                  type="radio"
+                  id={index.toString()}
+                  label={`${String.fromCharCode("A".charCodeAt(0) + index)}. ${option}`}
+                  name="options"
+                  value={option}
+                />
+              </ListGroup.Item>
+            ))}
+          </ListGroup>
+        </div>
       }
       {questype &&
-        <div >
-          <input
-            type="text"
-            placeholder="Enter your answer"
-            value={userAnswer}
-            onChange={handleAnswerChange}
-            style={{
-              display: "block",
-              margin: "0 auto",
-              width: "50%",
-              height: "80px",
-              fontSize: "20px",
-              textAlign: "center",
-              opacity: "0.6"
-            }}
-          />
-
-        </div>
-        }
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          marginTop: "20px"
-        }}
-      >
-
+        <Form.Control
+          type="text"
+          placeholder="Enter your answer"
+          value={userAnswer}
+          onChange={handleAnswerChange}
+          className="mt-3"
+        />
+      }
+      <div className="d-flex justify-content-center mt-3">
         <a
           onClick={(e) => {
             if (ques == 0) {
             } else {
               setques(ques - 1);
-              let parentNode = e.target.parentNode.parentNode;
-              let answeropt = parentNode.querySelector(".options")?.childNodes;
-              if (answeropt) {
-                for (let opt of answeropt) {
-                  opt.className = styles.container;
-                }
             }
-          }
           }}
-          className={styles.buttons1}
+          className="me-3 cursor-pointer"
         >
-          &#8249;
+          <Button variant="secondary">Previous</Button>
         </a>
         <a
           onClick={(e) => {
-            if (!answered) {
-              alert.show("Please answer the current question before going to the next one.",{type:"warning"});
-              return;
-            }
             if (ques === length - 1) {
               alert.show("This is the last question, Submitting the test.", { type: "warning" });
               submithandler();
             } else {
               setques(ques + 1);
-              let parentNode = e.target.parentNode.parentNode;
-              let answeropt = parentNode.querySelector(".options")?.childNodes;
-              if (answeropt) {
-                for (let opt of answeropt) {
-                  opt.className = styles.container;
-                }
-              }
             }
           }}
-          className={styles.buttons2}
           disabled={!answered}
+          className="cursor-pointer"
         >
-          &#8250;
+          <Button variant="secondary">Next</Button>
         </a>
-
-
       </div>
     </Fragment>
   );
