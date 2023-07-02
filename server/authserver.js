@@ -26,8 +26,10 @@ mongoose.connection.once("open", () => {
 
 const userRouter = require("./routes/user");
 const testRouter = require("./routes/test");
+const adminQuestionRouter = require("./routes/adminQuestion");
 app.use("/api/user", userRouter);
 app.use("/api/test", testRouter);
+app.use("/api/adminQuestion", adminQuestionRouter)
 
 if (
   process.env.NODE_ENV === "production" ||

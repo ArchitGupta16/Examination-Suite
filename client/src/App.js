@@ -6,6 +6,7 @@ import Ques from "./components/Question.component";
 import Landing from "./components/Landing";
 import TestResults from "./components/Results";
 import Grade from "./components/Grade";
+import EditTest from "./components/EditTest"
 import CustomNavbar from "./components/CustomNavbar";
 function App() {
   const [loggedin, setloggedin] = useState(false);
@@ -24,6 +25,7 @@ function App() {
           <Route exact path="/test" component={Ques} />
           <Route exact path="/test-results" component={TestResults} />
           <Route exact path="/grade" component={Grade} />
+          <Route exact path="/Edittest" component={EditTest} />
           <Route render={() => <Redirect to="/" />} />
         </Switch>
       </main>

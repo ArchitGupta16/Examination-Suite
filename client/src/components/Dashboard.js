@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { useHistory } from "react-router-dom";
+import { useHistory,Link } from "react-router-dom";
 import axios from "axios";
 import { Alert, Button, Card, Form, Modal } from "react-bootstrap";
+
 
 const topics = [
   { id: 1, name: "<--select category-->" },
@@ -40,6 +41,19 @@ function Dashboard(props) {
     .then((res) => {
       console.log(res,"got the results guyss",);
       history.push("/test-results", { data: res.data, testdetails : tests.find((test) => test.pin === pin) });
+    })
+    .catch((err) => {
+      console.log("error here buddy",err.response.body)
+    })
+  }
+  const getQuestions=(pin)=>{
+    axios.post(
+      "http://localhost:4000/api/test/getquestions",
+      {pin}
+    )
+    .then((res) => {
+      console.log(res,"got the question guyss",);
+      history.push("/Edittest", { data: res.data, testdetails : tests.find((test) => test.pin === pin) });
     })
     .catch((err) => {
       console.log("error here buddy",err.response.body)
@@ -108,6 +122,7 @@ function Dashboard(props) {
                     <strong>Expiry:</strong> {new Date(test.expiry).toLocaleDateString()}
                   </Card.Text>
                   <Button variant="primary" onClick={()=>getResults(test.pin)} >View Results</Button>
+                  <Button variant="primary" onClick={()=>getQuestions(test.pin)} style={{marginLeft:"10px" ,marginTop:"2px"}}>Edit Test</Button>
                 </Card.Body>
                 </Card>
               </div>
