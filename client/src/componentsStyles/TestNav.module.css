@@ -1,34 +1,40 @@
-
-.header {
-  background: #5f5f5f;
-  padding: 0 0;
-  display: block;
-  width: 100vw;
+.testName {
+  margin-left: 20px; /* Adjust the left margin as needed */
+  font-size: 140%;
+  
 }
-
-.navitems {
-  display: grid;
-  grid-template-columns: 1fr 2fr 1fr;
-  grid-template-rows: 80px;
-  color: white;
-  font-size: 1.2em;
+.na{
+  background-color: white;
+  
 }
-
-.timer {
-  grid-column: 2/3;
-  padding: 7px 5% 2% 5%;
-  border-radius: 20px;
-  border: 2px solid white;
+.navbarContent {
+  display: flex;
+  align-items: center;
   justify-content: center;
-  margin: 0 auto;
+  flex: 1;
 }
 
-.submit {
-  grid-column-start: 3;
-  margin: auto;
-  cursor: pointer;
-  padding: 2% 10% 2% 10%;
-  border-radius: 20px;
-  border: 2px solid white;
-  float: right;
+.timerBox {
+  background-color: #00896B;
+  padding: 1px 8px 1px 8px;
+  border-radius: 4px;
+  margin-top:1vh ;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.name {
+  margin-left: auto;
+  font-size: 140%;
+}
+
+@media (max-width: 767px) {
+  .navbarContent {
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: space-between;
+  }
 }

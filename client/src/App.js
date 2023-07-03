@@ -14,9 +14,12 @@ function App() {
   let location = useLocation();
 
   const isTaketestPage = location.pathname === "/taketest";
+  const isquestionpage=location.pathname==="/test";
+
   return (
     <React.Fragment>
-      {!isTaketestPage && <CustomNavbar  />}
+     {!isquestionpage && !isTaketestPage && <CustomNavbar  />}
+
       <main>
         <Switch>
           <Route exact path="/" component={Landing} />
