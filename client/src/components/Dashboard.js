@@ -2,15 +2,12 @@ import React, { useState, useEffect } from "react";
 import { useHistory,Link } from "react-router-dom";
 import axios from "axios";
 import { Alert, Button, Card, Form, Modal } from "react-bootstrap";
+import one from "../resources/1.jpg";
+import two from "../resources/p2.jpg";
+import three from "../resources/p3.jpeg";
+import four from "../resources/p4.jpg";
 
-
-const topics = [
-  { id: 1, name: "<--select category-->" },
-  { id: 2, name: "EVS" },
-  { id: 3, name: "Math" },
-  { id: 4, name: "English" },
-  { id: 5, name: "Computer" },
-];
+const images = [one, two, three, four];
 
 function Dashboard(props) {
   let history = useHistory();
@@ -64,11 +61,6 @@ function Dashboard(props) {
     axios
       .post("http://localhost:4000/api/test/gettests", {}, options)
       .then((res) => {
-        for (let x of res.data) {
-          for (let y of topics) {
-            if (y["id"] == x["topic"]) x.topicname = y["name"];
-          }
-        }
         setTests(res.data);
       })
       .catch((err) => {
@@ -110,23 +102,38 @@ function Dashboard(props) {
           </Button>
         </div>
         <div className="row row-cols-1 row-cols-md-3 g-4">
-          {tests.map((test) => (
-            <div className="col" key={test._id}>
-              <Card>
-                <Card.Body>
-                  <Card.Title>{test.topicname}</Card.Title>
-                  <Card.Text>
-                    <strong>Pin:</strong> {test.pin}<br />
-                    <strong>Number of Questions:</strong> {test.amount}<br />
-                    <strong>Time Duration (Mins):</strong> {test.time}<br />
-                    <strong>Expiry:</strong> {new Date(test.expiry).toLocaleDateString()}
-                  </Card.Text>
-                  <Button variant="primary" onClick={()=>getResults(test.pin)} >View Results</Button>
-                  <Button variant="primary" onClick={()=>getQuestions(test.pin)} style={{marginLeft:"10px" ,marginTop:"2px"}}>Edit Test</Button>
-                </Card.Body>
-                </Card>
-              </div>
-          ))}
+        {tests.map((test,index) => (
+          <div className="col" key={test._id}>
+            <Card>
+              {/* Add Card Image */}
+              <Card.Img variant="top" style={{ width: "100%",height:"20vh" }} src={images[index % images.length]} alt="Test Image" />
+
+              <Card.Body>
+                <Card.Title>{test.testname}</Card.Title>
+                <Card.Text>
+                  <strong>Pin:</strong> {test.pin}
+                  <br />
+                  <strong>Number of Questions:</strong> {test.amount}
+                  <br />
+                  <strong>Time Duration (Mins):</strong> {test.time}
+                  <br />
+                  <strong>Expiry:</strong>{" "}
+                  {new Date(test.expiry).toLocaleDateString()}
+                </Card.Text>
+                <Button variant="primary" onClick={() => getResults(test.pin)}>
+                  View Results
+                </Button>
+                <Button
+                  variant="primary"
+                  onClick={() => getQuestions(test.pin)}
+                  style={{ marginLeft: "10px", marginTop: "2px" }}
+                >
+                  Edit Test
+                </Button>
+              </Card.Body>
+            </Card>
+          </div>
+        ))}
 
         </div>
       </div>
@@ -139,16 +146,15 @@ function Dashboard(props) {
         <Modal.Body>
           {alert.show && <Alert variant={alert.variant}>{alert.message}</Alert>}
           <Form onSubmit={onSubmit}>
-            <Form.Group controlId="exampleForm.SelectCustom">
-              <Form.Label>Select Category</Form.Label>
-              <Form.Control as="select" custom value={topic} onChange={(event) => settopic(event.target.value)}>
-                {topics.map((topic) => (
-                  <option key={topic.id} value={topic.id}>
-                    {topic.name}
-                  </option>
-                ))}
-              </Form.Control>
-            </Form.Group>
+          <Form.Group controlId="formBasicNumber">
+              <Form.Label>Topic</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Enter name of test"
+                value={topic}
+                onChange={(event) => settopic(event.target.value)}
+              />
+              </Form.Group>
             <Form.Group controlId="formBasicNumber">
               <Form.Label>Number of Questions</Form.Label>
               <Form.Control

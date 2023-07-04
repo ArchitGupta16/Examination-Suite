@@ -57,9 +57,9 @@ router.use("/getresults", verify);
 router.use("/addtest", verify);
 
 router.route("/gettests").post(async (req, res) => {
-  const aadhaar = req.user.aadhaar;
+  const email = req.user.email;
   try {
-    const doc = await test.find({ aadhaar }).sort("-created").exec();
+    const doc = await test.find({ email }).sort("-created").exec();
     return res.send(doc);
   } catch (err) {
     console.log(err);
@@ -79,16 +79,18 @@ router.route("/getresults").post(async (req, res) => {
 
 router.route("/addtest").post(async (req, res) => {
   const pin = (await test.countDocuments({}).exec()) + 1000;
-  const aadhaar = req.user.aadhaar;
+  const testname = req.body.topic;
+  const email = req.user.email.toLowerCase();
   const amount = req.body.amount;
-  const topic = req.body.topic;
+  const topic = (await test.countDocuments({}).exec()) + 1;
   const time = req.body.time;
   const expiry = Date.parse(req.body.expiry);
   const created = Date.parse(req.body.created);
 
   const newtest = new test({
+    testname,
     pin,
-    aadhaar,
+    email,
     amount,
     topic,
     time,

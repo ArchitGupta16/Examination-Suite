@@ -285,7 +285,7 @@ function EditTest() {
       <br/>
 
       {questions.map((question) => (
-        <div className="mb-3" key={question._id}>
+        <div className="mbb-3" key={question._id}>
           <Card>
             <Card.Body>
               <Card.Title>Question {question._id}</Card.Title>

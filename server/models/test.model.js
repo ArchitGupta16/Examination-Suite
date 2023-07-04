@@ -3,7 +3,15 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const testSchema = new Schema({
+  testname: {
+    type: String,
+    required: true,
+  },
   pin: {
+    type: String,
+    required: true,
+  },
+  email: {
     type: String,
     required: true,
   },
@@ -27,10 +35,6 @@ const testSchema = new Schema({
     type: Date,
     required: true,
   },
-  aadhaar: {
-    type: String,
-    required: true,
-  }
 });
 
 const test = mongoose.model("test", testSchema);
