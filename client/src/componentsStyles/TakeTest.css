@@ -15,18 +15,19 @@
 }
 
 .containerr {
+  margin-left: 1vh!important;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  max-width: 600px; 
-  max-height: 600px;
-  width: 55vw; 
-  height: 50vh;
-  background-color: rgba(255, 255, 255, 0.4);
-  padding: 2vw; 
-  box-sizing: border-box; 
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.3); 
-  border-radius: 17px; 
+  width: 80vw;
+  max-width: 600px;
+  height: auto;
+  background-color: rgba(255, 255, 255, 0.9);
+  padding: 2vw;
+  margin: 2vh auto;
+  box-sizing: border-box;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+  border-radius: 17px;
 }
 
 .image-container {
@@ -36,26 +37,84 @@
   padding: 10px;
 }
 
-.fieldss{
+.fieldss {
   background-color: rgba(255, 255, 255, 0.1);
   border-radius: 10px;
   border-color: #000000;
 }
-.btttn{
+
+.btttn {
   min-width: fit-content;
-  width: 6vw;
+  width: 8vw;
   height: 5vh;
-  background-color: #00896B; 
-  border-color: #00896B; 
+  background-color: #00896B;
+  border-color: #00896B;
   color: #FFFFFF;
+  font-size: 1.2rem;
+  margin-top: 2vh;
+  align-self: center;
 }
+
 .btttn:hover {
   background-color: #4e9e8d;
-  border-color: #4e9e8d; 
+  border-color: #4e9e8d;
   color: #FFFFFF;
 }
-.text{
+
+.text {
   color: #0d421f;
-  text-emphasis: bold;
+  font-size: 2rem;
+  font-weight: bold;
   text-align: center;
+  margin-bottom: 2vh;
+}
+
+.containerr input[type="text"],
+.containerr input[type="email"],
+.containerr textarea {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 1vw;
+  margin-bottom: 2vh;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1.2rem;
+}
+
+.containerr select {
+  align-items: flex-start;
+  box-sizing: border-box;
+  width: 100%;
+  padding: 1vw;
+  margin-bottom: 2vh;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1.2rem;
+  background-color: white;
+  background-image: none;
+  margin: 0;
+}
+
+@media screen and (max-width: 600px) {
+  .containerr {
+    width: 90vw;
+  }
+}
+
+@media screen and (max-width: 400px) {
+  .text {
+    font-size: 1.5rem;
+  }
+  
+  .containerr input[type="text"],
+  .containerr input[type="email"],
+  .containerr textarea,
+  .containerr select {
+    font-size: 1rem;
+  }
+  
+  .btttn {
+    font-size: 1rem;
+    width: 10vw;
+  }
 }

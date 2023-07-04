@@ -4,6 +4,7 @@ const result = require("../models/result.model");
 const question = require("../models/question.model");
 const axios = require("axios");
 const verify = require("./verifyToken");
+const student = require("../models/student.model");
 
 router.route("/").post(async (req, res) => {
   const testid = req.body.pin;
@@ -131,6 +132,26 @@ router.route("/updateScore").put(async (req, res) => {
     console.log(err);
     res.status(400).send("Error updating score");
   });
+});
+
+router.route("/studentProfile").post(async (req, res) => {
+  console.log(req.body);
+  const aadhaar = req.body.aadhaar;
+  const firstName = req.body.firstName;
+  const lastName = req.body.lastName;
+  const parentName = req.body.parentName;
+  const gender = req.body.gender;
+  const projectName = req.body.projectName;
+  const state = req.body.state;
+  const city = req.body.city;
+  const profile = new student({ aadhaar, firstName, lastName, parentName, gender, projectName, state, city });
+  profile
+    .save()
+    .then(() => {
+    console.log("Student profile added!");
+    res.send("Student profile added!")
+    })
+    .catch((err) => {console.log(err.message),res.status(400).json("Could not add to database: " + err)} );
 });
 
 module.exports = router;
