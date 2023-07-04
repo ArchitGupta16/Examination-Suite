@@ -4,7 +4,7 @@ import TestNav from "./TestNav";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
 import { useAlert } from "react-alert";
-import { Card, Button, Form, ListGroup,ProgressBar} from 'react-bootstrap';
+import { Card, Button, Form, ListGroup,ProgressBar,Modal} from 'react-bootstrap';
 
 function Question(props) {
   let history = useHistory();
@@ -26,6 +26,8 @@ function Question(props) {
   const [allScore, setAllScore] = useState();
   const [isLastQuestion, setIsLastQuestion] = useState(false);
   const [selectedOption, setSelectedOption] = useState("");
+  const [showModal, setShowModal] = useState(false);
+  const [selectedOptions, setSelectedOptions] = useState(new Array(length).fill(""));
 
   const category = res.category;
 
@@ -70,6 +72,8 @@ function Question(props) {
     }
     score = (score / length) * 100;
 
+    setShowModal(true);
+    
     const options = {
       headers: {
         "Content-Type": "application/json",
@@ -90,11 +94,13 @@ function Question(props) {
       )
       .then((res) => {
         console.log(res);
-        history.push("/");
-        alert.show("Test Submitted Successfully", { type: "success" });
+        
+        alert.show("Test Submitted Successfully", { type: "success" });
+      
       })
       .catch((err) => console.log(err.response.data));
     localStorage.clear();
+    
   };
 
   function shuffleArray(array) {
@@ -131,6 +137,8 @@ function Question(props) {
     setUserAnswer(answers[ques] || "");
     setImage(res.results[ques]?.image || "");
 
+    
+
   }, [ques]);
 
 
@@ -147,9 +155,17 @@ function Question(props) {
 
   const handleOptionClick = (option) => {
     setSelectedOption(option);
+    const updatedSelectedOptions = [...selectedOptions];
+    updatedSelectedOptions[ques] = option;
+    setSelectedOptions(updatedSelectedOptions);
     setanswers({ ...answers, [ques]: option[0] });
     setAnswered(true);
+    
 
+  };
+  const handleQuestionClick = (index) => {
+    setques(index);
+    setShowModal(false); // Close the modal after clicking on a question
   };
 
   const progress = ((ques + 1) / length) * 100;
@@ -184,13 +200,14 @@ function Question(props) {
           <div id="options" className={`mt-4 ${styles.optionsContainer}`}>
             
               {options.map((option, index) => {
-                const isChecked = option === answers[ques];
+                const isChecked = option === answers[ques] ;
+                const isSelected = option === selectedOptions[ques];
                 
                 return (
                   <Card
                     key={index}
                     onClick={() => handleOptionClick(option)}
-                    className={`${styles.optionItem} cursor-pointer mb-1 ${option===selectedOption ? styles.selectedOption : ''}`}
+                    className={`${styles.optionItem} cursor-pointer mb-1 ${isSelected  ? styles.selectedOption : ''}`}
                   >
                     <Card.Body>
                     <Card.Text className={styles.optionText}>
@@ -230,10 +247,31 @@ function Question(props) {
             onClick={isLastQuestion ? submithandler : () => setques(ques + 1)}
             className={styles.navigationButton}
           >
-            {isLastQuestion ? "Submit" : "Next"}
+            {isLastQuestion ? "Summary" : "Next"}
           </Button>
         </div>
       </div>
+
+      <Modal show={showModal} onHide={() => setShowModal(false)} size="lg">
+  <Modal.Header closeButton>
+    <Modal.Title>Test Results</Modal.Title>
+  </Modal.Header>
+  <Modal.Body>
+    <ListGroup>
+      {res.results.map((result, index) => (
+        <ListGroup.Item key={index} variant={answers[index] ? 'success' : 'danger'} onClick={() => handleQuestionClick(index)}>
+          Q{index + 1}:  {answers[index] ? 'Answered' : 'Unanswered'}
+        </ListGroup.Item>
+      ))}
+    </ListGroup>
+  </Modal.Body>
+  <Modal.Footer>
+  <Button variant="success" onClick={() => history.push("/")} >
+            Submit
+          </Button>
+                  
+  </Modal.Footer>
+</Modal>
     </Fragment>
   );
 }

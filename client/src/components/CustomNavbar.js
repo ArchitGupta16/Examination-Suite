@@ -93,14 +93,14 @@ function CustomNavbar(props) {
                 />
               </Navbar.Brand>
               <Nav>
-                <Row>
+                
                   <Col>
               <Button variant="success" as={Link} to="/dashboard" style={{ width: '100px',marginTop:"5px" ,marginLeft:"10px"}}>Dashboard</Button>
               </Col>
               <Col>
               <Button variant="success" as={Link} to="/logout" style={{marginLeft:"10px",width:"100px",marginTop:"5px"}}>Logout</Button>
               </Col>
-              </Row>
+              
               </Nav>
             </>
           )}
