@@ -80,8 +80,7 @@ function Taketest() {
 
   return (
 
-    <div style={{height: "100vh", overflow: "hidden"}}>
-    {/* <CustomNavbar page="TakeTest"/> */}
+    <div >
     <div className="bgg">
       <div className="image-container">
         <a href="/">

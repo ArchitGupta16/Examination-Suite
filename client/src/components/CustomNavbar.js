@@ -19,7 +19,9 @@ function CustomNavbar(props) {
 
   
   const handleLogout = () => {
-    // handle logout logic here
+    localStorage.clear();
+    props.setloggedin(false);
+    history.push("/");
   }
 
   return (
@@ -93,14 +95,12 @@ function CustomNavbar(props) {
                 />
               </Navbar.Brand>
               <Nav>
-                <Row>
-                  <Col>
+              <Col>
               <Button variant="success" as={Link} to="/dashboard" style={{ width: '100px',marginTop:"5px" ,marginLeft:"10px"}}>Dashboard</Button>
               </Col>
               <Col>
               <Button variant="success" as={Link} to="/logout" style={{marginLeft:"10px",width:"100px",marginTop:"5px"}}>Logout</Button>
               </Col>
-              </Row>
               </Nav>
             </>
           )}
@@ -118,6 +118,21 @@ function CustomNavbar(props) {
               <Nav>
               <Button variant="success"  as={Link} to="/logout" style={{ width: '100px' }} >Logout</Button>
               
+              </Nav>
+            </>
+          )}
+          { location.pathname === "/Edittest" && (
+            <>
+              <Navbar.Brand  as={Link} to="/">
+                <img
+                  src="https://i.ibb.co/wp6QBSZ/niitfoundatin-Logo.png"
+                  height="50"
+                  className="d-inline-block align-top imgg"
+                  alt="Brand Logo"
+                />
+              </Navbar.Brand> 
+              <Nav>
+              <Button variant="success" as={Link} to="/logout" style={{ width: '100px' }}>Logout</Button>
               </Nav>
             </>
           )}

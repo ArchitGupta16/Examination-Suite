@@ -13,7 +13,7 @@ function Question(props) {
   const mins = res.time.split(":")[0];
   const secs = res.time.split(":")[1] ? res.time.split(":")[1] : 0;
   const length = res.results.length;
-  let name = localStorage.getItem("name");
+  let name = localStorage.getItem("firstName");
   let pin = localStorage.getItem("pin");
   const [questype, settype] = useState(false);
   const [ques, setques] = useState(parseInt(localStorage.getItem("currentQuestionIndex")) || 0);
@@ -33,7 +33,7 @@ function Question(props) {
 
   const submithandler = () => {
     
-    let name = localStorage.getItem("name");
+    let name = localStorage.getItem("firstName");
     let aadhaar = localStorage.getItem("aadhaar");
     let pin = localStorage.getItem("pin");
     let score = 0;
@@ -72,7 +72,7 @@ function Question(props) {
     }
     score = (score / length) * 100;
 
-    setShowModal(true);
+    
     
     const options = {
       headers: {
@@ -94,12 +94,17 @@ function Question(props) {
       )
       .then((res) => {
         console.log(res);
-        
+        localStorage.clear();
         alert.show("Test Submitted Successfully", { type: "success" });
+        history.push("/");
       
       })
-      .catch((err) => console.log(err.response.data));
-    localStorage.clear();
+      .catch((err) => {
+        console.log(err.response.data)
+        alert.show(err.response.data.msg, { type: "error" })}
+      )
+      ;
+    
     
   };
 
@@ -167,7 +172,15 @@ function Question(props) {
     setques(index);
     setShowModal(false); // Close the modal after clicking on a question
   };
-
+  const handleNextQuestion = () => {
+    if (isLastQuestion) {
+      setTimeout(() => {
+        setShowModal(true);
+      }, 0);
+    } else {
+      setques(ques + 1);
+    }
+  };
   const progress = ((ques + 1) / length) * 100;
 
 
@@ -244,7 +257,7 @@ function Question(props) {
           </Button>
            <Button
             variant={isLastQuestion ? "success" : "primary"}
-            onClick={isLastQuestion ? submithandler : () => setques(ques + 1)}
+            onClick={handleNextQuestion}
             className={styles.navigationButton}
           >
             {isLastQuestion ? "Summary" : "Next"}
@@ -266,7 +279,7 @@ function Question(props) {
     </ListGroup>
   </Modal.Body>
   <Modal.Footer>
-  <Button variant="success" onClick={() => history.push("/")} >
+  <Button variant="success" onClick={() => submithandler()} >
             Submit
           </Button>
                   

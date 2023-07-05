@@ -14,3 +14,7 @@
   .align-right {
     float: right;
   }
+
+  .mybutton{
+    align-items: right;
+  }

@@ -146,7 +146,16 @@ function EditTest() {
   };
 
   return (
+    <div>
+    <hr className="hr-custom" />
+    <div className="d-flex justify-content-center mb-4">
+      <Button className="add-button align-right"
+          variant="primary" onClick={() => setShowAddModal(true)}>
+        Add Question
+      </Button>
+      </div>
     <div className="centered-container">
+      
       <Modal show={showAddModal} onHide={() => setShowAddModal(false)}>
         <Modal.Header closeButton>
           <Modal.Title>Add New Question</Modal.Title>
@@ -272,16 +281,14 @@ function EditTest() {
           <Button variant="dark" onClick={() => setShowAddModal(false)}>
             Cancel
           </Button>
+          
           <Button variant="success" onClick={handleAddQuestion} >
             Add Question
           </Button>
+         
         </Modal.Footer>
       </Modal>
-
-      <Button className="add-button align-right"
-          variant="primary" onClick={() => setShowAddModal(true)}>
-        Add Question
-      </Button>
+      
       <br/>
 
       {questions.map((question) => (
@@ -375,6 +382,7 @@ function EditTest() {
           )}
         </div>
       ))}
+    </div>
     </div>
   );
 }
