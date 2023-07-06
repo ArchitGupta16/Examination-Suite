@@ -38,7 +38,11 @@ const studentSchema = new mongoose.Schema({
   city: {
     type: String,
     required: false
- }
+ },
+ testID :{
+    type: String,
+    required: true
+ },
 });
 
 module.exports = mongoose.model("Student", studentSchema);

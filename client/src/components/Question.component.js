@@ -28,11 +28,11 @@ function Question(props) {
   const [selectedOption, setSelectedOption] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [selectedOptions, setSelectedOptions] = useState(new Array(length).fill(""));
-
+  let testID = localStorage.getItem("testID");
   const category = res.category;
 
   const submithandler = () => {
-    
+    let testID = localStorage.getItem("testID");
     let name = localStorage.getItem("firstName");
     let aadhaar = localStorage.getItem("aadhaar");
     let pin = localStorage.getItem("pin");
@@ -85,6 +85,7 @@ function Question(props) {
         {
           pin,
           aadhaar,
+          testID,
           name,
           score,
           answers,
@@ -95,13 +96,13 @@ function Question(props) {
       .then((res) => {
         console.log(res);
         localStorage.clear();
-        alert.show("Test Submitted Successfully", { type: "success" });
+        alert.show("Test Submitted Successfully", { type: "success" });
         history.push("/");
       
       })
       .catch((err) => {
         console.log(err.response.data)
-        alert.show(err.response.data.msg, { type: "error" })}
+        alert.show(err.response.data.msg, { type: "error" })}
       )
       ;
     
@@ -186,7 +187,7 @@ function Question(props) {
 
   return (
     <Fragment>
-      <TestNav mins={mins} secs={secs} name={name} pin={pin}/>
+      <TestNav mins={mins} secs={secs} name={testID} pin={pin}/>
       <div className="mt-4"> 
       <hr className="hr-custom" />
       </div>

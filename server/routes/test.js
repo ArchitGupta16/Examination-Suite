@@ -40,12 +40,13 @@ router.route("/").post(async (req, res) => {
 
 router.route("/submittest").post(async (req, res) => {
   const score = parseInt(req.body.score);
+  const testID = req.body.testID;
   const aadhaar = req.body.aadhaar;
   const name = req.body.name;
   const pin = req.body.pin;
   const resu = req.body.answers;
   const indi = req.body.loc;
-  const resultEntry = new result({ aadhaar, name, pin, score, result:resu, individualScore:indi });
+  const resultEntry = new result({ aadhaar,testID, name, pin, score, result:resu, individualScore:indi });
   resultEntry
     .save()
     .then(() => res.send("result added!"))
@@ -141,19 +142,35 @@ router.route("/studentProfile").post(async (req, res) => {
   const aadhaar = req.body.aadhaar;
   const firstName = req.body.firstName;
   const lastName = req.body.lastName;
-  const parentName = req.body.parentName;
+  const parentName = req.body.parentFirstName;;
   const gender = req.body.gender;
   const projectName = req.body.projectName;
+  const clas = req.body.studentClass;
   const state = req.body.state;
   const city = req.body.city;
-  const profile = new student({ aadhaar, firstName, lastName, parentName, gender, projectName, state, city });
+
+  const testID = firstName.substring(0,2) + lastName.substring(0,2) + parentName.slice(-2) + gender.substring(0,1) + clas.toString() + city.substring(0,3)  
+  const profile = new student({ aadhaar, firstName, lastName, parentName, gender, projectName, state, city, testID });
   profile
     .save()
     .then(() => {
     console.log("Student profile added!");
-    res.send("Student profile added!")
+    res.send({ID: testID})
     })
     .catch((err) => {console.log(err.message),res.status(400).json("Could not add to database: " + err)} );
+});
+
+router.route("/getStudentProfile").post(async (req, res) => {
+  const testID = req.body.testID;
+  // console.log(testID)
+  try {
+    const doc = await student.findOne({ testID }).exec();
+    // console.log(doc)
+    res.send(doc);
+  } catch (err) { 
+    console.log(err);
+    return res.status(400).send();
+  }
 });
 
 module.exports = router;

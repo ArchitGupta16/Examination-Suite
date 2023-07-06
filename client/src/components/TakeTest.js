@@ -26,6 +26,7 @@ function Taketest() {
   const [projectName, setProjectName] = useState("");
   const [state, setState] = useState("");
   const [city, setCity] = useState("");
+  const [testID, setTestID] = useState("");
   const alert = useAlert()
   
 
@@ -47,7 +48,7 @@ function Taketest() {
       aadhaar, 
       firstName,
       lastName,
-      parentName: `${parentFirstName} ${parentLastName}`,
+      parentFirstName,
       gender,
       studentClass,
       projectName,
@@ -55,7 +56,9 @@ function Taketest() {
       city
     }, options)
     .then((res) => {
-      console.log("success");
+      console.log("success",res.data);
+      setTestID(res.data.ID);
+      localStorage.setItem("testID", res.data.ID);
     })
     .catch((err) => {
       alert.show(err.response.data.message, { type: "error" });

@@ -26,7 +26,11 @@ const resultSchema = new Schema({
   individualScore: {
     type: Object,
     required: true,
-  }
+  },
+  testID: {
+    type: String,
+    required: true,
+  },
 });
 
 const result = mongoose.model("result", resultSchema);
