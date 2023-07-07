@@ -27,6 +27,9 @@ function Taketest() {
   const [state, setState] = useState("");
   const [city, setCity] = useState("");
   const [testID, setTestID] = useState("");
+  const [dob, setDob] = useState("");
+  const [ration, setRation] = useState("");
+  const [documentType, setDocumentType] = useState("");
   const alert = useAlert()
   
 
@@ -53,7 +56,8 @@ function Taketest() {
       studentClass,
       projectName,
       state,
-      city
+      city,
+      dob,
     }, options)
     .then((res) => {
       console.log("success",res.data);
@@ -65,11 +69,11 @@ function Taketest() {
     });
 
     axios
-      .post("http://localhost:4000/api/test/", { pin, aadhaar, firstName, lastName }, options)
+      .post("http://localhost:4000/api/test/", { pin, [documentType]: documentType === "aadhaar" ? aadhaar : ration, firstName, lastName }, options)
       .then((res) => {
         localStorage.setItem("firstName", firstName);
         localStorage.setItem("lastName", lastName);
-        localStorage.setItem("aadhaar", aadhaar);
+        localStorage.setItem(documentType, documentType === "aadhaar" ? aadhaar : ration);
         localStorage.setItem("pin", pin);
         history.push({
           pathname: "/test",
@@ -83,7 +87,7 @@ function Taketest() {
 
   return (
 
-    <div >
+    <div className="imc" >
     <div className="bgg">
       <div className="image-container">
         <a href="/">
@@ -106,7 +110,7 @@ function Taketest() {
                 <FloatingLabel
                   controlId="floatingInput"
                   label="First Name"
-                  className="mb-4"
+                  className="mbb-4"
                 >
                   <Form.Control
                     className="fieldss"
@@ -123,7 +127,7 @@ function Taketest() {
                 <FloatingLabel
                   controlId="floatingInput"
                   label="Last Name"
-                  className="mb-4"
+                  className="mbb-4"
                 >
                   <Form.Control
                     className="fieldss"
@@ -138,29 +142,64 @@ function Taketest() {
               </Row>
               <br />
               <Row>
-                <Form.Group as={Col} controlId="aadhaar">
-                    <FloatingLabel
-                      controlId="floatingInput"
-                      label="Aadhaar Number"
-                      className="mb-4"
-                    >
-                  <Form.Control
-                    className="fieldss"
-                     
-                    // type="number"
-                    placeholder="Enter Aadhaar number"
-                    value={aadhaar}
-                    onChange={(e) => setAadhaar(e.target.value)}
-                  />
-                  </FloatingLabel>
+                
+                <Form.Group as={Col} controlId="documentType">
+                {/* <Form.Label>Select Document Type</Form.Label> */}
+                <Form.Control
+                  as="select"
+                  value={documentType}
+                  className="fieldss"
+                  onChange={(e) => setDocumentType(e.target.value)}
+                  style={{padding:"15px"}}
+                >
+                  <option value="">Select Document Type</option>
+                  <option value="aadhaar">Aadhaar Card</option>
+                  <option value="ration">Ration Card</option>
+                </Form.Control>
               </Form.Group>
+
+              {documentType === "aadhaar" && (
+                <Form.Group as={Col} controlId="aadhaar">
+                  <FloatingLabel
+                    controlId="floatingInput"
+                    label="Aadhaar Number"
+                    className="mbb-4"
+                  >
+                    <Form.Control
+                      className="fieldss"
+                      type="text"
+                      placeholder="Enter Aadhaar number"
+                      value={aadhaar}
+                      onChange={(e) => setAadhaar(e.target.value)}
+                    />
+                  </FloatingLabel>
+                </Form.Group>
+              )}
+
+              {documentType === "ration" && (
+                <Form.Group as={Col} controlId="ration">
+                  <FloatingLabel
+                    controlId="floatingInput"
+                    label="Ration Card Number"
+                    className="mbb-4"
+                  >
+                    <Form.Control
+                      className="fieldss"
+                      type="text"
+                      placeholder="Enter Ration card number"
+                      value={ration}
+                      onChange={(e) => setRation(e.target.value)}
+                    />
+                  </FloatingLabel>
+                </Form.Group>
+              )}
               <br />
 
               <Form.Group as={Col} controlId="pin">
                 <FloatingLabel
                     controlId="floatingInput"
                     label="Pin"
-                    className="mb-3"
+                    className="mbb-4"
                   >
                 <Form.Control
                   className="fieldss"
@@ -179,7 +218,7 @@ function Taketest() {
                 <FloatingLabel
                   controlId="floatingInput"
                   label="Parent First Name"
-                  className="mb-4"
+                  className="mbb-4"
                 >
                   <Form.Control
                     className="fieldss"
@@ -196,7 +235,7 @@ function Taketest() {
                 <FloatingLabel
                   controlId="floatingInput"
                   label="Parent Last Name"
-                  className="mb-4"
+                  className="mbb-4"
                 >
                   <Form.Control
                     className="fieldss"
@@ -212,18 +251,20 @@ function Taketest() {
               <br />
               <Row>
               <Form.Group as={Col} controlId="gender">
-                <FloatingLabel controlId="floatingSelect" label="Gender" className="mb-3">
+                {/* <FloatingLabel controlId="floatingSelect" label="Gender" className="mbb-4"> */}
                   <Form.Select
                     aria-label="Select Gender"
                     value={gender}
                     onChange={(e) => setGender(e.target.value)}
+                    className="fieldss"
+                    style={{padding:"15px"}}
                   >
                     <option value="">Select Gender</option>
                     <option value="male">Male</option>
                     <option value="female">Female</option>
                     <option value="other">Other</option>
                   </Form.Select>
-                </FloatingLabel>
+                {/* </FloatingLabel> */}
               </Form.Group>
               <br />
               <Form.Group as={Col} controlId="studentClass">
@@ -232,8 +273,10 @@ function Taketest() {
                   as="select"
                   value={studentClass}
                   onChange={(e) => setStudentClass(e.target.value)}
+                  className="fieldss"
+                  style={{padding:"15px"}}
                 >
-                  <option value="">Select Class</option>
+                  <option value="" >Select Class</option>
                   <option value="1">Class 1</option>
                   <option value="2">Class 2</option>
                   <option value="3">Class 3</option>
@@ -250,13 +293,26 @@ function Taketest() {
               </Form.Group>
               </Row>
               <br />
+              <Form.Group controlId="dob">
+                <Form.Label>Date of Birth</Form.Label>
+                <Form.Control
+                  type="date"
+                  placeholder="Enter date of birth"
+                  value={dob}
+                  className="fieldss"
+                  onChange={(e) => setDob(e.target.value)}
+                />
+              </Form.Group>
+
+              <br/>
               <Form.Group controlId="projectName">
-                <Form.Label>Project Name</Form.Label>
+                <Form.Label className="mbb-4">Project Name</Form.Label>
                 <Form.Control
                   type="text"
                   placeholder="Enter project name"
                   value={projectName}
                   onChange={(e) => setProjectName(e.target.value)}
+                  className="fieldss"
                 />
               </Form.Group>
               <br />
@@ -265,7 +321,7 @@ function Taketest() {
                 <FloatingLabel
                   controlId="floatingInput"
                   label="State"
-                  className="mb-3"
+                  className="mbb-4"
                 >
                   <Form.Control
                     className="fieldss"
@@ -282,7 +338,7 @@ function Taketest() {
                 <FloatingLabel
                   controlId="floatingInput"
                   label="City"
-                  className="mb-3"
+                  className="mbb-4"
                 >
                   <Form.Control
                     className="fieldss"

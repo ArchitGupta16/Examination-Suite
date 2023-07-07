@@ -139,7 +139,9 @@ router.route("/updateScore").put(async (req, res) => {
 
 router.route("/studentProfile").post(async (req, res) => {
   console.log(req.body);
+  const documentType = req.body.documentType;
   const aadhaar = req.body.aadhaar;
+  const ration = req.body.ration;
   const firstName = req.body.firstName;
   const lastName = req.body.lastName;
   const parentName = req.body.parentFirstName;;
@@ -148,9 +150,17 @@ router.route("/studentProfile").post(async (req, res) => {
   const clas = req.body.studentClass;
   const state = req.body.state;
   const city = req.body.city;
+  const dob = req.body.dob;
 
-  const testID = firstName.substring(0,2) + lastName.substring(0,2) + parentName.slice(-2) + gender.substring(0,1) + clas.toString() + city.substring(0,3)  
-  const profile = new student({ aadhaar, firstName, lastName, parentName, gender, projectName, state, city, testID });
+  const dateOfBirth = new Date(dob);
+  const day = dateOfBirth.getDate();
+  const month = dateOfBirth.getMonth() + 1;
+  const year = dateOfBirth.getFullYear().toString().slice(-2);
+  const ddmmyy = `${day}${month}${year}`;
+
+
+  const testID = firstName.substring(0,2) + lastName.substring(0,2) + parentName.slice(-2) + gender.substring(0,1) + ddmmyy  
+  const profile = new student({ firstName, lastName,ration, aadhaar,parentName, gender, projectName, state, city, testID, clas, dob });
   profile
     .save()
     .then(() => {
@@ -174,3 +184,4 @@ router.route("/getStudentProfile").post(async (req, res) => {
 });
 
 module.exports = router;
+

@@ -43,6 +43,22 @@ const studentSchema = new mongoose.Schema({
     type: String,
     required: true
  },
+
+ aadhaar: {
+  type: String, 
+  required: false
+ },
+
+ ration: {
+  type: String,
+  required: false
+  },
+
+ dob: {
+  type: Date,
+  required: false
+ }
 });
 
 module.exports = mongoose.model("Student", studentSchema);
+

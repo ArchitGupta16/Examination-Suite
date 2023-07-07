@@ -4,7 +4,7 @@ import TestNav from "./TestNav";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
 import { useAlert } from "react-alert";
-import { Card, Button, Form, ListGroup,ProgressBar,Modal} from 'react-bootstrap';
+import { Card, Button, Offcanvas,Accordion ,Form, ListGroup, ProgressBar, Modal, Nav } from 'react-bootstrap';
 
 function Question(props) {
   let history = useHistory();
@@ -30,6 +30,10 @@ function Question(props) {
   const [selectedOptions, setSelectedOptions] = useState(new Array(length).fill(""));
   let testID = localStorage.getItem("testID");
   const category = res.category;
+  const [activeQuestion, setActiveQuestion] = useState(ques);
+  const [Canvasshow, setCanvasShow] = useState(false);
+  const handleCanvasClose = () => setCanvasShow(false);
+  const handleCanvasShow = () => setCanvasShow(true);
 
   const submithandler = () => {
     let testID = localStorage.getItem("testID");
@@ -60,7 +64,7 @@ function Question(props) {
       setAllScore(loc)
 
     } else if (category === "5") {
-      let loc= {}
+      
       for (let i = 0; i < length; i++) {
         loc[i] = 0
         if (res.results[i].correct_answer.includes(answers[i])) {
@@ -72,7 +76,6 @@ function Question(props) {
     }
     score = (score / length) * 100;
 
-    
     
     const options = {
       headers: {
@@ -94,19 +97,17 @@ function Question(props) {
         options
       )
       .then((res) => {
-        console.log(res);
+        // console.log(res);
         localStorage.clear();
-        alert.show("Test Submitted Successfully", { type: "success" });
         history.push("/");
+        alert.show("Test Submitted Successfully", { type: "success"});
+        
       
       })
       .catch((err) => {
         console.log(err.response.data)
         alert.show(err.response.data.msg, { type: "error" })}
-      )
-      ;
-    
-    
+      );
   };
 
   function shuffleArray(array) {
@@ -126,7 +127,6 @@ function Question(props) {
     localStorage.setItem("answers", JSON.stringify(answers));
   }, [ques, answers]);
 
-
   useEffect(() => {
     if (res.results[ques].type === "text") {
       settype(true);
@@ -142,11 +142,7 @@ function Question(props) {
     setoptions(shuffledOptions);
     setUserAnswer(answers[ques] || "");
     setImage(res.results[ques]?.image || "");
-
-    
-
   }, [ques]);
-
 
   useEffect(() => {
     setAnswered(answers[ques] !== undefined);
@@ -166,13 +162,14 @@ function Question(props) {
     setSelectedOptions(updatedSelectedOptions);
     setanswers({ ...answers, [ques]: option[0] });
     setAnswered(true);
-    
-
   };
+
   const handleQuestionClick = (index) => {
     setques(index);
+    setActiveQuestion(index);
     setShowModal(false); // Close the modal after clicking on a question
   };
+
   const handleNextQuestion = () => {
     if (isLastQuestion) {
       setTimeout(() => {
@@ -180,19 +177,55 @@ function Question(props) {
       }, 0);
     } else {
       setques(ques + 1);
+      setActiveQuestion(ques + 1);
     }
   };
+
   const progress = ((ques + 1) / length) * 100;
 
+  const handleQuestionNavigation = (index) => {
+    setques(index);
+    setActiveQuestion(index);
+  };
 
   return (
-    <Fragment>
-      <TestNav mins={mins} secs={secs} name={testID} pin={pin}/>
-      <div className="mt-4"> 
-      <hr className="hr-custom" />
+    <div className="container-fluid">
+      <TestNav mins={mins} secs={secs} name={name} pin={pin} />
+      <div className="mt-4">
+        <hr className="hr-custom" />
       </div>
+      <div className="text-center ">
+      <Button variant="outline-primary" onClick={handleCanvasShow} >
+        Navigate Questions
+      </Button>
+      </div>
+      <Offcanvas   show={Canvasshow} onHide={handleCanvasClose} >
+        <Offcanvas.Header closeButton>
+          <Offcanvas.Title>Questions Navigation</Offcanvas.Title>
+        </Offcanvas.Header>
+        <Offcanvas.Body>
+          <Nav variant="pills" className="justify-content-center mb-3">
+          {res.results.map((result, index) => (
+            <Nav.Item key={index}>
+              <Nav.Link
+                active={index === activeQuestion}
+                onClick={() => handleQuestionNavigation(index)}
+              >
+                {index + 1}
+              </Nav.Link>
+            </Nav.Item>
+          ))}
+        </Nav>
+        </Offcanvas.Body>
+      </Offcanvas>
+
+  
+    <div className={`container ${styles.questionContainer} col-md-8`}>
+      
+      
       <div className={`container ${styles.questionContainer}`}>
-        <ProgressBar now={progress} className={`mt-5 ${styles.progressBar}`} />
+        <ProgressBar animated  now={progress} className={`mt-5 ${styles.progressBar}`} />
+        
         <Card className={`mt-4 ${styles.questionCard}`}>
           <Card.Body className={styles.cardbody}>
             <Card.Title className={` ${styles.questionTitle} `}>
@@ -201,37 +234,37 @@ function Question(props) {
           </Card.Body>
         </Card>
         <div className={`text-center mt-3 `}>
-              {image && (
-                <img
-                  src={image}
-                  alt="Question"
-                  className={styles.questionImage}
-                  style={{ maxWidth: "100%", height: "auto" }}
-                />
-              )}
-            </div>
+          {image && (
+            <img
+              src={image}
+              alt="Question"
+              className={styles.questionImage}
+              style={{ maxWidth: "100%", height: "auto" }}
+            />
+          )}
+        </div>
         {!questype && (
           <div id="options" className={`mt-4 ${styles.optionsContainer}`}>
-            
-              {options.map((option, index) => {
-                const isChecked = option === answers[ques] ;
-                const isSelected = option === selectedOptions[ques];
-                
-                return (
-                  <Card
-                    key={index}
-                    onClick={() => handleOptionClick(option)}
-                    className={`${styles.optionItem} cursor-pointer mb-1 ${isSelected  ? styles.selectedOption : ''}`}
-                  >
-                    <Card.Body>
+            {options.map((option, index) => {
+              const isChecked = option === answers[ques];
+              const isSelected = option === selectedOptions[ques];
+
+              return (
+                <Card
+                  key={index}
+                  onClick={() => handleOptionClick(option)}
+                  className={`${styles.optionItem} cursor-pointer mb-1 ${
+                    isSelected ? styles.selectedOption : ""
+                  }`}
+                >
+                  <Card.Body>
                     <Card.Text className={styles.optionText}>
                       {`${String.fromCharCode("A".charCodeAt(0) + index)}. ${option}`}
                     </Card.Text>
                   </Card.Body>
-                  </Card>
-                );
-              })}
-            
+                </Card>
+              );
+            })}
           </div>
         )}
         {questype && (
@@ -250,13 +283,14 @@ function Question(props) {
               if (ques === 0) {
               } else {
                 setques(ques - 1);
+                setActiveQuestion(ques - 1);
               }
             }}
             className={`me-3 ${styles.navigationButton}`}
           >
             Previous
           </Button>
-           <Button
+          <Button
             variant={isLastQuestion ? "success" : "primary"}
             onClick={handleNextQuestion}
             className={styles.navigationButton}
@@ -267,26 +301,31 @@ function Question(props) {
       </div>
 
       <Modal show={showModal} onHide={() => setShowModal(false)} size="lg">
-  <Modal.Header closeButton>
-    <Modal.Title>Test Results</Modal.Title>
-  </Modal.Header>
-  <Modal.Body>
-    <ListGroup>
-      {res.results.map((result, index) => (
-        <ListGroup.Item key={index} variant={answers[index] ? 'success' : 'danger'} onClick={() => handleQuestionClick(index)}>
-          Q{index + 1}:  {answers[index] ? 'Answered' : 'Unanswered'}
-        </ListGroup.Item>
-      ))}
-    </ListGroup>
-  </Modal.Body>
-  <Modal.Footer>
-  <Button variant="success" onClick={() => submithandler()} >
+        <Modal.Header closeButton>
+          <Modal.Title>Test Results</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <ListGroup>
+            {res.results.map((result, index) => (
+              <ListGroup.Item
+                key={index}
+                variant={answers[index] ? "success" : "danger"}
+                onClick={() => handleQuestionClick(index)}
+              >
+                Q{index + 1}: {answers[index] ? "Answered" : "Unanswered"}
+              </ListGroup.Item>
+            ))}
+          </ListGroup>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="success" onClick={() => submithandler()}>
             Submit
           </Button>
-                  
-  </Modal.Footer>
-</Modal>
-    </Fragment>
+        </Modal.Footer>
+      </Modal>
+    </div>
+  </div>
+
   );
 }
 
