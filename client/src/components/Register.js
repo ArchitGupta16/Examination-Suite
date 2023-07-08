@@ -56,6 +56,7 @@ function Register(props) {
   return (
     <div style={{ padding: '40px' }}>
       {showReg && (
+        
         <Form onSubmit={submithandler}>
           <Form.Group controlId="name">
             <FloatingLabel
@@ -128,7 +129,9 @@ function Register(props) {
             </Button>
           </div>
         </Form>
+        
       )}
+      
       {!showReg && (
         <Login handleClose={handleClose} handleShowRegister={handleShowRegister} />
       )}

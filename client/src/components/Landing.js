@@ -11,9 +11,7 @@ function Landing() {
   
   return (
 
-    <div style={{height: "100vh", overflow: "hidden"}}>
-
-      {/* <CustomNavbar/> */}
+    <div style={{ overflow: "hidden"}}>
 
       <hr className="hr-custom" />
 

@@ -58,6 +58,7 @@ function Login(props) {
         <Modal.Title>{showLogin ? "Login" : "Register"}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
+      <div className="scrollable-container">
         {showLogin ? (
           <Form onSubmit={onSubmit} style={{ padding: "35px" }}>
             <Form.Group controlId="email">
@@ -108,7 +109,7 @@ function Login(props) {
         ) : (
           <Register handleClose={handleClose} handleShowLogin={handleShowLogin} />
         )}
-      </Modal.Body>
+      
       {!showLogin && (
         <Modal.Footer>
           <p style={{ textAlign: "center" }}>
@@ -119,6 +120,8 @@ function Login(props) {
           </p>
         </Modal.Footer>
       )}
+      </div>
+      </Modal.Body>
     </Modal>
   );
 }

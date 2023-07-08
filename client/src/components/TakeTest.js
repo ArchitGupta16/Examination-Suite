@@ -149,10 +149,11 @@ function Taketest() {
                   as="select"
                   value={documentType}
                   className="fieldss"
+                  
                   onChange={(e) => setDocumentType(e.target.value)}
                   style={{padding:"15px"}}
                 >
-                  <option value="">Select Document Type</option>
+                  <option value="" className="text-change">Select Document Type</option>
                   <option value="aadhaar">Aadhaar Card</option>
                   <option value="ration">Ration Card</option>
                 </Form.Control>
@@ -259,7 +260,7 @@ function Taketest() {
                     className="fieldss"
                     style={{padding:"15px"}}
                   >
-                    <option value="">Select Gender</option>
+                    <option value="" className="text-change">Select Gender</option>
                     <option value="male">Male</option>
                     <option value="female">Female</option>
                     <option value="other">Other</option>
@@ -275,8 +276,10 @@ function Taketest() {
                   onChange={(e) => setStudentClass(e.target.value)}
                   className="fieldss"
                   style={{padding:"15px"}}
+                  
                 >
-                  <option value="" >Select Class</option>
+                 
+                  <option value="" className="text-change" >Select Class</option>
                   <option value="1">Class 1</option>
                   <option value="2">Class 2</option>
                   <option value="3">Class 3</option>
@@ -301,6 +304,7 @@ function Taketest() {
                   value={dob}
                   className="fieldss"
                   onChange={(e) => setDob(e.target.value)}
+                  style={{fontSize:"small"}}
                 />
               </Form.Group>
 
@@ -313,6 +317,7 @@ function Taketest() {
                   value={projectName}
                   onChange={(e) => setProjectName(e.target.value)}
                   className="fieldss"
+                  style={{fontSize:"small"}}
                 />
               </Form.Group>
               <br />
