@@ -3,7 +3,7 @@ import { Container, Row, Col, Table, Button, Card } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { useState, useEffect } from "react";
-
+import "../componentsStyles/Results.css";
 function TestResults({ location }) {
   const [data, setData] = useState(location.state && location.state.data);
   const testDetails = location.state && location.state.testdetails;
@@ -90,12 +90,12 @@ function TestResults({ location }) {
   }
 
   return (
-    <div>
+    <div className="mybg">
       <hr className="hr-custom" />
       <Container fluid className="mt-5">
         <Row>
-          <Col lg={3} md={6} className="mb-4">
-            <Card>
+          <Col lg={3} md={4} sm={12} className="mb-4">
+            <Card className=" mycard1">
               <Card.Body>
                 <Card.Title>Test Details</Card.Title>
                 <Card.Text>
@@ -109,84 +109,123 @@ function TestResults({ location }) {
                 </Card.Text>
               </Card.Body>
             </Card>
-            <Card className="mt-4">
+
+            <Card className=" mt-5 mycard2">
               <Card.Body>
                 <Card.Title>Filters</Card.Title>
                 <Card.Text>
-                  <label htmlFor="city-filter">City:</label>
-                  <input
-                    type="text"
-                    id="city-filter"
-                    value={cityFilter}
-                    onChange={handleCityFilterChange}
-                  />
-                  <br />
-                  <label htmlFor="state-filter">State:</label>
-                  <input
-                    type="text"
-                    id="state-filter"
-                    value={stateFilter}
-                    onChange={handleStateFilterChange}
-                  />
-                  <br />
-                  <label htmlFor="gender-filter">Gender:</label>
-                  <select
-                    id="gender-filter"
-                    value={genderFilter}
-                    onChange={handleGenderFilterChange}
-                  >
-                    <option value="">Select Gender</option>
-                    <option value="male">Male</option>
-                    <option value="female">Female</option>
-                    <option value="other">Other</option>
-                  </select>
+                  <div className="form-group">
+                    <label htmlFor="city-filter">City:</label>
+                    <input
+                      type="text"
+                      className="form-control customfield"
+                      id="city-filter"
+                      value={cityFilter}
+                      onChange={handleCityFilterChange}
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label htmlFor="state-filter">State:</label>
+                    <input
+                      type="text"
+                      className="form-control customfield"
+                      id="state-filter"
+                      value={stateFilter}
+                      onChange={handleStateFilterChange}
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label htmlFor="gender-filter">Gender:</label>
+                    <select
+                      className="form-control customfield"
+                      id="gender-filter"
+                      value={genderFilter}
+                      onChange={handleGenderFilterChange}
+                    >
+                      <option value="">Select Gender</option>
+                      <option value="male">Male</option>
+                      <option value="female">Female</option>
+                      <option value="other">Other</option>
+                    </select>
+                  </div>
                 </Card.Text>
               </Card.Body>
             </Card>
           </Col>
-          <Col lg={9} md={6}>
+          <Col lg={9} md={8} sm={12}>
             <Container>
-              <Table striped bordered hover responsive variant="custom">
-                <thead>
-                  <tr>
-                    <th>Name</th>
-                    <th>Gender</th>
-                    <th>TestID</th>
-                    <th>Score</th>
-                    <th>City</th>
-                    <th>State</th>
-                    <th>Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {filteredData.map((result, index) => (
-                    <tr key={index}>
-                      <td>{result.name}</td>
-                      <td>{result.gender}</td>
-                      <td>{result.testID}</td>
-                      <td>{result.score}%</td>
-                      <td>{result.city}</td>
-                      <td>{result.state}</td>
-                      <td>
-                        <Link
-                          to={{
-                            pathname: "/grade",
-                            state: { student: result },
-                          }}
-                        >
-                          <Button variant="primary">Edit Score</Button>
-                        </Link>
-                      </td>
+              <div className="d-none d-md-block">
+                <Table striped bordered hover responsive variant="custom">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Gender</th>
+                      <th>TestID</th>
+                      <th>Score</th>
+                      <th>City</th>
+                      <th>State</th>
+                      <th>Actions</th>
                     </tr>
-                  ))}
-                </tbody>
-              </Table>
+                  </thead>
+                  <tbody>
+                    {filteredData.map((result, index) => (
+                      <tr key={index}>
+                        <td>{result.name}</td>
+                        <td>{result.gender}</td>
+                        <td>{result.testID}</td>
+                        <td>{result.score}%</td>
+                        <td>{result.city}</td>
+                        <td>{result.state}</td>
+                        <td>
+                          <Link
+                            to={{
+                              pathname: "/grade",
+                              state: { student: result },
+                            }}
+                          >
+                            <Button variant="outline-dark" >Edit Score</Button>
+                          </Link>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </Table>
+              </div>
+              <div className="d-md-none">
+                {filteredData.map((result, index) => (
+                  <Card className="shadow mb-3" key={index}>
+                    <Card.Body>
+                      <Card.Title>{result.name}</Card.Title>
+                      <Card.Subtitle className="mb-2 text-muted">
+                        {result.gender}
+                      </Card.Subtitle>
+                      <Card.Text>
+                        <strong>TestID:</strong> {result.testID}
+                        <br />
+                        <strong>Score:</strong> {result.score}%
+                        <br />
+                        <strong>City:</strong> {result.city}
+                        <br />
+                        <strong>State:</strong> {result.state}
+                      </Card.Text>
+                      <Link
+                        to={{
+                          pathname: "/grade",
+                          state: { student: result },
+                        }}
+                      >
+                        <Button variant="primary">Edit Score</Button>
+                      </Link>
+                    </Card.Body>
+                  </Card>
+                ))}
+              </div>
             </Container>
           </Col>
         </Row>
       </Container>
     </div>
-  );
+      )
 }
 
 export default TestResults;

@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import axios from "axios";
-import { Alert, Button, Card, Form, Modal, ListGroup } from "react-bootstrap";
+import { Alert, Button, Card, Form, Modal, ListGroup, Nav,Accordion } from "react-bootstrap";
 import { useAlert } from "react-alert";
-
+import "../componentsStyles/Grade.css"
 function Grade({ location }) {
   const answers = location.state && location.state.student.result;
   const testPin = location.state && location.state.student.pin;
@@ -15,6 +15,7 @@ function Grade({ location }) {
   const [showResult, setShowResult] = useState(false);
   const [previousScore, setPreviousScore] = useState(0);
   const [updatedScore, setUpdatedScore] = useState(0);
+  const [activeQuestion, setActiveQuestion] = useState(0);
   const alert = useAlert();
   const history = useHistory();
 
@@ -54,17 +55,22 @@ function Grade({ location }) {
     Object.entries(updatedScores).forEach(([index, score]) => {
       individual[index] = Number(score);
     });
-    axios.put("http://localhost:4000/api/test/updateScore", {  pin:testPin ,aadhaar:aadhaar,score:updatedScore*100,indi:individual}, options)
-    .then((res) => { 
-      console.log("Successfully updated result")
-      alert.show("Successfully updated result", { type: "success" })
-      history.push("dashboard")
-      
-    })
-    .catch((err) => {
-      console.log(err.response.data)
-    })
-    }
+    axios
+      .put("http://localhost:4000/api/test/updateScore", {
+        pin: testPin,
+        aadhaar: aadhaar,
+        score: updatedScore * 100,
+        indi: individual,
+      }, options)
+      .then((res) => {
+        console.log("Successfully updated result");
+        alert.show("Successfully updated result", { type: "success" });
+        history.push("dashboard");
+      })
+      .catch((err) => {
+        console.log(err.response.data);
+      });
+  };
 
   const calculatePreviousScore = () => {
     if (typeof individual === "object" && individual !== null) {
@@ -73,30 +79,36 @@ function Grade({ location }) {
       setPreviousScore(sum / scores.length);
     }
   };
-  
+
   const calculateFinalScore = () => {
     let sum = 0;
     let count = 0;
     for (let i = 0; i < Object.keys(individual).length; i++) {
       if (updatedScores[i] === undefined) {
         sum += individual[i];
-      }
-      else{
+      } else {
         sum += Number(updatedScores[i]);
       }
     }
-   
+
     const totalScore = sum / Object.keys(individual).length;
     setUpdatedScore(totalScore);
     setShowResult(true);
   };
-  
+
+  const handleQuestionNavigation = (index) => {
+    setActiveQuestion(index);
+    const questionElement = document.getElementById(`question-${index}`);
+    questionElement.scrollIntoView({ behavior: "smooth" });
+  };
+
   const renderQuestion = (question, index) => {
+    const questionId = `question-${index}`;
     if (question.type === "multiple") {
       const options = [...question.incorrect_answers, ...question.correct_answer];
 
       return (
-        <div key={index}>
+        <div id={questionId} key={index}>
           <Card>
             <Card.Body>
               <Card.Title>Question {index + 1}</Card.Title>
@@ -141,7 +153,7 @@ function Grade({ location }) {
       const currentScore = individual && individual[index];
 
       return (
-        <div key={index}>
+        <div id={questionId} key={index}>
           <Card>
             <Card.Body>
               <Card.Title>Question {index + 1}</Card.Title>
@@ -173,7 +185,32 @@ function Grade({ location }) {
     <div>
       <br />
       <div className="container">
-        {data.map((question, index) => renderQuestion(question, index))}
+        <div className="row">
+          <div className="col-md-8">
+            {data.map((question, index) => renderQuestion(question, index))}
+          </div>
+          <div className="col-md-4 ">
+            <div className="sticky-top ">
+              <Card className="accordionsss">
+              <Card.Body>
+                <Card.Title>Navigate Questions</Card.Title>
+                <Nav variant="pills" className="">
+                  {data.map((question, index) => (
+                    <Nav.Item key={index}>
+                      <Nav.Link
+                        active={index === activeQuestion}
+                        onClick={() => handleQuestionNavigation(index)}
+                      >
+                        {index + 1}
+                      </Nav.Link>
+                    </Nav.Item>
+                  ))}
+                </Nav>
+              </Card.Body>
+                </Card>
+            </div>
+          </div>
+        </div>
       </div>
       <br />
       <Button onClick={calculateFinalScore}>Calculate Final Score</Button>
@@ -182,7 +219,7 @@ function Grade({ location }) {
           <h3>Final Score:</h3>
           <div>Previous Score: {previousScore * 100}</div>
           <div>Updated Score: {updatedScore * 100}</div>
-          <Button variant="primary" className="mt-3" onClick={() => updateDB()}>
+          <Button variant="primary"className="mt-3" onClick={() => updateDB()}>
             Update
           </Button>
         </div>

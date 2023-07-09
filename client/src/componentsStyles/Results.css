@@ -1,0 +1,61 @@
+.mybg {
+    padding: 20px;
+  }
+  
+  .mycard1 {
+    padding: 20px;
+    width: 18vw;
+    min-width: fit-content;
+    background-color: rgba(0, 137, 107,0.1);
+    
+  }
+  
+  .mycard2 {
+    padding: 10px;
+    width: 18vw;
+    min-width: fit-content;
+    background-color: rgba(0, 137, 107, 0.1);
+    font-weight: bold;
+  }
+  
+  .hr-custom {
+    margin-top: 10px;
+    margin-bottom: 20px;
+  }
+  
+  .customfield
+    {
+     background-color: rgba(255, 255, 255, 0.8);
+    }
+  
+  @media (max-width: 767px) {
+    .mycard1{
+        margin-top: 2vh;
+        margin-left: 17%;
+      }
+    .mycard2 {
+      margin-top: 2vh;
+      margin-left: 15%;
+    }
+    
+    .card {
+      margin-bottom: 2vh;
+    }
+    
+    .card-title {
+      font-size: 1.2rem;
+    }
+    
+    .card-subtitle {
+      font-size: 1rem;
+    }
+    
+    .card-text {
+      font-size: 0.9rem;
+    }
+    
+    .btn {
+      font-size: 0.9rem;
+      padding: 1vh 2vw;
+    }
+  }
