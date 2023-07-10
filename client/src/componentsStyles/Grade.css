@@ -8,6 +8,10 @@
   .cc{
     padding: 0 3% 0 3%;
   }
+  .scrollable-navi {
+    max-height: 80vh;
+    overflow-y: auto;
+  }
   .scroll-to-top {
     position: fixed;
     bottom: 20px;

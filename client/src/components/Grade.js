@@ -214,6 +214,7 @@ function Grade({ location }) {
             <div className="sticky-top accordionsss">
               <Card className="">
               <Card.Body>
+                <div className="scrollable-navi">
                 <Card.Title>Navigate Questions</Card.Title>
                 <Nav variant="pills" className="">
                   {data.map((question, index) => (
@@ -227,6 +228,7 @@ function Grade({ location }) {
                     </Nav.Item>
                   ))}
                 </Nav>
+                </div>
               </Card.Body>
                 </Card>
             </div>
