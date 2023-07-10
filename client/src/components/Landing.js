@@ -2,10 +2,10 @@ import React from 'react';
 import Carousel from 'react-bootstrap/Carousel';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-import styles from "../componentsStyles/Landing.css";
-import img1 from "../resources/a1.jpg";
-import img2 from "../resources/4.jpg";
-import img3 from "../resources/6.jpg"
+import "../componentsStyles/Landing.css";
+import img1 from "../resources/l1.jpg";
+import img2 from "../resources/l2.jpg";
+import img3 from "../resources/l3.jpg"
 
 function Landing() {
   

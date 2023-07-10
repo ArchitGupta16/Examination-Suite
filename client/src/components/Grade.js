@@ -181,17 +181,38 @@ function Grade({ location }) {
     }
   };
 
+  const [showScrollToTop, setShowScrollToTop] = useState(false);
+
+  const handleScroll = () => {
+    if (window.pageYOffset > 300) {
+      setShowScrollToTop(true);
+    } else {
+      setShowScrollToTop(false);
+    }
+  };
+
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  };
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
   return (
     <div>
       <br />
-      <div className="container">
+      <div className="cc">
         <div className="row">
-          <div className="col-md-8">
-            {data.map((question, index) => renderQuestion(question, index))}
-          </div>
-          <div className="col-md-4 ">
-            <div className="sticky-top ">
-              <Card className="accordionsss">
+        <div className="col-md-4 ">
+            <div className="sticky-top accordionsss">
+              <Card className="">
               <Card.Body>
                 <Card.Title>Navigate Questions</Card.Title>
                 <Nav variant="pills" className="">
@@ -210,6 +231,9 @@ function Grade({ location }) {
                 </Card>
             </div>
           </div>
+          <div className="col-md-8">
+            {data.map((question, index) => renderQuestion(question, index))}
+          </div>
         </div>
       </div>
       <br />
@@ -222,6 +246,11 @@ function Grade({ location }) {
           <Button variant="primary"className="mt-3" onClick={() => updateDB()}>
             Update
           </Button>
+        </div>
+      )}
+      {showScrollToTop && (
+        <div className="scroll-to-top" onClick={scrollToTop}>
+          <i className="fa fa-arrow-up"></i>
         </div>
       )}
     </div>

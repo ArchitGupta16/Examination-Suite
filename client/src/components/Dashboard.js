@@ -1,13 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { useHistory,Link } from "react-router-dom";
 import axios from "axios";
-import { Alert, Button, Card, Form, Modal } from "react-bootstrap";
-import one from "../resources/1.jpg";
-import two from "../resources/p2.jpg";
-import three from "../resources/p3.jpeg";
-import four from "../resources/p4.jpg";
+import { Alert, Button, Card, Form, Modal, Badge } from "react-bootstrap";
+import one from "../resources/t1.jpg";
+import two from "../resources/t2.jpg";
+import three from "../resources/t3.jpg";
+import four from "../resources/t4.jpg";
+import six from "../resources/p2.jpg";
+import seven from "../resources/p3.jpeg";
+import eight from "../resources/p4.jpg";
+import "../componentsStyles/Dashboard.css";
 
-const images = [one, two, three, four];
+const images = [one, two, three, six,four,  seven, eight];
 
 function Dashboard(props) {
   let history = useHistory();
@@ -95,9 +99,11 @@ function Dashboard(props) {
       {/* <CustomNavbar  loggedin={props.loggedin} setloggedin={props.setloggedin} /> */}
       <hr className="hr-custom" />
       <div className="container mt-5">
-        <h1 className="text-center mb-4">Welcome {localStorage.getItem("name")}</h1>
+        <div className="text-center mb-4">
+        <Badge bg="custom" className="dashboard-badge">Welcome {localStorage.getItem("name")}</Badge>
+        </div>
         <div className="d-flex justify-content-end mb-4">
-          <Button variant="primary" onClick={() => setmodalIsOpen(true)}>
+          <Button variant="custom" className="buttong" onClick={() => setmodalIsOpen(true)}>
             + Add Test
           </Button>
         </div>
@@ -109,7 +115,7 @@ function Dashboard(props) {
               <Card.Img variant="top" style={{ width: "100%",height:"20vh" }} src={images[index % images.length]} alt="Test Image" />
 
               <Card.Body>
-                <Card.Title>{test.testname}</Card.Title>
+                <Card.Title className="modallabels">{test.testname}</Card.Title>
                 <Card.Text>
                   <strong>Pin:</strong> {test.pin}
                   <br />
@@ -120,11 +126,12 @@ function Dashboard(props) {
                   <strong>Expiry:</strong>{" "}
                   {new Date(test.expiry).toLocaleDateString()}
                 </Card.Text>
-                <Button variant="primary" onClick={() => getResults(test.pin)}>
+                <Button variant="primary" className="buttonss" onClick={() => getResults(test.pin)}>
                   View Results
                 </Button>
                 <Button
                   variant="primary"
+                  className="buttonss"
                   onClick={() => getQuestions(test.pin)}
                   style={{ marginLeft: "10px", marginTop: "2px" }}
                 >
@@ -141,13 +148,13 @@ function Dashboard(props) {
       {/* Add Test Modal */}
       <Modal show={modalIsOpen} onHide={() => setmodalIsOpen(false)}>
         <Modal.Header closeButton>
-          <Modal.Title>Add Test</Modal.Title>
+          <Modal.Title className="modallabels">Add Test</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           {alert.show && <Alert variant={alert.variant}>{alert.message}</Alert>}
           <Form onSubmit={onSubmit}>
           <Form.Group controlId="formBasicNumber">
-              <Form.Label>Topic</Form.Label>
+              <Form.Label className="modallabels">Topic</Form.Label>
               <Form.Control
                 type="text"
                 placeholder="Enter name of test"
@@ -155,8 +162,9 @@ function Dashboard(props) {
                 onChange={(event) => settopic(event.target.value)}
               />
               </Form.Group>
+              <br />
             <Form.Group controlId="formBasicNumber">
-              <Form.Label>Number of Questions</Form.Label>
+              <Form.Label className="modallabels">Number of Questions</Form.Label>
               <Form.Control
                 type="number"
                 placeholder="Enter number of questions"
@@ -165,8 +173,9 @@ function Dashboard(props) {
                 onChange={(event) => setamount(event.target.value)}
               />
             </Form.Group>
+            <br />
             <Form.Group controlId="formBasicTime">
-              <Form.Label>Time Duration (in minutes)</Form.Label>
+              <Form.Label className="modallabels">Time Duration (in minutes)</Form.Label>
               <Form.Control
                 type="number"
                 placeholder="Enter time duration (in minutes)"
@@ -175,8 +184,9 @@ function Dashboard(props) {
                 onChange={(event) => settime(event.target.value)}
               />
             </Form.Group>
+            <br />
             <Form.Group controlId="formBasicExpiry">
-              <Form.Label>Expiry Date</Form.Label>
+              <Form.Label className="modallabels">Expiry Date</Form.Label>
               <Form.Control
                 type="date"
                 min={new Date().toISOString().split("T")[0]}
@@ -184,7 +194,8 @@ function Dashboard(props) {
                 onChange={(event) => setexpiry(event.target.value)}
               />
             </Form.Group>
-            <Button variant="primary" type="submit">
+            <br />
+            <Button variant="custom " className='buttonss' type="submit">
               Add Test
             </Button>
           </Form>

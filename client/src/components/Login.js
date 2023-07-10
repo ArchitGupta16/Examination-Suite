@@ -53,11 +53,11 @@ function Login(props) {
   };
 
   return (
-    <Modal show={props.show} onHide={handleClose} className="mymodal">
-      <Modal.Header closeButton>
-        <Modal.Title>{showLogin ? "Login" : "Register"}</Modal.Title>
+    <Modal show={props.show} onHide={handleClose} className="mymodal" >
+      <Modal.Header closeButton className="backforModal" style={{height:"7vh"}} >
+        <Modal.Title ><strong>{showLogin ? "Login" : "Register"}</strong></Modal.Title>
       </Modal.Header>
-      <Modal.Body>
+      <Modal.Body className="backforModal">
       <div className="scrollable-container">
         {showLogin ? (
           <Form onSubmit={onSubmit} style={{ padding: "35px" }}>

@@ -1,17 +1,25 @@
 
 .bn{
    
-    width: fit-content;
-    height: fit-content;
-    background-color: #00896B; 
-    border-color: #00896B; 
-    color: #FFFFFF;
+  min-width:fit-content;
+  min-height: fit-content;
+  color: #FFFFFF;
+  background-color: #00896B;
+  padding: 8px 16px;
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
+  text-decoration: none;
+  color: #fff;
+  border-radius: 8px;
+  transition: background-color 0.3s ease;
+  border: none;
+  cursor: pointer;
   }
 
 .bn:hover {
-    background-color: #4e9e8d;
-    border-color: #4e9e8d; 
-    color: #FFFFFF;
+  background-color: #00796bbe;
+  color: white;
 }
 
 .text{

@@ -47,16 +47,16 @@ function CustomNavbar(props) {
                 <Nav >
                  
                   <Nav.Link as={Link} to="/dashboard" >Dashboard</Nav.Link>
-                  <Button variant="primary" onClick={handleLogout} >Logout</Button>
+                  <Button variant="custom" className='custom-button' onClick={handleLogout} >Logout</Button>
                   
                 </Nav>
               ) : (
                 <Nav >
                     <Col>
-                  <Button variant="success" as={Link} to="/taketest"style={{ width: '100px',marginTop:"5px",marginLeft:"10px" }} >Take Test</Button>
+                  <Button variant="custom" className='custom-button' as={Link} to="/taketest"style={{ width: '100px',marginTop:"5px",marginLeft:"10px" }} >Take Test</Button>
                   </Col>
                   <Col>
-                  <Button variant="success" onClick={handleShow} style={{width:"100px", marginTop:"5px",marginLeft:"10px"}} >Login</Button>
+                  <Button variant="custom" className='custom-button' onClick={handleShow} style={{width:"100px", marginTop:"5px",marginLeft:"10px"}} >Login</Button>
                   </Col>
                   
                   <Login show={showLogin} handleClose={handleClose} setloggedin={props.setloggedin}  />
@@ -78,7 +78,7 @@ function CustomNavbar(props) {
                 />
               </Navbar.Brand> 
               <Nav>
-              <Button variant="success" as={Link} to="/logout" style={{ width: '100px' }}>Logout</Button>
+              <Button variant="custom" className='custom-button' as={Link} to="/logout" style={{ width: '100px' }}>Logout</Button>
               
               </Nav>
             </>
@@ -96,10 +96,10 @@ function CustomNavbar(props) {
               </Navbar.Brand>
               <Nav>
               <Col>
-              <Button variant="success" as={Link} to="/dashboard" style={{ width: '100px',marginTop:"5px" ,marginLeft:"10px"}}>Dashboard</Button>
+              <Button variant="custom" className='custom-button' as={Link} to="/dashboard" style={{ marginTop:"5px" ,marginLeft:"10px"}}>Dashboard</Button>
               </Col>
               <Col>
-              <Button variant="success" as={Link} to="/logout" style={{marginLeft:"10px",width:"100px",marginTop:"5px"}}>Logout</Button>
+              <Button variant="custom" className='custom-button' as={Link} to="/logout" style={{marginLeft:"10px",marginTop:"5px"}}>Logout</Button>
               </Col>
               </Nav>
             </>
@@ -116,8 +116,7 @@ function CustomNavbar(props) {
                 />
               </Navbar.Brand> 
               <Nav>
-              <Button variant="success"  as={Link} to="/logout" style={{ width: '100px' }} >Logout</Button>
-              
+              <Button variant="custom" className='custom-button'  as={Link} to="/logout" style={{ width: '100px' }} >Logout</Button>
               </Nav>
             </>
           )}
@@ -132,7 +131,7 @@ function CustomNavbar(props) {
                 />
               </Navbar.Brand> 
               <Nav>
-              <Button variant="success" as={Link} to="/logout" style={{ width: '100px' }}>Logout</Button>
+              <Button variant="custom" className='custom-button' as={Link} to="/logout" style={{ width: '100px' }}>Logout</Button>
               </Nav>
             </>
           )}

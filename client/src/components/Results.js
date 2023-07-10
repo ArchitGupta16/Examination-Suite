@@ -183,7 +183,7 @@ function TestResults({ location }) {
                               state: { student: result },
                             }}
                           >
-                            <Button variant="outline-dark" >Edit Score</Button>
+                            <Button variant="custom" className="buttonss">Edit Score</Button>
                           </Link>
                         </td>
                       </tr>

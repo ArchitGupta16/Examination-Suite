@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-// import styles from "../componentsStyles/TakeTest.css";
 import  "../componentsStyles/TakeTest.css"
 import axios from "axios";
 

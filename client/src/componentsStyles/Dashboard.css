@@ -1,7 +1,13 @@
 
 body {
   font-family: 'Open Sans', sans-serif;
-  background-color: white;
+}
+.dashboard-badge {
+  background-color: #005b93;
+  color: #fdfdfd;
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-size: 16px;
 }
 
 .container {
@@ -34,24 +40,25 @@ body {
   margin-bottom: 20px;
   color: #333;
 }
-
-.buttons {
-  display: inline-block;
-  padding: 12px 24px;
-  font-size: 16px;
+.modallabels{
+  font-weight:bold;
+}
+.buttonss {
+  /* display: inline-block; */
+  padding: 8px 16px;
+  font-size: 14px;
   font-weight: bold;
   text-align: center;
   text-decoration: none;
   background-color: #005b93;
   color: #fff;
-  border-radius: 4px;
+  border-radius: 8px;
   transition: background-color 0.3s ease;
   border: none;
   cursor: pointer;
-  margin: 0 auto;
 }
 
-.buttons:hover {
+.buttonss:hover {
   background-color: #00796b;
 }
 
@@ -62,18 +69,24 @@ body {
 }
 
 
-.button {
-  display: inline-block;
-  padding: 10px 20px;
-  background-color: #009688;
-  color: #fff;
+.buttong {
+  
+  background-color: #00896B;
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: bold;
+  text-align: center;
   text-decoration: none;
-  border-radius: 4px;
+  color: #fff;
+  border-radius: 8px;
   transition: background-color 0.3s ease;
+  border: none;
+  cursor: pointer;
 }
 
-.button:hover {
-  background-color: #00796b;
+.buttong:hover {
+  background-color: #00796bbe;
+  color: white;
 }
 
 .icon {
