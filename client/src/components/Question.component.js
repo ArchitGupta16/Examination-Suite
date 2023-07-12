@@ -13,7 +13,7 @@ function Question(props) {
   const mins = res.time.split(":")[0];
   const secs = res.time.split(":")[1] ? res.time.split(":")[1] : 0;
   const length = res.results.length;
-  let name = localStorage.getItem("firstName");
+  let firstName = localStorage.getItem("firstName");
   let pin = localStorage.getItem("pin");
   const [questype, settype] = useState(false);
   const [ques, setques] = useState(parseInt(localStorage.getItem("currentQuestionIndex")) || 0);
@@ -37,7 +37,7 @@ function Question(props) {
 
   const submithandler = () => {
     let testID = localStorage.getItem("testID");
-    let name = localStorage.getItem("firstName");
+    let firstName = localStorage.getItem("firstName");
     let aadhaar = localStorage.getItem("aadhaar");
     let pin = localStorage.getItem("pin");
     let score = 0;
@@ -89,7 +89,7 @@ function Question(props) {
           pin,
           aadhaar,
           testID,
-          name,
+          firstName,
           score,
           answers,
           loc,
@@ -190,7 +190,7 @@ function Question(props) {
 
   return (
     <div className="container-fluid">
-      <TestNav mins={mins} secs={secs} name={name} pin={pin} />
+      <TestNav mins={mins} secs={secs} name={firstName} pin={pin} />
       <div>
         <hr className="hr-custom my-5" />
       </div>

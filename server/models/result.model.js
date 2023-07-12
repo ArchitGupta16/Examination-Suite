@@ -7,7 +7,7 @@ const resultSchema = new Schema({
     type: String,
     required: true,
   },
-  name: {
+  firstName: {
     type: String,
     required: true,
   },
@@ -21,11 +21,11 @@ const resultSchema = new Schema({
   },
   result: {
     type: Object,
-    required: true,
+    required: false,
   },
   individualScore: {
     type: Object,
-    required: true,
+    required: false,
   },
   testID: {
     type: String,

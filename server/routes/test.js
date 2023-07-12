@@ -42,11 +42,11 @@ router.route("/submittest").post(async (req, res) => {
   const score = parseInt(req.body.score);
   const testID = req.body.testID;
   const aadhaar = req.body.aadhaar;
-  const name = req.body.name;
+  const firstName = req.body.firstName;
   const pin = req.body.pin;
   const resu = req.body.answers;
   const indi = req.body.loc;
-  const resultEntry = new result({ aadhaar,testID, name, pin, score, result:resu, individualScore:indi });
+  const resultEntry = new result({ aadhaar,testID, firstName, pin, score, result:resu, individualScore:indi });
   resultEntry
     .save()
     .then(() => res.send("result added!"))
@@ -144,7 +144,8 @@ router.route("/studentProfile").post(async (req, res) => {
   const ration = req.body.ration;
   const firstName = req.body.firstName;
   const lastName = req.body.lastName;
-  const parentName = req.body.parentFirstName;;
+  const fatherName = req.body.fatherName;
+  const motherName = req.body.motherName;
   const gender = req.body.gender;
   const projectName = req.body.projectName;
   const clas = req.body.studentClass;
@@ -159,8 +160,8 @@ router.route("/studentProfile").post(async (req, res) => {
   const ddmmyy = `${day}${month}${year}`;
 
 
-  const testID = firstName.substring(0,2) + lastName.substring(0,2) + parentName.slice(-2) + gender.substring(0,1) + ddmmyy  
-  const profile = new student({ firstName, lastName,ration, aadhaar,parentName, gender, projectName, state, city, testID, clas, dob });
+  const testID = firstName.substring(0,2) + lastName.substring(0,2) + fatherName.substring(0,2) + motherName.substring(0,2) + gender.substring(0,1) + clas;
+  const profile = new student({ firstName, lastName,ration, aadhaar, fatherName, motherName, gender, projectName, state, city, testID, clas, dob });
   profile
     .save()
     .then(() => {

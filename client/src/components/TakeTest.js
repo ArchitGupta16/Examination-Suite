@@ -18,8 +18,8 @@ function Taketest() {
   const [lastName, setLastName] = useState("");
   const [aadhaar, setAadhaar] = useState("");
   const [pin, setpin] = useState("");
-  const [parentFirstName, setParentFirstName] = useState("");
-  const [parentLastName, setParentLastName] = useState("");
+  const [fatherName, setFatherName] = useState("");
+  const [motherName, setMotherName] = useState("");
   const [gender, setGender] = useState("");
   const [studentClass, setStudentClass] = useState("");
   const [projectName, setProjectName] = useState("");
@@ -48,15 +48,17 @@ function Taketest() {
     axios
     .post("http://localhost:4000/api/test/studentProfile", {
       aadhaar, 
+      ration,
       firstName,
       lastName,
-      parentFirstName,
+      fatherName,
+      motherName,
       gender,
       studentClass,
       projectName,
       state,
       city,
-      dob,
+      dob
     }, options)
     .then((res) => {
       console.log("success",res.data);
@@ -214,36 +216,36 @@ function Taketest() {
             </Row>
             <br />
             <Row>
-            <Form.Group as={Col} controlId="parentFirstName">
+            <Form.Group as={Col} controlId="fatherName">
                 <FloatingLabel
                   controlId="floatingInput"
-                  label="Parent First Name"
+                  label="Father's Name"
                   className="mbb-4"
                 >
                   <Form.Control
                     className="fieldss"
                      
                     type="text"
-                    placeholder="Enter parent first name"
-                    value={parentFirstName}
-                    onChange={(e) => setParentFirstName(e.target.value)}
+                    placeholder="Enter Father's name"
+                    value={fatherName}
+                    onChange={(e) => setFatherName(e.target.value)}
                   />
                 </FloatingLabel>
               </Form.Group>
               <br />
-              <Form.Group as={Col} controlId="parentLastName">
+              <Form.Group as={Col} controlId="motherName">
                 <FloatingLabel
                   controlId="floatingInput"
-                  label="Parent Last Name"
+                  label="Mother's Name"
                   className="mbb-4"
                 >
                   <Form.Control
                     className="fieldss"
                      
                     type="text"
-                    placeholder="Enter parent last name"
-                    value={parentLastName}
-                    onChange={(e) => setParentLastName(e.target.value)}
+                    placeholder="Enter mother's name"
+                    value={motherName}
+                    onChange={(e) => setMotherName(e.target.value)}
                   />
                 </FloatingLabel>
               </Form.Group>

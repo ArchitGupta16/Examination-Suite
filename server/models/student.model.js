@@ -7,9 +7,14 @@ const studentSchema = new mongoose.Schema({
   },
   lastName: {
     type: String,
-    required: true,
+    required: false,
   },
-  parentName: {
+  fatherName: {
+    type: String,
+    required: false
+  },
+
+  motherName: {
     type: String,
     required: false
   },
