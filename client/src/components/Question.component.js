@@ -191,8 +191,8 @@ function Question(props) {
   return (
     <div className="container-fluid">
       <TestNav mins={mins} secs={secs} name={name} pin={pin} />
-      <div className="mt-4">
-        <hr className="hr-custom" />
+      <div>
+        <hr className="hr-custom my-5" />
       </div>
       <div className="text-center ">
       <Button variant="outline-primary" onClick={handleCanvasShow} >

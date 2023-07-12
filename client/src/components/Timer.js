@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { BsClockFill } from "react-icons/bs";
 import { useHistory } from "react-router-dom";
 import { useAlert } from "react-alert";
 
@@ -49,6 +50,7 @@ function Timer(props) {
         width: "100%",
       }}
     >
+      <BsClockFill size={40} style={{margin: "0 5px 0 0",color:"white" }} />
       <div
         style={{
           color: "white",

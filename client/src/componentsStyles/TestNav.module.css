@@ -1,40 +1,47 @@
-.testName {
-  margin-left: 20px; /* Adjust the left margin as needed */
-  font-size: 140%;
-  
-}
+
 .na{
   background-color: white;
   
 }
-.navbarContent {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex: 1;
-}
-
 .timerBox {
   background-color: #00896B;
-  padding: 1px 8px 1px 8px;
+  padding:  8px 3px 0 3px;
   border-radius: 4px;
-  margin-top:1vh ;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   position: absolute;
-  top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
+  margin-top: 2vh;
+  transform: translateX(-50%);
+  width: fit-content;
+  
 }
 
-.name {
-  margin-left: auto;
-  font-size: 140%;
-}
 
-@media (max-width: 767px) {
-  .navbarContent {
-    flex-direction: row;
-    align-items: flex-start;
-    justify-content: space-between;
+.testname {
+  font-size: 25px;
+   /* margin-top: 1vh; */
+ }
+ .stuname{
+   font-size: 25px;
+   /* margin-top: 1vh; */
+ }
+
+
+@media (max-width: 576px) {
+  .timerBox {
+    font-size: 12px; /* Adjust the font size as needed */
+    margin-top: 12px;
+  }
+  .testname{
+    font-size: medium;
+    
+  }
+  .stuname{
+    font-size: medium;
   }
 }
+
+
+
+
+
