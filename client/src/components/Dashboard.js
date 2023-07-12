@@ -95,10 +95,8 @@ function Dashboard(props) {
 
   return (
     <div>
-      {/* <CustomNavbar page="dashboard"/> */}
-      {/* <CustomNavbar  loggedin={props.loggedin} setloggedin={props.setloggedin} /> */}
-      <hr className="hr-custom" />
-      <div className="container mt-5">
+     <hr className="hr-custom" />
+      <div className="containerrr mt-5">
         <div className="text-center mb-4">
         <Badge bg="custom" className="dashboard-badge">Welcome {localStorage.getItem("name")}</Badge>
         </div>
@@ -110,12 +108,13 @@ function Dashboard(props) {
         <div className="row row-cols-1 row-cols-md-3 g-4">
         {tests.map((test,index) => (
           <div className="col" key={test._id}>
-            <Card>
+            <Card className="marginforCard">
               {/* Add Card Image */}
               <Card.Img variant="top" style={{ width: "100%",height:"20vh" }} src={images[index % images.length]} alt="Test Image" />
 
               <Card.Body>
                 <Card.Title className="modallabels">{test.testname}</Card.Title>
+                <hr />
                 <Card.Text>
                   <strong>Pin:</strong> {test.pin}
                   <br />

@@ -16,6 +16,7 @@ function Grade({ location }) {
   const [previousScore, setPreviousScore] = useState(0);
   const [updatedScore, setUpdatedScore] = useState(0);
   const [activeQuestion, setActiveQuestion] = useState(0);
+  const [showModal, setShowModal] = useState(false);
   const alert = useAlert();
   const history = useHistory();
 
@@ -109,9 +110,9 @@ function Grade({ location }) {
 
       return (
         <div id={questionId} key={index}>
-          <Card>
+          <Card border="secondary">
             <Card.Body>
-              <Card.Title>Question {index + 1}</Card.Title>
+              <Card.Title><strong>Question {index + 1}</strong></Card.Title>
               <Card.Text>{question.question}</Card.Text>
               <ListGroup>
                 {options.map((option, optionIndex) => (
@@ -154,7 +155,7 @@ function Grade({ location }) {
 
       return (
         <div id={questionId} key={index}>
-          <Card>
+          <Card border="secondary">
             <Card.Body>
               <Card.Title>Question {index + 1}</Card.Title>
               <Card.Text>{question.question}</Card.Text>
@@ -207,17 +208,18 @@ function Grade({ location }) {
 
   return (
     <div>
-      <br />
+      <hr className="my-4 hr-custom" />
       <div className="cc">
         <div className="row">
         <div className="col-md-4 ">
             <div className="sticky-top accordionsss">
-              <Card className="">
+              <Card border="secondary">
               <Card.Body>
                 <div className="scrollable-navi">
-                <Card.Title>Navigate Questions</Card.Title>
-                <Nav variant="pills" className="">
-                  {data.map((question, index) => (
+                <Card.Title className="d-flex justify-content-center"><strong>Navigate Questions</strong></Card.Title>
+                <hr className="my-4" />
+                <Nav justify variant="pills" >
+                  {data.map((_, index) => (
                     <Nav.Item key={index}>
                       <Nav.Link
                         active={index === activeQuestion}
@@ -230,31 +232,47 @@ function Grade({ location }) {
                 </Nav>
                 </div>
               </Card.Body>
-                </Card>
+              </Card>
+              <div className="d-flex justify-content-center">
+                <Button style={{marginTop:"1vh"}} className="buttonss" onClick={() => {setShowModal(true);calculateFinalScore()}}>
+                  Calculate Final Score
+                </Button>
+              </div>
             </div>
           </div>
           <div className="col-md-8">
+            <br />
             {data.map((question, index) => renderQuestion(question, index))}
           </div>
         </div>
       </div>
       <br />
-      <Button onClick={calculateFinalScore}>Calculate Final Score</Button>
-      {showResult && (
-        <div className="text-center mt-5">
-          <h3>Final Score:</h3>
-          <div>Previous Score: {previousScore * 100}</div>
-          <div>Updated Score: {updatedScore * 100}</div>
-          <Button variant="primary"className="mt-3" onClick={() => updateDB()}>
-            Update
-          </Button>
-        </div>
-      )}
+      
       {showScrollToTop && (
         <div className="scroll-to-top" onClick={scrollToTop}>
           <i className="fa fa-arrow-up"></i>
         </div>
       )}
+      <Modal show={showModal} onHide={() => setShowModal(false)}>
+      <Modal.Header closeButton>
+        <Modal.Title>Final Changes</Modal.Title>
+      </Modal.Header> 
+      <Modal.Body>
+        <Alert variant="secondary">
+          <Alert.Heading>Previous Score: {previousScore * 100}</Alert.Heading>
+          <Alert.Heading>Updated Score: {updatedScore * 100}</Alert.Heading>
+        </Alert>
+      </Modal.Body>
+      <Modal.Footer>
+        <Button variant="custom" className="mt-3 buttong" onClick={() => setShowModal(false)}>
+          Close
+        </Button>
+        <Button variant="custom" className="mt-3 buttonss" onClick={() => updateDB()}>
+          Update
+        </Button>
+      </Modal.Footer>
+    </Modal>
+
     </div>
   );
 }

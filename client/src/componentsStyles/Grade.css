@@ -1,6 +1,7 @@
 .accordionsss {
     position: fixed;
-    margin-top: 15%;
+    margin-top: 7%;
+    max-height: 80vh;
     /* width: 50vw; */
     max-width: 25%;
     overflow-y: auto;
@@ -9,7 +10,7 @@
     padding: 0 3% 0 3%;
   }
   .scrollable-navi {
-    max-height: 80vh;
+    max-height: 50vh;
     overflow-y: auto;
   }
   .scroll-to-top {
@@ -46,6 +47,42 @@
     opacity: 1;
   }
   
+  .buttonss {
+    margin-top: 2px;
+    padding: 8px 16px;
+    font-size: 14px;
+    font-weight: bold;
+    text-align: center;
+    text-decoration: none;
+    background-color: #005b93;
+    color: #fff;
+    border-radius: 8px;
+    transition: background-color 0.3s ease;
+    border: none;
+    cursor: pointer;
+  }
+  .hr-custom {
+    border-top: 3px solid #000000;
+    margin: 1vh auto 2vh auto;
+    width: 80vw
+  }
+  .buttong {
+  
+    background-color: #00896B;
+    padding: 8px 16px;
+    font-size: 14px;
+    font-weight: bold;
+    text-align: center;
+    text-decoration: none;
+    color: #fff;
+    border-radius: 8px;
+    transition: background-color 0.3s ease;
+    border: none;
+    cursor: pointer;
+  }
+  .showgrade{
+    margin-top: 15%;
+  }
   @media (max-width: 768px) {
      .accordionsss {
       position: relative;
@@ -53,3 +90,13 @@
       margin-top: 5%;
     }
   }
+  @media (max-width: 992px) {
+    .accordionsss {
+      position: fixed;
+      margin-top: 16%;
+      margin-left: 2%;
+      max-width: 25%;
+      max-height: fit-content;
+      overflow-y: auto;
+   }
+ }

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useHistory, useLocation } from "react-router-dom";
-import { Button, Card, Form, Modal } from "react-bootstrap";
+import { Button, Card, Form, Modal,Nav,ListGroup,hr } from "react-bootstrap";
 import "../componentsStyles/EditTest.css";
 import axios from "axios";
 import { useAlert } from "react-alert";
@@ -22,6 +22,8 @@ function EditTest() {
     difficulty: "",
   });
   const alert = useAlert();
+  const [showScrollToTop, setShowScrollToTop] = useState(false);
+  const [activeQuestion, setActiveQuestion] = useState(0);
 
   const getQuestions = () => {
     const { testdetails } = location.state;
@@ -29,8 +31,8 @@ function EditTest() {
     axios
       .post("http://localhost:4000/api/test/getquestions", { pin })
       .then((res) => {
-        console.log(res, "got the questions");
         setQuestions(res.data.map((question) => ({ ...question, isModified: false })));
+        console.log(questions);
       })
       .catch((err) => {
         console.log("error here buddy", err.response.body);
@@ -39,6 +41,7 @@ function EditTest() {
 
   useEffect(() => {
     getQuestions();
+    console.log(questions)
   }, []);
 
   const handleQuestionChange = (questionId, value) => {
@@ -56,16 +59,24 @@ function EditTest() {
     setLastModifiedQuestion(modifiedQuestion);
   };
 
-  const handleCorrectAnswerChange = (questionId, value) => {
+  const handleCorrectAnswerChange = (questionId,index, value) => {
     setQuestions((prevQuestions) =>
       prevQuestions.map((prevQuestion) =>
         prevQuestion._id === questionId
-          ? { ...prevQuestion, correct_answer: [value], isModified: true }
-          : prevQuestion
+          // ? { ...prevQuestion, correct_answer: [value], isModified: true }
+          // : prevQuestion
+          ? {
+            ...prevQuestion,
+            correct_answer: prevQuestion.correct_answer.map((answer, i) =>
+              i === index ? value : answer
+            ),
+            isModified: true,
+          }
+        : prevQuestion
       )
     );
     const modifiedQuestion = questions.find((question) => question._id === questionId);
-    modifiedQuestion.correct_answer[0] = value;
+    modifiedQuestion.correct_answer[index] = value;
     modifiedQuestion.isModified = true;
     setModifiedQuestion(modifiedQuestion);
     setLastModifiedQuestion(modifiedQuestion);
@@ -144,36 +155,63 @@ function EditTest() {
       });
     
   };
+  
+
+  const handleScroll = () => {
+    if (window.pageYOffset > 300) {
+      setShowScrollToTop(true);
+    } else {
+      setShowScrollToTop(false);
+    }
+  };
+
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  };
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
+  const handleQuestionNavigation = (question,index) => {
+    setActiveQuestion(index);
+    const questionElement = document.getElementById(question._id);
+    questionElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+  
+  
 
   return (
     <div>
     <hr className="hr-custom" />
-    <div className="d-flex justify-content-center mb-4">
-      <Button className="add-button align-right"
-          variant="primary" onClick={() => setShowAddModal(true)}>
-        Add Question
-      </Button>
-      </div>
+    
     <div className="centered-container">
-      
+
       <Modal show={showAddModal} onHide={() => setShowAddModal(false)}>
         <Modal.Header closeButton>
-          <Modal.Title>Add New Question</Modal.Title>
+          <Modal.Title><strong>Add New Question</strong></Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form>
             <Form.Group controlId="new-question">
-              <Form.Label>Question:</Form.Label>
+              <Form.Label><strong>Question</strong></Form.Label>
               <Form.Control
                 type="text"
                 value={newQuestion.question}
                 onChange={(event) =>
                   setNewQuestion({ ...newQuestion, question: event.target.value })
                 }
+                
               />
-            </Form.Group>
+            </Form.Group><br/>
             <Form.Group controlId="new-correct-answers">
-              <Form.Label>Correct Answers:</Form.Label>
+              <Form.Label><strong>Correct Answers</strong></Form.Label>
               {newQuestion.correct_answer && newQuestion.correct_answer.map((answer, index) => (
                 <Form.Control
                   key={index}
@@ -187,20 +225,22 @@ function EditTest() {
                 />
               ))}
               <Button
-                variant="dark"
+                variant="custom"
                 onClick={() =>
                   setNewQuestion({
                     ...newQuestion,
                     correct_answer: [...newQuestion.correct_answer, ""],
                   })
                 }
-                className="mt-2"
+                className="mt-2 buttonss"
               >
                 Add +
               </Button>
+              
             </Form.Group>
+            <br/>
             <Form.Group controlId="new-incorrect-answers">
-              <Form.Label>Incorrect Answers:</Form.Label>
+              <Form.Label><strong>Incorrect Answers</strong></Form.Label>
               {newQuestion.incorrect_answers.map((answer, index) => (
                 <Form.Control
                   key={index}
@@ -214,20 +254,21 @@ function EditTest() {
                 />
               ))}
               <Button
-                variant="dark"
+                variant="custom"
                 onClick={() =>
                   setNewQuestion({
                     ...newQuestion,
                     incorrect_answers: [...newQuestion.incorrect_answers, ""],
                   })
                 }
-                className="mt-2"
+                className="mt-2 buttonss"
               >
                 Add +
               </Button>
             </Form.Group>
+            <br/>
             <Form.Group controlId="new-category">
-              <Form.Label>Category:</Form.Label>
+              <Form.Label><strong>Category</strong></Form.Label>
               <Form.Control
                 type="number"
                 value={newQuestion.category}
@@ -235,9 +276,9 @@ function EditTest() {
                   setNewQuestion({ ...newQuestion, category: event.target.value })
                 }
               />
-            </Form.Group>
+            </Form.Group><br/>
             <Form.Group controlId="new-type">
-              <Form.Label>Type:</Form.Label>
+              <Form.Label><strong>Type</strong></Form.Label>
               <Form.Control
                 as="select"
                 value={newQuestion.type}
@@ -246,12 +287,12 @@ function EditTest() {
                 }
               >
                 <option value="">Select Type</option>
-                <option value="multiple">Multiple Choice</option>
-                <option value="true/false">True/False</option>
+                <option value="multiple">Multiple</option>
+                <option value="true/false">text</option>
               </Form.Control>
-            </Form.Group>
+            </Form.Group><br/>
             <Form.Group controlId="new-image">
-              <Form.Label>Image:</Form.Label>
+              <Form.Label><strong>Image link</strong></Form.Label>
               <Form.Control
                 type="text"
                 value={newQuestion.image}
@@ -259,9 +300,9 @@ function EditTest() {
                   setNewQuestion({ ...newQuestion, image: event.target.value })
                 }
               />
-            </Form.Group>
+            </Form.Group><br/>
             <Form.Group controlId="new-difficulty">
-              <Form.Label>Difficulty:</Form.Label>
+              <Form.Label><strong>Difficulty</strong></Form.Label>
               <Form.Control
                 as="select"
                 value={newQuestion.difficulty}
@@ -278,57 +319,101 @@ function EditTest() {
           </Form>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="dark" onClick={() => setShowAddModal(false)}>
+          <Button variant="custom" className="buttong" onClick={() => setShowAddModal(false)}>
             Cancel
           </Button>
           
-          <Button variant="success" onClick={handleAddQuestion} >
+          <Button variant="custom" className="buttong" onClick={handleAddQuestion} >
             Add Question
           </Button>
          
         </Modal.Footer>
       </Modal>
       
-      <br/>
-
-      {questions.map((question) => (
-        <div className="mbb-3" key={question._id}>
-          <Card>
-            <Card.Body>
-              <Card.Title>Question {question._id}</Card.Title>
-              <Form>
+      <div className="row">
+        <div className="col-md-4 ">
+        
+        <div className="sticky-top accordionsss">
+        <div className="d-flex justify-content-start mb-4 " >
+          <Button className="add-button align-right buttonss"
+              variant="custom"  onClick={() => setShowAddModal(true)}>
+            Add Question
+          </Button>
+          </div>
+        <Card border="secondary">
+        <Card.Body>
+          <div className="scrollable-navi ">
+          <Card.Title className="d-flex justify-content-center"><strong>Navigate Questions</strong></Card.Title>
+          <hr className="my-4" />
+          <Nav justify variant="pills" >
+            {questions.map((question, index) => (
+              <Nav.Item key={index}>
+                <Nav.Link
+                  active={index === activeQuestion}
+                  onClick={() => {
+                    setActiveQuestion(index);
+                    setTimeout(() => {
+                      handleQuestionNavigation(question,index);
+                    }, 0);
+                  }}
+                >
+                  {index + 1}
+                </Nav.Link>
+              </Nav.Item>
+            ))}
+          </Nav>
+          </div>
+        </Card.Body>
+          </Card>
+      </div>
+        </div>
+        <div className="col-md-8">
+        {questions.map((question,index) => (
+        <div className="mbb-3" key={question._id} id={question._id}>
+          <Card border="secondary">
+            <Card.Body >
+              <Card.Title><strong>Question {index+1}</strong></Card.Title>
+              <Form >
                 <Form.Group controlId={`question-${question._id}`}>
-                  <Form.Label>Question:</Form.Label>
+                  <Form.Label></Form.Label>
                   <Form.Control
                     type="text"
                     value={question.question}
                     onChange={(event) =>
                       handleQuestionChange(question._id, event.target.value)
                     }
+                    className="mb-2 fieldd"
                   />
                 </Form.Group>
                 {question.image && (
-                  <Form.Group controlId={`image-${question._id}`}>
-                    {/* <Form.Label>Image:</Form.Label> */}
+                  <Form.Group controlId={`image-${question._id}`} className="d-flex justify-content-center align-items-center">
                     <img
                       src={question.image}
                       alt={`Question ${question._id}`}
-                      className="img-fluid"
+                      className="img-fluid "
                     />
                   </Form.Group>
                 )}
                 <Form.Group controlId={`correct-answer-${question._id}`}>
-                  <Form.Label>Correct Answer:</Form.Label>
-                  <Form.Control
-                    type="text"
-                    value={question.correct_answer[0]}
-                    onChange={(event) =>
-                      handleCorrectAnswerChange(question._id, event.target.value)
-                    }
-                  />
+                  <Form.Label><strong>Correct Answer</strong></Form.Label>
+                  {question.correct_answer.map((correctAnswer, index) => (
+                    <Form.Control
+                      key={index}
+                      type="text"
+                      value={correctAnswer}
+                      onChange={(event) =>
+                        handleCorrectAnswerChange(
+                          question._id,
+                          index,
+                          event.target.value
+                        )
+                      }
+                      className="mb-2 fieldd"
+                    />
+                  ))}
                 </Form.Group>
                 <Form.Group controlId={`incorrect-answers-${question._id}`}>
-                  <Form.Label>Incorrect Answers:</Form.Label>
+                  <Form.Label><strong>Incorrect Answers</strong></Form.Label>
                   {question.incorrect_answers.map((incorrectAnswer, index) => (
                     <Form.Control
                       key={index}
@@ -341,47 +426,61 @@ function EditTest() {
                           event.target.value
                         )
                       }
+                      className="mb-2 fieldd"
                     />
                   ))}
                 </Form.Group>
                 <br/>
-                <div className="d-grid gap-2">
                   <Button
-                    variant="danger"
+                    variant="custom"
                     onClick={() => handleDeleteQuestion(question._id)}
-                    className="btn-auto-width"
-                    style={{ width: "fit-content" }}
+                    className="btn-auto-width buttonss"
+                    style={{ width: "fit-content",marginRight:"10px", marginTop:"10px"}}
                   >
                     Delete
                   </Button>
                   <Button
-                    variant="success"
+                    variant="custom"
                     onClick={() => handleUpdateQuestion(question._id)}
-                    className="btn-auto-width"
-                    style={{ width: "fit-content" }}
+                    className="btn-auto-width buttong"
+                    style={{ width: "fit-content",marginRight:"10px", marginTop:"10px" }}
                   >
                     Update
                   </Button>
-                </div>
               </Form>
             </Card.Body>
           </Card>
 
           {lastModifiedQuestion && lastModifiedQuestion._id === question._id && (
-            <Card>
-              <Card.Body>
-                <Card.Title>Last Modified Question:</Card.Title>
-                <p>Question: {lastModifiedQuestion.question}</p>
-                <p>Correct Answer: {lastModifiedQuestion.correct_answer[0]}</p>
-                <p>
-                  Incorrect Answers:{" "}
-                  {lastModifiedQuestion.incorrect_answers.join(", ")}
-                </p>
-              </Card.Body>
-            </Card>
+            <Card border="info" className="updatedCard">
+            <Card.Body>
+              <Card.Title>Last Modified Question:</Card.Title>
+              <ListGroup variant="flush">
+                <ListGroup.Item>
+                  <strong>Question:</strong> {lastModifiedQuestion.question}
+                </ListGroup.Item>
+                <ListGroup.Item>
+                  <strong>Correct Answer:</strong>{' '}
+                  {lastModifiedQuestion.correct_answer.join(', ')}
+                </ListGroup.Item>
+                <ListGroup.Item>
+                  <strong>Incorrect Answers:</strong>{' '}
+                  {lastModifiedQuestion.incorrect_answers.join(', ')}
+                </ListGroup.Item>
+              </ListGroup>
+            </Card.Body>
+          </Card>
           )}
         </div>
       ))}
+      </div>
+      </div>
+      <br/>
+      {showScrollToTop && (
+        <div className="scroll-to-top" onClick={scrollToTop}>
+          <i className="fa fa-arrow-up"></i>
+        </div>
+      )}
     </div>
     </div>
   );
