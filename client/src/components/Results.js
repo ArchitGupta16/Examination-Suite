@@ -41,8 +41,10 @@ function TestResults({ location }) {
   const [dob, setDob] = useState("");
   const [pin, setPin] = useState("");
   const [score, setScore] = useState(0);
-  const  alert  = useAlert();
   const [idType, setIdType] = useState("aadhaar");
+  const [attempts, setAttempts] = useState(""); 
+  const  alert  = useAlert();
+  
 
   useEffect(() => {
 
@@ -205,6 +207,7 @@ function TestResults({ location }) {
       state,
       city,
       dob,
+      attempts
     };
   
     axios
@@ -389,6 +392,19 @@ function TestResults({ location }) {
                     <Modal.Body>
                     <Form onSubmit={handleSubmit}>
                       <strong>Pin:</strong> {testDetails.pin}
+                      <br />
+                      <Row>
+                        <Col sm={8} className="d-flex align-items-center">
+                          <Form.Label className="mb-0" style={{ paddingRight: '8%' }}><strong>Attempt:</strong></Form.Label>
+                          <Form.Control
+                            type="number"
+                            placeholder="Enter attempts"
+                            value={attempts}
+                            onChange={(e) => setAttempts(e.target.value)}
+                          />
+                        </Col>
+                      </Row>
+
                       <Form.Group>
                         <br />
                         <Form.Label style={{marginRight:"2vw"}}><strong>Select:</strong></Form.Label>

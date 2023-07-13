@@ -154,6 +154,7 @@ router.route("/studentProfile").post(async (req, res) => {
   const state = req.body.state;
   const city = req.body.city;
   const dob = req.body.dob;
+  const attempts = req.body.attempts;
 
   const dateOfBirth = new Date(dob);
 
@@ -177,7 +178,7 @@ router.route("/studentProfile").post(async (req, res) => {
       
       else 
       {
-        const profile = new student({ firstName, lastName, ration, aadhaar, fatherName, motherName, gender, projectName, state, city, testID, clas, dateOfBirth });
+        const profile = new student({ firstName, lastName, ration, aadhaar, fatherName, motherName, gender, projectName, state, city, testID, clas, dateOfBirth , attempts});
         profile.save()
           .then(() => {
             console.log("Student profile added!");
