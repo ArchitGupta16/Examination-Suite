@@ -3,15 +3,22 @@
   }
   
   .mycard1 {
+    position: relative;
     padding: 20px;
     width: 18vw;
-    min-width: fit-content;
+    max-width: 18vw;
+    /* min-width: fit-content; */
     background-color: #005b933f;
-    
   }
-  
+
+  .filtercard{
+    position: relative;
+    width: 30%;
+    border-radius: 2px;
+    /* min-width: fit-content; */
+  }
+
   .buttonss {
-    /* display: inline-block; */
     padding: 8px 16px;
     font-size: 14px;
     text-align: center;
@@ -23,16 +30,22 @@
     border: none;
     cursor: pointer;
   }
+
 .buttonss:hover {
     background-color: #00796b;
     color: white;
   }
+
+  .bothcards{
+    margin-left: 0vw;
+    max-width: 100%;
+  }
+
   .mycard2 {
-    padding: 10px;
-    width: 18vw;
+    position: relative;
     min-width: fit-content;
-    background-color:#005b933f;
-    font-weight: bold;
+    max-width: 70%;
+    /* background-color:#5e60cf1f; */
   }
   
   .hr-custom {
@@ -43,16 +56,24 @@
   .customfield
     {
      background-color: rgba(255, 255, 255, 0.8);
+     border-radius: 10px;
+     /* border-color: rgb(65, 30, 148); */
     }
   
-  @media (max-width: 767px) {
+  @media (max-width: 767) {
+    .bothcards{
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
     .mycard1{
-        margin-top: 2vh;
-        margin-left: 17%;
+      position:relative;
       }
+      
     .mycard2 {
-      margin-top: 2vh;
-      margin-left: 15%;
+      position:relative;
     }
     
     .card {
@@ -71,8 +92,16 @@
       font-size: 0.9rem;
     }
     
-    .btn {
-      font-size: 0.9rem;
-      padding: 1vh 2vw;
+    .buttonss {
+      padding: 8px 16px;
+      font-size: 14px;
+      text-align: center;
+      text-decoration: none;
+      background-color: #005b93;
+      color: #fff;
+      border-radius: 8px;
+      transition: background-color 0.3s ease;
+      border: none;
+      cursor: pointer;
     }
   }

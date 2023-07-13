@@ -2,33 +2,35 @@ const router = require("express").Router();
 const test = require("../models/test.model");
 const result = require("../models/result.model");
 const question = require("../models/question.model");
-const axios = require("axios");
 const verify = require("./verifyToken");
 const student = require("../models/student.model");
 
 router.route("/").post(async (req, res) => {
   const testid = req.body.pin;
-  const aadhaar = req.body.aadhaar;
   const doc = await test.findOne({ pin: testid }).exec();
+
   if (!doc) {
     return res.status(400).send({ message: "Test doesn't exist!" });
   }
+
   if (Date.parse(doc.expiry) < Date.now()) {
     return res.status(400).send({ message: "Test has expired!! " });
   }
-  const check = await result.findOne({ pin: testid, aadhaar }).exec();
-  if (check) {
-    return res.status(400).send({message:"Test already taken!"});
-  }
+
   let ques = {
     response_code: 0,
   };
+
   ques.results = await question.find({ category: doc.topic }).exec();
-  if (ques.results.length > 0) {
-    ques.response_code = 1;
-  } else {
-    console.log("failed");
-  }
+  if (ques.results.length > 0) 
+    {
+      ques.response_code = 1;
+    } 
+  else 
+    {
+      console.log("failed");
+    }
+
   ques.time = doc.time;
   ques.category = doc.topic;
   if (ques.response_code == 1) return res.send(ques);
@@ -154,32 +156,51 @@ router.route("/studentProfile").post(async (req, res) => {
   const dob = req.body.dob;
 
   const dateOfBirth = new Date(dob);
-  const day = dateOfBirth.getDate();
-  const month = dateOfBirth.getMonth() + 1;
-  const year = dateOfBirth.getFullYear().toString().slice(-2);
-  const ddmmyy = `${day}${month}${year}`;
 
+  const testID = firstName.substring(0, 2) + lastName.substring(0, 2) + fatherName.substring(0, 2) + motherName.substring(0, 2) + gender.substring(0, 1) + clas;
 
-  const testID = firstName.substring(0,2) + lastName.substring(0,2) + fatherName.substring(0,2) + motherName.substring(0,2) + gender.substring(0,1) + clas;
-  const profile = new student({ firstName, lastName,ration, aadhaar, fatherName, motherName, gender, projectName, state, city, testID, clas, dob });
-  profile
-    .save()
-    .then(() => {
-    console.log("Student profile added!");
-    res.send({ID: testID})
+  student.findOne({ testID: testID })
+    .then(existingProfile => {
+      if (existingProfile) 
+      {
+        existingProfile.attempts = (existingProfile.attempts || 1) + 1;
+        existingProfile.save()
+          .then(() => {
+            console.log("Student profile updated!");
+            res.send({ ID: testID, attempts: existingProfile.attempts });
+          })
+          .catch((err) => {
+            console.log(err.message);
+            res.status(400).json("Could not update the profile: " + err);
+          });
+      } 
+      
+      else 
+      {
+        const profile = new student({ firstName, lastName, ration, aadhaar, fatherName, motherName, gender, projectName, state, city, testID, clas, dateOfBirth });
+        profile.save()
+          .then(() => {
+            console.log("Student profile added!");
+            res.send({ ID: testID });
+          })
+          .catch((err) => {
+            console.log(err.message);
+            res.status(400).json("Could not add to the database: " + err);
+          });
+      }
     })
-    .catch((err) => {console.log(err.message),res.status(400).json("Could not add to database: " + err)} );
+    .catch((err) => {
+      console.log(err.message);
+      res.status(400).json("Could not find student profile: " + err);
+    });
 });
 
 router.route("/getStudentProfile").post(async (req, res) => {
   const testID = req.body.testID;
-  // console.log(testID)
   try {
     const doc = await student.findOne({ testID }).exec();
-    // console.log(doc)
     res.send(doc);
   } catch (err) { 
-    console.log(err);
     return res.status(400).send();
   }
 });

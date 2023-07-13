@@ -1,10 +1,20 @@
 import React from "react";
-import { Container, Row, Col, Table, Button, Card } from "react-bootstrap";
+import { Container, Row, Col, Table, Button, Card ,Form,Modal} from "react-bootstrap";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { useState, useEffect } from "react";
 import "../componentsStyles/Results.css";
 import { useAlert } from "react-alert";
+import { ratio as fuzzballRatio } from 'fuzzball';
+import one from "../resources/t1.jpg";
+import two from "../resources/t2.jpg";
+import three from "../resources/t3.jpg";
+import four from "../resources/t4.jpg";
+import six from "../resources/p2.jpg";
+import seven from "../resources/p3.jpeg";
+import eight from "../resources/p4.jpg";
+
+const images = [one, two, three, six,four,  seven, eight];
 
 function TestResults({ location }) {
   const [data, setData] = useState(location.state && location.state.data);
@@ -12,6 +22,8 @@ function TestResults({ location }) {
   const [cityFilter, setCityFilter] = useState("");
   const [stateFilter, setStateFilter] = useState("");
   const [genderFilter, setGenderFilter] = useState("");
+  const [projectFilter, setProjectFilter] = useState("");
+  const [attemptFilter, setAttemptFilter] = useState("");
   const expiryDate = new Date(testDetails.expiry).toISOString().substr(0, 10);
   const [showModal, setShowModal] = useState(false);
   const [testID, setTestID] = useState("");
@@ -30,6 +42,7 @@ function TestResults({ location }) {
   const [pin, setPin] = useState("");
   const [score, setScore] = useState(0);
   const  alert  = useAlert();
+  const [idType, setIdType] = useState("aadhaar");
 
   useEffect(() => {
 
@@ -37,13 +50,12 @@ function TestResults({ location }) {
     
     if (data) {
       data.forEach((result) => {
-        getProfile(result.testID);
+        getprofile(result.testID);
       });
     }
 
 
   }, []);
-
   const options = {
     headers: {
       "Content-Type": "application/json",
@@ -71,7 +83,7 @@ function TestResults({ location }) {
     axios
       .post("http://localhost:4000/api/test/getStudentProfile", { testID })
       .then((res) => {
-        const { state, city, projectName, gender } = res.data;
+        const { state, city, projectName, gender,attempts } = res.data;
         setData((prevData) => {
           const updatedData = prevData.map((result) => {
             if (result.testID === testID) {
@@ -81,11 +93,12 @@ function TestResults({ location }) {
                 city,
                 projectName,
                 gender,
+                attempts
               };
             }
             return result;
           });
-          console.log(updatedData);
+          // console.log(updatedData);
           return updatedData;
         });
       })
@@ -93,7 +106,7 @@ function TestResults({ location }) {
         console.log(err.response.data);
       });
   };
-
+  
 
   const handleCityFilterChange = (event) => {
     setCityFilter(event.target.value);
@@ -107,21 +120,43 @@ function TestResults({ location }) {
     setGenderFilter(event.target.value);
   };
 
+  const handleProjectFilterChange = (event) => {
+    setProjectFilter(event.target.value);
+  };
+  const handleAttemptFilterChange = (event) => {
+    setAttemptFilter(event.target.value);
+  };
+
   let filteredData = data;
+  
+  const fuzzyFilter = (input, filter) => {
+    if (typeof input !== 'string') {
+      return input === filter;
+    }
+    const inputLower = input.toLowerCase();
+    const filterLower = filter.toLowerCase();
+    const similarity = fuzzballRatio(inputLower, filterLower);
+    const threshold = 60; 
+  
+    return similarity >= threshold;
+  };
+  
   if (cityFilter) {
-    filteredData = filteredData.filter(
-      (result) => result.city.toLowerCase() === cityFilter.toLowerCase()
-    );
+    filteredData = filteredData.filter((result) => fuzzyFilter(result.city, cityFilter));
   }
   if (stateFilter) {
-    filteredData = filteredData.filter(
-      (result) => result.state.toLowerCase() === stateFilter.toLowerCase()
-    );
+    filteredData = filteredData.filter((result) => fuzzyFilter(result.state, stateFilter));
+  }
+  if (projectFilter) {
+    filteredData = filteredData.filter((result) => fuzzyFilter(result.projectName, projectFilter));
   }
   if (genderFilter) {
     filteredData = filteredData.filter(
       (result) => result.gender.toLowerCase() === genderFilter.toLowerCase()
     );
+  }
+  if (attemptFilter){
+    filteredData = filteredData.filter((result) => result.attempts == attemptFilter);
   }
 
   if (!data || data.length === 0) {
@@ -144,7 +179,6 @@ function TestResults({ location }) {
     setShowModal(true);
   };
 
-  const [idType, setIdType] = useState("aadhaar");
 
   const handleIdTypeChange = (event) => {
     setIdType(event.target.value);
@@ -183,7 +217,7 @@ function TestResults({ location }) {
         const submitData = {
           pin: testDetails.pin,
           aadhaar,
-          testID: localStorage.getItem("testID"), // Use the testID from the response
+          testID: localStorage.getItem("testID"), 
           firstName,
           score,
         };
@@ -194,11 +228,9 @@ function TestResults({ location }) {
         
       })
       .then((res) => {
-        // localStorage.clear();
         console.log(res);
         alert.show("Test result added", { type: "success" });
         setShowModal(false);
-        // history.push("/");
       })
       .catch((err) => {
         console.log(err.response.data);
@@ -211,9 +243,15 @@ function TestResults({ location }) {
       <Container fluid className="mt-5">
         <Row>
           <Col lg={3} md={4} sm={12} className="mb-4">
-            <Card className=" mycard1">
+            <div className="bothcards">
+            <Card className=" mycard2 shadow" border="">
+              
+              <Card.Img variant="top" style={{height:"20vh"}} src={images[0]} alt="Test Image" />
+              <div className="d-flex justify-content-center">
+              <hr className="my-3" style={{width:"85%"}}/>
+              </div>
               <Card.Body>
-                <Card.Title>Test Details</Card.Title>
+                
                 <Card.Text>
                   <strong>Pin:</strong> {testDetails.pin}
                   <br />
@@ -226,63 +264,96 @@ function TestResults({ location }) {
               </Card.Body>
             </Card>
           
-            <Button variant="custom" className="buttonss" onClick={handleModalShow}>
-              Add Result
-            </Button>
-            <Card className=" mt-5 mycard2">
+            <Card className=" mt-5 mycard2 shadow" border="">
               <Card.Body>
-                <Card.Title>Filters</Card.Title>
+                <Card.Title><strong>Filters</strong></Card.Title>
+                <br />
                 <Card.Text>
+                      <div className="form-group">
+                        <label htmlFor="city-filter"><strong>City:</strong></label>
+                        <input
+                          type="text"
+                          className="form-control customfield"
+                          id="city-filter"
+                          value={cityFilter}
+                          onChange={handleCityFilterChange}
+                        />
+                      </div>
+                      <br />
+                      <div className="form-group">
+                        <label htmlFor="state-filter"><strong>State:</strong></label>
+                        <input
+                          type="text"
+                          className="form-control customfield"
+                          id="state-filter"
+                          value={stateFilter}
+                          onChange={handleStateFilterChange}
+                        />
+                      </div>
+
+                  <br />
                   <div className="form-group">
-                    <label htmlFor="city-filter">City:</label>
+                    <label htmlFor="project-filter"><strong>Project:</strong></label>
                     <input
                       type="text"
                       className="form-control customfield"
-                      id="city-filter"
-                      value={cityFilter}
-                      onChange={handleCityFilterChange}
+                      id="project-filter"
+                      value={projectFilter}
+                      onChange={handleProjectFilterChange}
                     />
                   </div>
-                  <div className="form-group">
-                    <label htmlFor="state-filter">State:</label>
-                    <input
-                      type="text"
-                      className="form-control customfield"
-                      id="state-filter"
-                      value={stateFilter}
-                      onChange={handleStateFilterChange}
-                    />
-                  </div>
-                  <div className="form-group">
-                    <label htmlFor="gender-filter">Gender:</label>
-                    <select
-                      className="form-control customfield"
-                      id="gender-filter"
-                      value={genderFilter}
-                      onChange={handleGenderFilterChange}
-                    >
-                      <option value="">Select Gender</option>
-                      <option value="male">Male</option>
-                      <option value="female">Female</option>
-                      <option value="other">Other</option>
-                    </select>
-                  </div>
+                  <br />
+                      <div className="form-group">
+                        <label htmlFor="attempt-filter"><strong>Attempt:</strong></label>
+                        <input
+                          type="number"
+                          className="form-control customfield"
+                          id="attempt-filter"
+                          value={attemptFilter}
+                          onChange={handleAttemptFilterChange}
+                        />
+                      </div>
+                      <br />
+                      <div className="form-group">
+                        <label htmlFor="gender-filter"><strong>Gender:</strong></label>
+                        <select
+                          className="form-control customfield"
+                          id="gender-filter"
+                          value={genderFilter}
+                          onChange={handleGenderFilterChange}
+                        >
+                          <option value="">Select Gender</option>
+                          <option value="male">Male</option>
+                          <option value="female">Female</option>
+                          <option value="other">Other</option>
+                        </select>
+                      </div>
+                    {/* </Col>
+                  </Row> */}
                 </Card.Text>
               </Card.Body>
             </Card>
+            </div>
           </Col>
           <Col lg={9} md={8} sm={12}>
             <Container>
               <div className="d-none d-md-block">
-                <Table striped bordered hover responsive variant="custom">
+                <div className="d-flex justify-content-end" style={{marginBottom:"2vh"}}>
+                  <Button variant="custom" className="buttong " onClick={handleModalShow}>
+                    Add Result
+                  </Button>
+                </div>
+                <Table striped bordered hover responsive variant="custom" border="dark">
                   <thead>
                     <tr>
                       <th>Name</th>
                       <th>Gender</th>
                       <th>TestID</th>
                       <th>Score</th>
+                      <th>Attempts</th>
                       <th>City</th>
                       <th>State</th>
+                      <th>Project</th>
                       <th>Actions</th>
                     </tr>
                   </thead>
@@ -293,8 +364,10 @@ function TestResults({ location }) {
                         <td>{result.gender}</td>
                         <td>{result.testID}</td>
                         <td>{result.score}%</td>
+                        <td>{result.attempts}</td>
                         <td>{result.city}</td>
                         <td>{result.state}</td>
+                        <td>{result.projectName}</td>
                         <td>
                           <Link
                             to={{
@@ -313,12 +386,12 @@ function TestResults({ location }) {
                   <Modal.Header closeButton>
                     <Modal.Title>Add Result</Modal.Title>
                   </Modal.Header>
-                  <Modal.Body>
+                    <Modal.Body>
                     <Form onSubmit={handleSubmit}>
                       <strong>Pin:</strong> {testDetails.pin}
                       <Form.Group>
-                        <Form.Label>Choose</Form.Label>
-                        <div>
+                        <br />
+                        <Form.Label style={{marginRight:"2vw"}}><strong>Select:</strong></Form.Label>
                           <Form.Check
                             inline
                             type="radio"
@@ -337,11 +410,12 @@ function TestResults({ location }) {
                             checked={idType === "rationCard"}
                             onChange={handleIdTypeChange}
                           />
-                        </div>
                       </Form.Group>
+                      <br />
+
                       <Form.Group controlId="formIdNumber">
                         <Form.Label>
-                          {idType === "aadhaar" ? "Aadhaar Number" : "Ration Card Number"}
+                          <strong>{idType === "aadhaar" ? "Aadhaar Number" : "Ration Card Number"}</strong>
                         </Form.Label>
                         <Form.Control
                           type="text"
@@ -354,66 +428,92 @@ function TestResults({ location }) {
                           }
                         />
                       </Form.Group>
-                      <Form.Group controlId="firstName">
-                        <Form.Label>First Name</Form.Label>
-                        <Form.Control
-                          type="text"
-                          placeholder="Enter first name"
-                          value={firstName}
-                          onChange={(e) => setFirstName(e.target.value)}
-                        />
-                      </Form.Group>
-                      <Form.Group controlId="lastName">
-                        <Form.Label>Last Name</Form.Label>
-                        <Form.Control
-                          type="text"
-                          placeholder="Enter last name"
-                          value={lastName}
-                          onChange={(e) => setLastName(e.target.value)}
-                        />
-                      </Form.Group>
-                      <Form.Group controlId="fatherName">
-                        <Form.Label>Father's Name</Form.Label>
-                        <Form.Control
-                          type="text"
-                          placeholder="Enter father's name"
-                          value={fatherName}
-                          onChange={(e) => setFatherName(e.target.value)}
-                        />
-                      </Form.Group>
-                      <Form.Group controlId="motherName">
-                        <Form.Label>Mother's Name</Form.Label>
-                        <Form.Control
-                          type="text"
-                          placeholder="Enter mother's name"
-                          value={motherName}
-                          onChange={(e) => setMotherName(e.target.value)}
-                        />
-                      </Form.Group>
-                      <Form.Group controlId="gender">
-                        <Form.Label>Gender</Form.Label>
-                        <Form.Control
-                          as="select"
-                          value={gender}
-                          onChange={(e) => setGender(e.target.value)}
-                        >
-                          <option>Choose...</option>
-                          <option value="male">Male</option>
-                          <option value="female">Female</option>
-                          <option value="other">Other</option>
-                        </Form.Control>
-                      </Form.Group>
-                      <Form.Group controlId="studentClass">
-                        <Form.Label>Class</Form.Label>
-                        <Form.Control
-                          type="text"
-                          placeholder="Enter class"
-                          value={studentClass}
-                          onChange={(e) => setStudentClass(e.target.value)}
-                        />
-                      </Form.Group>
+                      <br />
+
+                      <Row>
+                        <Col sm={6}>
+                          <Form.Group controlId="firstName">
+                            <Form.Label><strong>First Name</strong></Form.Label>
+                            <Form.Control
+                              type="text"
+                              placeholder="Enter first name"
+                              value={firstName}
+                              onChange={(e) => setFirstName(e.target.value)}
+                            />
+                          </Form.Group>
+                        </Col>
+                        <Col sm={6}>
+                          <Form.Group controlId="lastName">
+                            <Form.Label><strong>Last Name</strong></Form.Label>
+                            <Form.Control
+                              type="text"
+                              placeholder="Enter last name"
+                              value={lastName}
+                              onChange={(e) => setLastName(e.target.value)}
+                            />
+                          </Form.Group>
+                        </Col>
+                      </Row>
+                      <br />
+
+                      <Row>
+                        <Col sm={6}>
+                          <Form.Group controlId="fatherName">
+                            <Form.Label><strong>Father's Name</strong></Form.Label>
+                            <Form.Control
+                              type="text"
+                              placeholder="Enter father's name"
+                              value={fatherName}
+                              onChange={(e) => setFatherName(e.target.value)}
+                            />
+                          </Form.Group>
+                        </Col>
+                        <Col sm={6}>
+                          <Form.Group controlId="motherName">
+                            <Form.Label><strong>Mother's Name</strong></Form.Label>
+                            <Form.Control
+                              type="text"
+                              placeholder="Enter mother's name"
+                              value={motherName}
+                              onChange={(e) => setMotherName(e.target.value)}
+                            />
+                          </Form.Group>
+                        </Col>
+                      </Row>
+                      <br />
+
+                      <Row>
+                        <Col sm={6}>
+                          <Form.Group controlId="gender">
+                            <Form.Label><strong>Gender</strong></Form.Label>
+                            <Form.Control
+                              as="select"
+                              value={gender}
+                              onChange={(e) => setGender(e.target.value)}
+                            >
+                              <option>Choose...</option>
+                              <option value="male">Male</option>
+                              <option value="female">Female</option>
+                              <option value="other">Other</option>
+                            </Form.Control>
+                          </Form.Group>
+                        </Col>
+                        <Col sm={6}>
+                          <Form.Group controlId="studentClass">
+                            <Form.Label><strong>Class</strong></Form.Label>
+                            <Form.Control
+                              type="text"
+                              placeholder="Enter class"
+                              value={studentClass}
+                              onChange={(e) => setStudentClass(e.target.value)}
+                            />
+                          </Form.Group>
+                        </Col>
+                      </Row>
+                      <br />
+
                       <Form.Group controlId="projectName">
-                        <Form.Label>Project Name</Form.Label>
+                        <Form.Label><strong>Project Name</strong></Form.Label>
                         <Form.Control
                           type="text"
                           placeholder="Enter project name"
@@ -421,48 +521,69 @@ function TestResults({ location }) {
                           onChange={(e) => setProjectName(e.target.value)}
                         />
                       </Form.Group>
-                      <Form.Group controlId="city">
-                        <Form.Label>City</Form.Label>
-                        <Form.Control
-                          type="text"
-                          placeholder="Enter city"
-                          value={city}
-                          onChange={(e) => setCity(e.target.value)}
-                        />
-                      </Form.Group>
-                      <Form.Group controlId="state">
-                        <Form.Label>State</Form.Label>
-                        <Form.Control
-                          type="text"
-                          placeholder="Enter state"
-                          value={state}
-                          onChange={(e) => setState(e.target.value)}
-                        />
-                      </Form.Group>
-                      <Form.Group controlId="dob">
-                        <Form.Label>Date of Birth</Form.Label>
-                        <Form.Control
-                          type="date"
-                          placeholder="Enter date of birth"
-                          value={dob}
-                          onChange={(e) => setDob(e.target.value)}
-                        />
-                      </Form.Group>
-                      <Form.Group controlId="score">
-                        <Form.Label>Score</Form.Label>
-                        <Form.Control
-                          type="number"
-                          placeholder="Enter score"
-                          value={score}
-                          onChange={(e) => setScore(e.target.value)}
-                        />
-                      </Form.Group>
-                      <Button variant="secondary" onClick={handleModalClose}>
+                      <br />
+
+                      <Row>
+                        <Col sm={6}>
+                          <Form.Group controlId="city">
+                            <Form.Label><strong> City</strong></Form.Label>
+                            <Form.Control
+                              type="text"
+                              placeholder="Enter city"
+                              value={city}
+                              onChange={(e) => setCity(e.target.value)}
+                            />
+                          </Form.Group>
+                        </Col>
+                        <Col sm={6}>
+                          <Form.Group controlId="state">
+                            <Form.Label><strong>State</strong></Form.Label>
+                            <Form.Control
+                              type="text"
+                              placeholder="Enter state"
+                              value={state}
+                              onChange={(e) => setState(e.target.value)}
+                            />
+                          </Form.Group>
+                        </Col>
+                      </Row>
+                      <br />
+                      
+                      <Row>
+                        <Col sm={6}>
+                          <Form.Group controlId="dob">
+                            <Form.Label><strong>Date of Birth</strong></Form.Label>
+                            <Form.Control
+                              type="date"
+                              placeholder="Enter date of birth"
+                              value={dob}
+                              onChange={(e) => setDob(e.target.value)}
+                            />
+                          </Form.Group>
+                        </Col>
+                      <br />
+                        <Col sm={6}>
+                          <Form.Group controlId="score">
+                            <Form.Label><strong>Score</strong></Form.Label>
+                            <Form.Control
+                              type="number"
+                              placeholder="Enter score"
+                              value={score}
+                              onChange={(e) => setScore(e.target.value)}
+                            />
+                          </Form.Group>
+                        </Col>
+                      </Row>
+                      <br />
+                      
+                      <div className="d-flex justify-content-end">
+                      <Button variant="custom" style={{margin:"2% 2% 0% 2%"}} className="buttong" onClick={handleModalClose}>
                         Close
                       </Button>
-                      <Button variant="primary" type="submit">
+                      <Button variant="custom" style={{margin:"2% 2% 0% 2%"}} type="submit" className="buttonss">
                         Save Changes
                       </Button>
+                      </div>
                     </Form>
                   </Modal.Body>
                 </Modal>
