@@ -247,9 +247,9 @@ function TestResults({ location }) {
         <Row>
           <Col lg={3} md={4} sm={12} className="mb-4">
             <div className="bothcards">
-            <Card className=" mycard2 shadow" border="">
+            <Card className=" mycard2 shadow" >
               
-              <Card.Img variant="top" style={{height:"20vh"}} src={images[0]} alt="Test Image" />
+              <Card.Img variant="top" className="imggggs" src={images[0]} alt="Test Image" />
               <div className="d-flex justify-content-center">
               <hr className="my-3" style={{width:"85%"}}/>
               </div>
@@ -267,7 +267,7 @@ function TestResults({ location }) {
               </Card.Body>
             </Card>
           
-            <Card className=" mt-5 mycard2 shadow" border="">
+            <Card className=" mt-5 mycard2 shadow" >
               <Card.Body>
                 <Card.Title><strong>Filters</strong></Card.Title>
                 <br />
@@ -339,13 +339,15 @@ function TestResults({ location }) {
             </div>
           </Col>
           <Col lg={9} md={8} sm={12}>
-            <Container>
-              <div className="d-none d-md-block">
-                <div className="d-flex justify-content-end" style={{marginBottom:"2vh"}}>
+            <Container className="con" >
+            <div className="d-flex justify-content-end" style={{marginBottom:"2vh"}}>
                   <Button variant="custom" className="buttong " onClick={handleModalShow}>
                     Add Result
                   </Button>
                 </div>
+              <div className="d-none d-md-block">
+                <div className="tab">
+                
                 <Table striped bordered hover responsive variant="custom" border="dark">
                   <thead>
                     <tr>
@@ -385,6 +387,7 @@ function TestResults({ location }) {
                     ))}
                   </tbody>
                 </Table>
+                </div>
                 <Modal show={showModal} onHide={handleModalClose}>
                   <Modal.Header closeButton>
                     <Modal.Title>Add Result</Modal.Title>
@@ -627,7 +630,7 @@ function TestResults({ location }) {
                           state: { student: result },
                         }}
                       >
-                        <Button variant="primary">Edit Score</Button>
+                        <Button variant="custom" className="buttonss">Edit Score</Button>
                       </Link>
                     </Card.Body>
                   </Card>
