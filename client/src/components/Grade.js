@@ -213,7 +213,7 @@ function Grade({ location }) {
         <div className="row">
         <div className="col-md-4 ">
             <div className="sticky-top accordionsss">
-              <Card border="secondary">
+              <Card border="secondary"  className="navi-box">
               <Card.Body>
                 <div className="scrollable-navi">
                 <Card.Title className="d-flex justify-content-center"><strong>Navigate Questions</strong></Card.Title>
@@ -234,7 +234,7 @@ function Grade({ location }) {
               </Card.Body>
               </Card>
               <div className="d-flex justify-content-center">
-                <Button style={{marginTop:"1vh"}} className="buttonss" onClick={() => {setShowModal(true);calculateFinalScore()}}>
+                <Button style={{marginTop:"1vh",marginRight:"2vw"}} className="buttonss" onClick={() => {setShowModal(true);calculateFinalScore()}}>
                   Calculate Final Score
                 </Button>
               </div>

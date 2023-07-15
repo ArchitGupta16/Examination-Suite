@@ -9,6 +9,9 @@
   .cc{
     padding: 0 3% 0 3%;
   }
+  .navi-box{
+    max-width: 90%;
+  }
   .scrollable-navi {
     max-height: 50vh;
     overflow-y: auto;

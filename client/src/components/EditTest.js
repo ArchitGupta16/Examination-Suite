@@ -340,7 +340,7 @@ function EditTest() {
             Add Question
           </Button>
           </div>
-        <Card border="secondary">
+        <Card border="secondary" className="nav-box">
         <Card.Body>
           <div className="scrollable-navi ">
           <Card.Title className="d-flex justify-content-center"><strong>Navigate Questions</strong></Card.Title>
