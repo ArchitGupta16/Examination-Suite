@@ -26,6 +26,7 @@ function Dashboard(props) {
   const [time, settime] = useState("");
   const [expiry, setexpiry] = useState(new Date());
   const [alert, setAlert] = useState({ show: false, message: "", variant: "" });
+  
 
   const options = {
     headers: {
@@ -57,7 +58,11 @@ function Dashboard(props) {
       history.push("/Edittest", { data: res.data, testdetails : tests.find((test) => test.pin === pin) });
     })
     .catch((err) => {
-      console.log("error here buddy",err.response.body)
+      console.log("error here buddy",err)
+      if (err.response.status === 405) {
+        // setAlert({ show: true, message: "No questions found", variant: "danger" });
+        history.push("/Edittest", { data: [], testdetails : tests.find((test) => test.pin === pin) });
+      }
     })
   }
 
@@ -73,7 +78,6 @@ function Dashboard(props) {
       });
   }, [modalIsOpen]);
 
-  
 
   const onSubmit = (event) => {
     event.preventDefault();
@@ -92,6 +96,8 @@ function Dashboard(props) {
         setAlert({ show: true, message: "Error: Test not added. Please try again.", variant: "danger" })
       });
   };
+
+
 
   return (
     <div>

@@ -161,7 +161,17 @@ function TestResults({ location }) {
     filteredData = filteredData.filter((result) => result.attempts == attemptFilter);
   }
 
-  
+  if (!data || data.length === 0) {
+    return (
+      <div>
+        <hr className="hr-custom" />
+        <Container className="mt-5">
+          <h1 className="text-center">Test Results</h1>
+          <p className="text-center">No results found.</p>
+        </Container>
+      </div>
+    );
+  }
 
   const handleModalClose = () => {
     setShowModal(false);
@@ -229,52 +239,14 @@ function TestResults({ location }) {
         console.log(err.response.data);
         alert.show(err.response.data.msg, { type: "error" });
       });
-
-      
   };
-  const [showScrollToTop, setShowScrollToTop] = useState(false);
-
-  const handleScroll = () => {
-    if (window.pageYOffset > 300) {
-      setShowScrollToTop(true);
-    } else {
-      setShowScrollToTop(false);
-    }
-  };
-
-  const scrollToTop = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
-  };
-
-  useEffect(() => {
-    window.addEventListener("scroll", handleScroll);
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
-
-  if (!data || data.length === 0) {
-    return (
-      <div>
-        <hr className="hr-custom" />
-        <Container className="mt-5">
-          <h1 className="text-center">Test Results</h1>
-          <p className="text-center">No results found.</p>
-        </Container>
-      </div>
-    );
-  }
-
   return (
     <div className="mybg">
       <hr className="hr-custom" />
       <Container fluid className="mt-5">
         <Row>
           <Col lg={3} md={4} sm={12} className="mb-4">
-            <div className="bothcards ">
+            <div className="bothcards">
             <Card className=" mycard2 shadow" >
               
               <Card.Img variant="top" className="imggggs" src={images[0]} alt="Test Image" />
@@ -301,7 +273,7 @@ function TestResults({ location }) {
                 <br />
                 <Card.Text>
                       <div className="form-group">
-                        <label htmlFor="city-filter"><strong>City</strong></label>
+                        <label htmlFor="city-filter"><strong>City:</strong></label>
                         <input
                           type="text"
                           className="form-control customfield"
@@ -312,7 +284,7 @@ function TestResults({ location }) {
                       </div>
                       <br />
                       <div className="form-group">
-                        <label htmlFor="state-filter"><strong>State</strong></label>
+                        <label htmlFor="state-filter"><strong>State:</strong></label>
                         <input
                           type="text"
                           className="form-control customfield"
@@ -324,7 +296,7 @@ function TestResults({ location }) {
 
                   <br />
                   <div className="form-group">
-                    <label htmlFor="project-filter"><strong>Project</strong></label>
+                    <label htmlFor="project-filter"><strong>Project:</strong></label>
                     <input
                       type="text"
                       className="form-control customfield"
@@ -334,10 +306,8 @@ function TestResults({ location }) {
                     />
                   </div>
                   <br />
-                  <Row>
-                    <Col sm={6}> 
                       <div className="form-group">
-                        <label htmlFor="attempt-filter"><strong>Attempts</strong></label>
+                        <label htmlFor="attempt-filter"><strong>Attempt:</strong></label>
                         <input
                           type="number"
                           className="form-control customfield"
@@ -346,24 +316,23 @@ function TestResults({ location }) {
                           onChange={handleAttemptFilterChange}
                         />
                       </div>
-                    </Col>
-                    <Col sm={6}> 
+                      <br />
                       <div className="form-group">
-                        <label htmlFor="gender-filter"><strong>Gender</strong></label>
+                        <label htmlFor="gender-filter"><strong>Gender:</strong></label>
                         <select
                           className="form-control customfield"
                           id="gender-filter"
                           value={genderFilter}
                           onChange={handleGenderFilterChange}
                         >
-                          <option value="">None</option>
+                          <option value="">Select Gender</option>
                           <option value="male">Male</option>
                           <option value="female">Female</option>
                           <option value="other">Other</option>
                         </select>
                       </div>
-                     </Col>
-                  </Row>
+                    {/* </Col>
+                  </Row> */}
                 </Card.Text>
               </Card.Body>
             </Card>
@@ -671,11 +640,6 @@ function TestResults({ location }) {
           </Col>
         </Row>
       </Container>
-      {showScrollToTop && (
-        <div className="scroll-to-top" onClick={scrollToTop}>
-          <i className="fa fa-arrow-up"></i>
-        </div>
-      )}
     </div>
       )
 }

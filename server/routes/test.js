@@ -85,7 +85,7 @@ router.route("/addtest").post(async (req, res) => {
   const testname = req.body.topic;
   const email = req.user.email.toLowerCase();
   const amount = req.body.amount;
-  const topic = (await test.countDocuments({}).exec()) + 1;
+  const topic = await test.countDocuments({}).exec() + 2;
   const time = req.body.time;
   const expiry = Date.parse(req.body.expiry);
   const created = Date.parse(req.body.created);
@@ -111,6 +111,11 @@ router.route("/getquestions").post(async (req, res) => {
   const doc = await test.findOne({ pin: pin }).exec();
   const ques = await question.find({ category: doc.topic }).exec();
   let response_code = 0;
+  // console.log(doc);
+  // console.log(ques.length);
+  if (ques.length === 0) {
+    return res.status(405).send({ message: "No questions found" });
+  }
   if (ques.length > 0) {
     response_code = 1;
   } else {
@@ -207,4 +212,3 @@ router.route("/getStudentProfile").post(async (req, res) => {
 });
 
 module.exports = router;
-

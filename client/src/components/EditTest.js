@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useHistory, useLocation } from "react-router-dom";
-import { Button, Card, Form, Modal,Nav,ListGroup,hr } from "react-bootstrap";
+import { Button, Card, Form, Modal,Nav,ListGroup,hr , Container} from "react-bootstrap";
 import "../componentsStyles/EditTest.css";
 import axios from "axios";
 import { useAlert } from "react-alert";
@@ -12,6 +12,7 @@ function EditTest() {
   const [modifiedQuestion, setModifiedQuestion] = useState(null);
   const [lastModifiedQuestion, setLastModifiedQuestion] = useState(null);
   const [showAddModal, setShowAddModal] = useState(false);
+  const [data, setData] = useState(false);
   const [newQuestion, setNewQuestion] = useState({
     question: "",
     correct_answer: [""],
@@ -33,9 +34,11 @@ function EditTest() {
       .then((res) => {
         setQuestions(res.data.map((question) => ({ ...question, isModified: false })));
         console.log(questions);
+        
       })
       .catch((err) => {
         console.log("error here buddy", err.response.body);
+        setData(true);
       });
   };
 
@@ -43,6 +46,9 @@ function EditTest() {
     getQuestions();
     console.log(questions)
   }, []);
+  // useEffect(() => {
+  //   console.log(questions);
+  // }, [questions]);
 
   const handleQuestionChange = (questionId, value) => {
     setQuestions((prevQuestions) =>
@@ -178,6 +184,157 @@ function EditTest() {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
+
+  if (data) {
+    return (
+      <div>
+        <hr className="hr-custom" />
+        <Container className="mt-5">
+          <h1 className="text-center">No Question Found</h1>
+          <Button className="add-button align-right buttonss"
+              variant="custom"  onClick={() => setShowAddModal(true)}>
+            Add Question
+          </Button>
+          <Modal show={showAddModal} onHide={() => setShowAddModal(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title><strong>Add New Question</strong></Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form>
+            <Form.Group controlId="new-question">
+              <Form.Label><strong>Question</strong></Form.Label>
+              <Form.Control
+                type="text"
+                value={newQuestion.question}
+                onChange={(event) =>
+                  setNewQuestion({ ...newQuestion, question: event.target.value })
+                }
+                
+              />
+            </Form.Group><br/>
+            <Form.Group controlId="new-correct-answers">
+              <Form.Label><strong>Correct Answers</strong></Form.Label>
+              {newQuestion.correct_answer && newQuestion.correct_answer.map((answer, index) => (
+                <Form.Control
+                  key={index}
+                  type="text"
+                  value={answer}
+                  onChange={(event) => {
+                    const updatedAnswers = [...newQuestion.correct_answer];
+                    updatedAnswers[index] = event.target.value;
+                    setNewQuestion({ ...newQuestion, correct_answer: updatedAnswers });
+                  }}
+                />
+              ))}
+              <Button
+                variant="custom"
+                onClick={() =>
+                  setNewQuestion({
+                    ...newQuestion,
+                    correct_answer: [...newQuestion.correct_answer, ""],
+                  })
+                }
+                className="mt-2 buttonss"
+              >
+                Add +
+              </Button>
+              
+            </Form.Group>
+            <br/>
+            <Form.Group controlId="new-incorrect-answers">
+              <Form.Label><strong>Incorrect Answers</strong></Form.Label>
+              {newQuestion.incorrect_answers.map((answer, index) => (
+                <Form.Control
+                  key={index}
+                  type="text"
+                  value={answer}
+                  onChange={(event) => {
+                    const updatedAnswers = [...newQuestion.incorrect_answers];
+                    updatedAnswers[index] = event.target.value;
+                    setNewQuestion({ ...newQuestion, incorrect_answers: updatedAnswers });
+                  }}
+                />
+              ))}
+              <Button
+                variant="custom"
+                onClick={() =>
+                  setNewQuestion({
+                    ...newQuestion,
+                    incorrect_answers: [...newQuestion.incorrect_answers, ""],
+                  })
+                }
+                className="mt-2 buttonss"
+              >
+                Add +
+              </Button>
+            </Form.Group>
+            <br/>
+            <Form.Group controlId="new-category">
+              <Form.Label><strong>Category</strong></Form.Label>
+              <Form.Control
+                type="number"
+                value={newQuestion.category}
+                onChange={(event) =>
+                  setNewQuestion({ ...newQuestion, category: event.target.value })
+                }
+              />
+            </Form.Group><br/>
+            <Form.Group controlId="new-type">
+              <Form.Label><strong>Type</strong></Form.Label>
+              <Form.Control
+                as="select"
+                value={newQuestion.type}
+                onChange={(event) =>
+                  setNewQuestion({ ...newQuestion, type: event.target.value })
+                }
+              >
+                <option value="">Select Type</option>
+                <option value="multiple">Multiple</option>
+                <option value="true/false">text</option>
+              </Form.Control>
+            </Form.Group><br/>
+            <Form.Group controlId="new-image">
+              <Form.Label><strong>Image link</strong></Form.Label>
+              <Form.Control
+                type="text"
+                value={newQuestion.image}
+                onChange={(event) =>
+                  setNewQuestion({ ...newQuestion, image: event.target.value })
+                }
+              />
+            </Form.Group><br/>
+            <Form.Group controlId="new-difficulty">
+              <Form.Label><strong>Difficulty</strong></Form.Label>
+              <Form.Control
+                as="select"
+                value={newQuestion.difficulty}
+                onChange={(event) =>
+                  setNewQuestion({ ...newQuestion, difficulty: event.target.value })
+                }
+              >
+                <option value="">Select Difficulty</option>
+                <option value="easy">Easy</option>
+                <option value="medium">Medium</option>
+                <option value="hard">Hard</option>
+              </Form.Control>
+            </Form.Group>
+          </Form>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="custom" className="buttong" onClick={() => setShowAddModal(false)}>
+            Cancel
+          </Button>
+          
+          <Button variant="custom" className="buttong" onClick={handleAddQuestion} >
+            Add Question
+          </Button>
+         
+        </Modal.Footer>
+        </Modal>
+        </Container>
+      </div>
+    );
+  }
 
   const handleQuestionNavigation = (question,index) => {
     setActiveQuestion(index);
@@ -340,7 +497,7 @@ function EditTest() {
             Add Question
           </Button>
           </div>
-        <Card border="secondary" className="nav-box">
+        <Card border="secondary">
         <Card.Body>
           <div className="scrollable-navi ">
           <Card.Title className="d-flex justify-content-center"><strong>Navigate Questions</strong></Card.Title>
