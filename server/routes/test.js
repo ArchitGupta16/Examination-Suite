@@ -159,7 +159,7 @@ router.route("/studentProfile").post(async (req, res) => {
   const state = req.body.state;
   const city = req.body.city;
   const dob = req.body.dob;
-  const attempts = req.body.attempts;
+  let attempts = req.body.attempts;
 
   const dateOfBirth = new Date(dob);
 
@@ -183,6 +183,7 @@ router.route("/studentProfile").post(async (req, res) => {
       
       else 
       {
+        attempts = 1;
         const profile = new student({ firstName, lastName, ration, aadhaar, fatherName, motherName, gender, projectName, state, city, testID, clas, dateOfBirth , attempts});
         profile.save()
           .then(() => {
