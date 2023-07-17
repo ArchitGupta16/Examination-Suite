@@ -13,7 +13,11 @@ const resultSchema = new Schema({
   },
   aadhaar: {
     type: String,
-    required: true,
+    required: false,
+  },
+  ration : {  
+    type: String,
+    required: false,  
   },
   score: {
     type: String,

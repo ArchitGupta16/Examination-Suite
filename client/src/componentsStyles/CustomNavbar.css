@@ -4,7 +4,7 @@ height: 6vh;
 }
 
 .na {
-  background-color:white ;
+  background-color: transparent ;
   padding-bottom: 0 !important;
 }
 .custom-button {
@@ -15,7 +15,7 @@ height: 6vh;
 }
 .custom-button:hover {
   background-color: #00896bb2;
-  color: white;
+  color: white; 
 }
 
 
