@@ -29,6 +29,7 @@ function Question(props) {
   const [showModal, setShowModal] = useState(false);
   const [selectedOptions, setSelectedOptions] = useState(new Array(length).fill(""));
   let testID = localStorage.getItem("testID");
+  const [currentDate, setCurrentDate] = useState(new Date().toISOString().slice(0, 10));
   const category = res.category;
   const [activeQuestion, setActiveQuestion] = useState(ques);
   const [Canvasshow, setCanvasShow] = useState(false);
@@ -93,6 +94,7 @@ function Question(props) {
           score,
           answers,
           loc,
+          testDate: currentDate,
         },
         options
       )

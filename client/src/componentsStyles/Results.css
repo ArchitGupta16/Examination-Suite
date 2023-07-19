@@ -5,6 +5,11 @@
 .con{
   min-width: 90%;
 }
+.table-cell-vertical {
+  vertical-align: middle;
+  align-items: center;
+  justify-content: center;
+}
 .imggggs{
   
   object-fit: contain;

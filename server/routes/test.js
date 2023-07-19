@@ -41,6 +41,7 @@ router.route("/").post(async (req, res) => {
 });
 
 router.route("/submittest").post(async (req, res) => {
+  console.log(req.body);
   const score = parseInt(req.body.score);
   const testID = req.body.testID;
   const aadhaar = req.body.aadhaar;
@@ -48,12 +49,30 @@ router.route("/submittest").post(async (req, res) => {
   const pin = req.body.pin;
   const resu = req.body.answers;
   const indi = req.body.loc;
-  const resultEntry = new result({ aadhaar,testID, firstName, pin, score, result:resu, individualScore:indi });
-  resultEntry
-    .save()
-    .then(() => res.send("result added!"))
-    .catch((err) => res.status(400).json("Could not add to database: " + err));
-});
+  const testDate = req.body.testDate;
+  let temp = 0;
+  result.findOne({ testID: testID }).sort({_id:-1}).limit(1)
+    .then((existingResult) => {
+      console.log(existingResult.attempts,"attempts")
+      if (existingResult) {
+        console.log("idharrrrrrrrrrrrrr")
+        const attempts = existingResult.attempts + 1;
+        temp = existingResult.testID;
+        const resultEntry = new result({ aadhaar,testID:temp, firstName, pin, score, result:resu, individualScore:indi,testDate, attempts});
+          resultEntry
+          .save()
+          .then(() => res.send("result added!"))
+          .catch((err) => res.status(400).json("Could not add to database: " + err));
+      } else {
+        const attempts = 1
+        const resultEntry = new result({ aadhaar,testID, firstName, pin, score, result:resu, individualScore:indi,testDate, attempts });
+      
+        resultEntry
+          .save()
+          .then(() => res.send("result added!"))
+          .catch((err) => res.status(400).json("Could not add to database: " + err));
+      }
+})});
 
 router.use("/gettests", verify);
 router.use("/getresults", verify);
@@ -145,7 +164,6 @@ router.route("/updateScore").put(async (req, res) => {
 });
 
 router.route("/studentProfile").post(async (req, res) => {
-  console.log(req.body);
   const documentType = req.body.documentType;
   const aadhaar = req.body.aadhaar;
   const ration = req.body.ration;
@@ -153,58 +171,47 @@ router.route("/studentProfile").post(async (req, res) => {
   const lastName = req.body.lastName;
   const fatherName = req.body.fatherName;
   const motherName = req.body.motherName;
-  const gender = req.body.gender;
+  let gender = req.body.gender;
   const projectName = req.body.projectName;
   const clas = req.body.studentClass;
   const state = req.body.state;
   const city = req.body.city;
   const dob = req.body.dob;
-  const attempts = req.body.attempts;
-
-  const dateOfBirth = new Date(dob);
-
+  let dateOfBirth = new Date();
+  gender = gender.charAt(0).toUpperCase() + gender.slice(1);
+  if (dob){
+   dateOfBirth = new Date(dob);
+  }
+  console.log(dateOfBirth,clas,typeof(dateOfBirth),"trying")
   const testID = firstName.substring(0, 2) + lastName.substring(0, 2) + fatherName.substring(0, 2) + motherName.substring(0, 2) + gender.substring(0, 1) + clas;
-
   student.findOne({ testID: testID })
-    .then(existingProfile => {
-      if (existingProfile) 
-      {
-        existingProfile.attempts = (existingProfile.attempts || 1) + 1;
-        existingProfile.save()
-          .then(() => {
-            console.log("Student profile updated!");
-            res.send({ ID: testID, attempts: existingProfile.attempts });
-          })
-          .catch((err) => {
-            console.log(err.message);
-            res.status(400).json("Could not update the profile: " + err);
-          });
-      } 
-      
-      else 
-      {
-        const profile = new student({ firstName, lastName, ration, aadhaar, fatherName, motherName, gender, projectName, state, city, testID, clas, dateOfBirth , attempts});
-        profile.save()
-          .then(() => {
-            console.log("Student profile added!");
-            res.send({ ID: testID });
-          })
-          .catch((err) => {
-            console.log(err.message);
-            res.status(400).json("Could not add to the database: " + err);
-          });
-      }
-    })
-    .catch((err) => {
-      console.log(err.message);
-      res.status(400).json("Could not find student profile: " + err);
-    });
+  .then(existingProfile => {
+    if (existingProfile === null) 
+  {console.log(existingProfile);
+    const profile = new student({ firstName, lastName, ration, aadhaar, fatherName, motherName, gender, projectName, state, city, testID, class:clas, dob:dateOfBirth});
+    profile.save()
+      .then(() => {
+        console.log("Student profile added!");
+        res.send({ ID: testID });
+      })
+      .catch((err) => {
+        console.log(err.message);
+        res.status(400).json("Could not add to the database: " + err);
+      });
+    }
+    else{
+      res.send({ID:testID})
+    }
+  }
+  )
 });
 
 router.route("/getStudentProfile").post(async (req, res) => {
   const testID = req.body.testID;
   try {
-    const doc = await student.findOne({ testID }).exec();
+    console.log(testID);
+    const doc = await student.findOne({ testID:testID }).exec();
+    console.log(doc);
     res.send(doc);
   } catch (err) { 
     return res.status(400).send();

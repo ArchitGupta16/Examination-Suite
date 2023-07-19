@@ -85,6 +85,7 @@ function TestResults({ location }) {
     axios
       .post("http://localhost:4000/api/test/getStudentProfile", { testID })
       .then((res) => {
+        console.log(res.data);
         const { state, city, projectName, gender,attempts } = res.data;
         setData((prevData) => {
           const updatedData = prevData.map((result) => {
@@ -95,7 +96,6 @@ function TestResults({ location }) {
                 city,
                 projectName,
                 gender,
-                attempts
               };
             }
             return result;
@@ -184,6 +184,14 @@ function TestResults({ location }) {
 
   const handleIdTypeChange = (event) => {
     setIdType(event.target.value);
+  };
+
+  const testdateFormat = (date) => {
+    const dateObj = new Date(date);
+    const month = dateObj.toLocaleString("default", { month: "short" });
+    const day = dateObj.getDate();
+    const year = dateObj.getFullYear();
+    return `${day} ${month} ${year}`;
   };
 
   const handleSubmit = (event) => {
@@ -355,7 +363,8 @@ function TestResults({ location }) {
                       <th>Gender</th>
                       <th>TestID</th>
                       <th>Score</th>
-                      <th>Attempts</th>
+                      <th>Attempt</th>
+                      <th>Test Date</th>
                       <th>City</th>
                       <th>State</th>
                       <th>Project</th>
@@ -365,15 +374,16 @@ function TestResults({ location }) {
                   <tbody>
                     {filteredData.map((result, index) => (
                       <tr key={index}>
-                        <td>{result.firstName}</td>
-                        <td>{result.gender}</td>
-                        <td>{result.testID}</td>
-                        <td>{result.score}%</td>
-                        <td>{result.attempts}</td>
-                        <td>{result.city}</td>
-                        <td>{result.state}</td>
-                        <td>{result.projectName}</td>
-                        <td>
+                        <td className="table-cell-vertical">{result.firstName}</td>
+                        <td className="table-cell-vertical">{result.gender}</td>
+                        <td className="table-cell-vertical">{result.testID}</td>
+                        <td className="table-cell-vertical">{result.score}%</td>
+                        <td className="table-cell-vertical">{result.attempts}</td>
+                        <td className="table-cell-vertical">{testdateFormat(result.testDate)}</td>
+                        <td className="table-cell-vertical">{result.city}</td>
+                        <td className="table-cell-vertical">{result.state}</td>
+                        <td className="table-cell-vertical">{result.projectName}</td>
+                        <td className="table-cell-vertical">
                           <Link
                             to={{
                               pathname: "/grade",

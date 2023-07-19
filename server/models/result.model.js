@@ -35,6 +35,14 @@ const resultSchema = new Schema({
     type: String,
     required: true,
   },
+  testDate: {
+    type: Date,
+    required: true,
+  },
+  attempts: {
+    type: Number,
+    required: true,
+  },
 });
 
 const result = mongoose.model("result", resultSchema);

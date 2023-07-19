@@ -62,11 +62,7 @@ const studentSchema = new mongoose.Schema({
  dob: {
   type: Date,
   required: false
- },
- attempts: {
-  type: Number,
-  required: false
-}
+ }
 });
 
 module.exports = mongoose.model("Student", studentSchema);

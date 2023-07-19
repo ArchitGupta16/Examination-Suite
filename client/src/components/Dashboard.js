@@ -3,15 +3,15 @@ import { useHistory,Link } from "react-router-dom";
 import axios from "axios";
 import { Alert, Button, Card, Form, Modal, Badge } from "react-bootstrap";
 import one from "../resources/t1.jpg";
-import two from "../resources/t2.jpg";
-import three from "../resources/t3.jpg";
-import four from "../resources/t4.jpg";
-import six from "../resources/p2.jpg";
+import two from "../resources/q2.png";
+import three from "../resources/q3.jpg";
+import four from "../resources/q5.jpg";
+import six from "../resources/q4.jpg";
 import seven from "../resources/p3.jpeg";
 import eight from "../resources/p4.jpg";
 import "../componentsStyles/Dashboard.css";
 
-const images = [one, two, three, six,four,  seven, eight];
+const images = [two, three, six,four,  seven, eight];
 
 function Dashboard(props) {
   let history = useHistory();

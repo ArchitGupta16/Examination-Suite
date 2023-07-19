@@ -77,7 +77,7 @@ function Grade({ location }) {
     if (typeof individual === "object" && individual !== null) {
       const scores = Object.values(individual);
       const sum = scores.reduce((acc, score) => acc + score, 0);
-      setPreviousScore(sum / scores.length);
+      setPreviousScore((sum / scores.length).toFixed(4));
     }
   };
 
@@ -92,7 +92,7 @@ function Grade({ location }) {
       }
     }
 
-    const totalScore = sum / Object.keys(individual).length;
+    const totalScore = (sum / Object.keys(individual).length).toFixed(4);
     setUpdatedScore(totalScore);
     setShowResult(true);
   };
