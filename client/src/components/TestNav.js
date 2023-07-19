@@ -26,6 +26,7 @@ function TestNav(props) {
           
             <Navbar.Brand >
             <div className={`stuname ${styles.stuname}`}>
+              
               <BsPerson className="mr-2" size={30} />
               {props.name}
               </div>

@@ -192,7 +192,7 @@ function Question(props) {
 
   return (
     <div className="container-fluid">
-      <TestNav mins={mins} secs={secs} name={firstName} pin={pin} />
+      <TestNav mins={mins} secs={secs} name={firstName} pin={pin}  />
       <div>
         <hr className="hr-custom my-5" />
       </div>
@@ -202,9 +202,10 @@ function Question(props) {
       </Button>
       </div>
       <Offcanvas   show={Canvasshow} onHide={handleCanvasClose} >
-        <Offcanvas.Header closeButton>
-          <Offcanvas.Title>Questions Navigation</Offcanvas.Title>
+      <Offcanvas.Header closeButton>
+      <h5>Test ID: {testID}</h5>
         </Offcanvas.Header>
+          <Offcanvas.Title style={{marginLeft:"3%"}}>Questions Navigation</Offcanvas.Title>
         <Offcanvas.Body>
           <Nav variant="pills" className="justify-content-center mb-3">
           {res.results.map((result, index) => (
