@@ -15,7 +15,7 @@ function Landing() {
 
       <hr className="hr-custom" />
 
-      <h1 style={{textAlign:"center",paddingBottom:"1vh"}}> Welcome To Examination Suite by NIIT Foundation</h1>
+      <h1 style={{textAlign:"center",paddingBottom:"1vh"}}> Welcome to Examination Suite by NIIT Foundation</h1>
 
       <div>
         <Carousel>

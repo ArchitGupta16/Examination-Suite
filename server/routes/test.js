@@ -41,7 +41,6 @@ router.route("/").post(async (req, res) => {
 });
 
 router.route("/submittest").post(async (req, res) => {
-  console.log(req.body);
   const score = parseInt(req.body.score);
   const testID = req.body.testID;
   const aadhaar = req.body.aadhaar;
@@ -181,12 +180,12 @@ router.route("/studentProfile").post(async (req, res) => {
   if (dob){
    dateOfBirth = new Date(dob);
   }
-  console.log(dateOfBirth,clas,typeof(dateOfBirth),"trying")
+  
   const testID = firstName.substring(0, 2) + lastName.substring(0, 2) + fatherName.substring(0, 2) + motherName.substring(0, 2) + gender.substring(0, 1) + clas;
   student.findOne({ testID: testID })
   .then(existingProfile => {
     if (existingProfile === null) 
-  {console.log(existingProfile);
+  {
     const profile = new student({ firstName, lastName, ration, aadhaar, fatherName, motherName, gender, projectName, state, city, testID, class:clas, dob:dateOfBirth});
     profile.save()
       .then(() => {
@@ -208,9 +207,7 @@ router.route("/studentProfile").post(async (req, res) => {
 router.route("/getStudentProfile").post(async (req, res) => {
   const testID = req.body.testID;
   try {
-    console.log(testID);
     const doc = await student.findOne({ testID:testID }).exec();
-    console.log(doc);
     res.send(doc);
   } catch (err) { 
     return res.status(400).send();

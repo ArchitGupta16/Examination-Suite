@@ -6,7 +6,7 @@ import { useState, useEffect } from "react";
 import "../componentsStyles/Results.css";
 import { useAlert } from "react-alert";
 import { ratio as fuzzballRatio } from 'fuzzball';
-import one from "../resources/t1.jpg";
+import one from "../resources/q4.jpg";
 import two from "../resources/t2.jpg";
 import three from "../resources/t3.jpg";
 import four from "../resources/t4.jpg";
@@ -25,6 +25,7 @@ function TestResults({ location }) {
   const [projectFilter, setProjectFilter] = useState("");
   const [attemptFilter, setAttemptFilter] = useState("");
   const expiryDate = new Date(testDetails.expiry).toISOString().substr(0, 10);
+  const [currentDate, setCurrentDate] = useState(new Date().toISOString().slice(0, 10));
   const [showModal, setShowModal] = useState(false);
   const [testID, setTestID] = useState("");
   const [aadhaar, setAadhaar] = useState("");
@@ -73,7 +74,18 @@ function TestResults({ location }) {
     )
     .then((res) => {
       console.log(res,"got the results guyss",);
-      setData(res.data);
+      const newData = res.data.map((result) => ({
+        ...result,
+        state: '',
+        city: '',
+        projectName: '',
+        gender: '',
+      }));
+      setData(newData);
+      newData.forEach((result) => {
+        getprofile(result.testID);
+      });
+      
     })
     .catch((err) => {
       console.log("error here buddy",err.response.body)
@@ -81,11 +93,10 @@ function TestResults({ location }) {
   }
 
   const getprofile = (testID) => {
-    console.log(testID);
     axios
       .post("http://localhost:4000/api/test/getStudentProfile", { testID })
       .then((res) => {
-        console.log(res.data);
+        // console.log(res.data);
         const { state, city, projectName, gender,attempts } = res.data;
         setData((prevData) => {
           const updatedData = prevData.map((result) => {
@@ -231,6 +242,7 @@ function TestResults({ location }) {
           testID: localStorage.getItem("testID"), 
           firstName,
           score,
+          testDate:currentDate,
         };
 
         console.log(submitData);
