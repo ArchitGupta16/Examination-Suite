@@ -6,15 +6,7 @@ import { useState, useEffect } from "react";
 import "../componentsStyles/Results.css";
 import { useAlert } from "react-alert";
 import { ratio as fuzzballRatio } from 'fuzzball';
-import one from "../resources/q4.jpg";
-import two from "../resources/t2.jpg";
-import three from "../resources/t3.jpg";
-import four from "../resources/t4.jpg";
-import six from "../resources/p2.jpg";
-import seven from "../resources/p3.jpeg";
-import eight from "../resources/p4.jpg";
 
-const images = [one, two, three, six,four,  seven, eight];
 
 function TestResults({ location }) {
   const [data, setData] = useState(location.state && location.state.data);
@@ -48,17 +40,10 @@ function TestResults({ location }) {
   
 
   useEffect(() => {
-
     getResults(testDetails?.pin);
-    
-    if (data) {
-      data.forEach((result) => {
-        getprofile(result.testID);
-      });
-    }
-
-
   }, []);
+
+
   const options = {
     headers: {
       "Content-Type": "application/json",
@@ -73,7 +58,7 @@ function TestResults({ location }) {
       options
     )
     .then((res) => {
-      console.log(res,"got the results guyss",);
+      
       const newData = res.data.map((result) => ({
         ...result,
         state: '',
@@ -88,7 +73,7 @@ function TestResults({ location }) {
       
     })
     .catch((err) => {
-      console.log("error here buddy",err.response.body)
+      console.log("error",err.response.body)
     })
   }
 
@@ -96,7 +81,6 @@ function TestResults({ location }) {
     axios
       .post("http://localhost:4000/api/test/getStudentProfile", { testID })
       .then((res) => {
-        // console.log(res.data);
         const { state, city, projectName, gender,attempts } = res.data;
         setData((prevData) => {
           const updatedData = prevData.map((result) => {
@@ -111,7 +95,6 @@ function TestResults({ location }) {
             }
             return result;
           });
-          // console.log(updatedData);
           return updatedData;
         });
       })
@@ -269,7 +252,7 @@ function TestResults({ location }) {
             <div className="bothcards">
             <Card className=" mycard2 shadow" >
               
-              <Card.Img variant="top" className="imggggs" src={images[0]} alt="Test Image" />
+            <Card.Img variant="top" style={{ width: "100%", height: "20vh" }} src={test.imageUrl} alt="Test Image" />
               <div className="d-flex justify-content-center">
               <hr className="my-3" style={{width:"85%"}}/>
               </div>
@@ -278,9 +261,11 @@ function TestResults({ location }) {
                 <Card.Text>
                   <strong>Pin:</strong> {testDetails.pin}
                   <br />
-                  <strong>Topic:</strong> {testDetails.topic}
+                  <strong>Category:</strong> {testDetails.topic}
                   <br />
                   <strong>Number of Questions:</strong> {testDetails.amount}
+                  <br />
+                  <strong>Time Duration:</strong> {testDetails.time} minutes
                   <br />
                   <strong>Expiry:</strong> {expiryDate}
                 </Card.Text>

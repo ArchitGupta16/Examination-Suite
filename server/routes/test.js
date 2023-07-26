@@ -105,6 +105,7 @@ router.route("/addtest").post(async (req, res) => {
   const time = req.body.time;
   const expiry = Date.parse(req.body.expiry);
   const created = Date.parse(req.body.created);
+  const imageUrl = req.body.imageUrl;
 
   const newtest = new test({
     testname,
@@ -115,6 +116,7 @@ router.route("/addtest").post(async (req, res) => {
     time,
     expiry,
     created,
+    imageUrl,
   });
   newtest
     .save()

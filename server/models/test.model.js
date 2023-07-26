@@ -35,6 +35,10 @@ const testSchema = new Schema({
     type: Date,
     required: true,
   },
+  imageUrl: {
+    type: String,
+    required: true,
+  },
 });
 
 const test = mongoose.model("test", testSchema);

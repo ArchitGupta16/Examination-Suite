@@ -20,9 +20,9 @@ function CustomNavbar(props) {
   
   const handleLogout = () => {
     localStorage.clear();
-    props.setloggedin(false);
     history.push("/");
   }
+  
 
   return (
     <Navbar className="na sticky-top " expand="lg"  >
@@ -78,7 +78,7 @@ function CustomNavbar(props) {
                 />
               </Navbar.Brand> 
               <Nav>
-              <Button variant="custom" className='custom-button' as={Link} to="/logout" style={{ width: '100px' }}>Logout</Button>
+              <Button variant="custom" className='custom-button' onClick={handleLogout} style={{ width: '100px' }}>Logout</Button>
               
               </Nav>
             </>

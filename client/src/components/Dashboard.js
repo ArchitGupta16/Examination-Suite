@@ -2,16 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useHistory,Link } from "react-router-dom";
 import axios from "axios";
 import { Alert, Button, Card, Form, Modal, Badge } from "react-bootstrap";
-import one from "../resources/t1.jpg";
-import two from "../resources/q2.png";
-import three from "../resources/q3.jpg";
-import four from "../resources/q5.jpg";
-import six from "../resources/q4.jpg";
-import seven from "../resources/p3.jpeg";
-import eight from "../resources/p4.jpg";
 import "../componentsStyles/Dashboard.css";
 
-const images = [two, three, six,four,  seven, eight];
 
 function Dashboard(props) {
   let history = useHistory();
@@ -26,8 +18,9 @@ function Dashboard(props) {
   const [time, settime] = useState("");
   const [expiry, setexpiry] = useState(new Date());
   const [alert, setAlert] = useState({ show: false, message: "", variant: "" });
+  const [imageUrl, setImageUrl] = useState("");
   
-
+  console.log(tests);
   const options = {
     headers: {
       "Content-Type": "application/json",
@@ -56,7 +49,7 @@ function Dashboard(props) {
     .then((res) => {
       console.log(res,"got the question guyss",);
       history.push("/Edittest", { data: res.data, testdetails : tests.find((test) => test.pin === pin) });
-    })
+    })  
     .catch((err) => {
       console.log("error here buddy",err)
       if (err.response.status === 405) {
@@ -84,12 +77,13 @@ function Dashboard(props) {
     axios
       .post(
         "http://localhost:4000/api/test/addtest",
-        { topic, amount, time, expiry, created: new Date() },
+        { topic, amount, time, expiry, created: new Date(), imageUrl: imageUrl },
         options
       )
       .then((res) => {
         console.log("added");
         setmodalIsOpen(false);
+        setTests([...tests, res.data]);
       })
       .catch((err) => {
         console.log(err);
@@ -116,12 +110,15 @@ function Dashboard(props) {
           <div className="col" key={test._id}>
             <Card className="marginforCard">
               {/* Add Card Image */}
-              <Card.Img variant="top" style={{ width: "100%",height:"20vh" }} src={images[index % images.length]} alt="Test Image" />
+              <Card.Img variant="top" style={{ width: "100%", height: "20vh" }} src={test.imageUrl} alt="Test Image" />
+              
 
               <Card.Body>
                 <Card.Title className="modallabels">{test.testname}</Card.Title>
                 <hr />
                 <Card.Text>
+                  <strong>Category:</strong> {test.topic}
+                  <br />
                   <strong>Pin:</strong> {test.pin}
                   <br />
                   <strong>Number of Questions:</strong> {test.amount}
@@ -151,7 +148,7 @@ function Dashboard(props) {
       </div>
 
       {/* Add Test Modal */}
-      <Modal show={modalIsOpen} onHide={() => setmodalIsOpen(false)}>
+      <Modal show={modalIsOpen} onHide={() => setmodalIsOpen(false)} >
         <Modal.Header closeButton>
           <Modal.Title className="modallabels">Add Test</Modal.Title>
         </Modal.Header>
@@ -168,6 +165,16 @@ function Dashboard(props) {
               />
               </Form.Group>
               <br />
+              <Form.Group controlId="formBasicImageURL">
+              <Form.Label className="modallabels">Image URL</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Enter image URL for the test"
+                value={imageUrl}
+                onChange={(event) => setImageUrl(event.target.value)}
+              />
+            </Form.Group>
+            <br />
             <Form.Group controlId="formBasicNumber">
               <Form.Label className="modallabels">Number of Questions</Form.Label>
               <Form.Control
