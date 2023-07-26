@@ -41,6 +41,7 @@ function TestResults({ location }) {
 
   useEffect(() => {
     getResults(testDetails?.pin);
+    
   }, []);
 
 
@@ -252,7 +253,7 @@ function TestResults({ location }) {
             <div className="bothcards">
             <Card className=" mycard2 shadow" >
               
-            <Card.Img variant="top" style={{ width: "100%", height: "20vh" }} src={test.imageUrl} alt="Test Image" />
+            <Card.Img variant="top" style={{ width: "100%", height: "20vh" }} src={testDetails.imageUrl} alt="Test Image" />
               <div className="d-flex justify-content-center">
               <hr className="my-3" style={{width:"85%"}}/>
               </div>

@@ -3,6 +3,7 @@ import { useHistory,Link } from "react-router-dom";
 import axios from "axios";
 import { Alert, Button, Card, Form, Modal, Badge } from "react-bootstrap";
 import "../componentsStyles/Dashboard.css";
+import { useAlert } from "react-alert";
 
 
 function Dashboard(props) {
@@ -17,7 +18,7 @@ function Dashboard(props) {
   const [amount, setamount] = useState("");
   const [time, settime] = useState("");
   const [expiry, setexpiry] = useState(new Date());
-  const [alert, setAlert] = useState({ show: false, message: "", variant: "" });
+  const alert = useAlert();
   const [imageUrl, setImageUrl] = useState("");
   
   console.log(tests);
@@ -38,7 +39,7 @@ function Dashboard(props) {
       history.push("/test-results", { data: res.data, testdetails : tests.find((test) => test.pin === pin) });
     })
     .catch((err) => {
-      console.log("error here buddy",err.response.body)
+      console.log("error here buddy",err)
     })
   }
   const getQuestions=(pin)=>{
@@ -53,7 +54,6 @@ function Dashboard(props) {
     .catch((err) => {
       console.log("error here buddy",err)
       if (err.response.status === 405) {
-        // setAlert({ show: true, message: "No questions found", variant: "danger" });
         history.push("/Edittest", { data: [], testdetails : tests.find((test) => test.pin === pin) });
       }
     })
@@ -67,7 +67,8 @@ function Dashboard(props) {
       })
       .catch((err) => {
         if (!localStorage.getItem("auth-token")) history.push("/");
-        else setAlert({ show: true, message: "Couldn't fetch tests. Please reload the page.", variant: "danger" });
+        else 
+        alert.show("Couldn't fetch tests. Please reload the page.");
       });
   }, [modalIsOpen]);
 
@@ -87,8 +88,7 @@ function Dashboard(props) {
       })
       .catch((err) => {
         console.log(err);
-        setAlert({ show: true, message: "Error: Test not added. Please try again.", variant: "danger" })
-      });
+        alert.show("Error: Test not added. Please try again.");      });
   };
 
 
@@ -96,9 +96,13 @@ function Dashboard(props) {
   return (
     <div>
      <hr className="hr-custom" />
+    
       <div className="containerrr mt-5">
-        <div className="text-center mb-4">
-        <Badge bg="custom" className="dashboard-badge">Welcome {localStorage.getItem("name")}</Badge>
+      <div className="d-flex justify-content-center mb-4">
+        {/* <Badge bg="custom" className="dashboard-badge">Welcome {localStorage.getItem("name")}</Badge> */}
+        <Alert variant="custom" className="dashboard-badge" style={{maxWidth:"20vw"}}>
+          Welcome {localStorage.getItem("name")}!
+        </Alert>
         </div>
         <div className="d-flex justify-content-end mb-4">
           <Button variant="custom" className="buttong" onClick={() => setmodalIsOpen(true)}>
@@ -153,7 +157,6 @@ function Dashboard(props) {
           <Modal.Title className="modallabels">Add Test</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          {alert.show && <Alert variant={alert.variant}>{alert.message}</Alert>}
           <Form onSubmit={onSubmit}>
           <Form.Group controlId="formBasicNumber">
               <Form.Label className="modallabels">Topic</Form.Label>

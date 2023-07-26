@@ -43,9 +43,7 @@ function CustomNavbar(props) {
                 />
               </Navbar.Brand>
               { props.isLoggedIn ? (
-                
                 <Nav >
-                 
                   <Nav.Link as={Link} to="/dashboard" >Dashboard</Nav.Link>
                   <Button variant="custom" className='custom-button' onClick={handleLogout} >Logout</Button>
                   
@@ -58,7 +56,6 @@ function CustomNavbar(props) {
                   <Col>
                   <Button variant="custom" className='custom-button' onClick={handleShow} style={{width:"100px", marginTop:"5px",marginLeft:"10px"}} >Login</Button>
                   </Col>
-                  
                   <Login show={showLogin} handleClose={handleClose} setloggedin={props.setloggedin}  />
                 </Nav>
               )}
@@ -79,7 +76,6 @@ function CustomNavbar(props) {
               </Navbar.Brand> 
               <Nav>
               <Button variant="custom" className='custom-button' onClick={handleLogout} style={{ width: '100px' }}>Logout</Button>
-              
               </Nav>
             </>
           )}
@@ -116,8 +112,14 @@ function CustomNavbar(props) {
                 />
               </Navbar.Brand> 
               <Nav>
-              <Button variant="custom" className='custom-button'  as={Link} to="/logout" style={{ width: '100px' }} >Logout</Button>
+              <Col>
+              <Button variant="custom" className='custom-button' as={Link} to="/dashboard" style={{ marginTop:"5px" ,marginLeft:"10px"}}>Dashboard</Button>
+              </Col>
+              <Col>
+              <Button variant="custom" className='custom-button'  as={Link} to="/logout" style={{ marginTop:"5px" ,marginLeft:"10px"}}>Logout</Button>
+              </Col>
               </Nav>
+              
             </>
           )}
           { location.pathname === "/Edittest" && (
