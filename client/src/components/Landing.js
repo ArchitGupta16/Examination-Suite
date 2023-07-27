@@ -3,8 +3,8 @@ import Carousel from 'react-bootstrap/Carousel';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 import "../componentsStyles/Landing.css";
-import img1 from "../resources/l1.jpg";
-import img2 from "../resources/l2.jpg";
+import img1 from "../resources/HiWEP 3.jpg";
+import img2 from "../resources/HiWEP 2.jpg";
 import img3 from "../resources/l3.jpg"
 
 function Landing() {

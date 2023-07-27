@@ -7,15 +7,15 @@
 
 .img-1 {
     object-fit: cover;
-    height: calc(100vh - 150px);
+    height: 100%
 }
 
 .img-2 {
     object-fit: cover;
-    height: calc(100vh - 150px);
+    height: 100%
 }
 
 .img-3 {
     object-fit: cover;
-    height: calc(100vh - 150px);
+    height:100%
 }
