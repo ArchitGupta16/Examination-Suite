@@ -5,6 +5,7 @@ import axios from "axios";
 import { useHistory } from "react-router-dom";
 import { useAlert } from "react-alert";
 import { Card, Button, Offcanvas,Accordion ,Form, ListGroup, ProgressBar, Modal, Nav } from 'react-bootstrap';
+import instance from "./AxiosInstance";
 
 function Question(props) {
   let history = useHistory();
@@ -83,9 +84,9 @@ function Question(props) {
         "Content-Type": "application/json",
       },
     };
-    axios
+    instance
       .post(
-        "http://localhost:4000/api/test/submittest",
+        "/api/test/submittest",
         {
           pin,
           aadhaar,

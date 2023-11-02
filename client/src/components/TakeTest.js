@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import  "../componentsStyles/TakeTest.css"
 import axios from "axios";
-
+import instance from "./AxiosInstance";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useHistory } from "react-router-dom";
 import { useAlert } from 'react-alert'
@@ -45,8 +45,8 @@ function Taketest() {
         "Content-Type": "application/json",
       },
     };
-    axios
-    .post("http://localhost:4000/api/test/studentProfile", {
+    instance
+    .post("/api/test/studentProfile", {
       aadhaar, 
       ration,
       firstName,
@@ -69,8 +69,8 @@ function Taketest() {
       alert.show(err.response.data.message, { type: "error" });
     });
 
-    axios
-      .post("http://localhost:4000/api/test/", { pin, [documentType]: documentType === "aadhaar" ? aadhaar : ration, firstName, lastName }, options)
+    instance
+      .post("/api/test/", { pin, [documentType]: documentType === "aadhaar" ? aadhaar : ration, firstName, lastName }, options)
       .then((res) => {
         localStorage.setItem("firstName", firstName);
         localStorage.setItem("lastName", lastName);

@@ -6,6 +6,7 @@ import { useState, useEffect } from "react";
 import "../componentsStyles/Results.css";
 import { useAlert } from "react-alert";
 import { ratio as fuzzballRatio } from 'fuzzball';
+import instance from "./AxiosInstance";
 
 
 function TestResults({ location }) {
@@ -53,8 +54,8 @@ function TestResults({ location }) {
   };
 
   const getResults = (pin) => {
-    axios.post(
-      "http://localhost:4000/api/test/getresults",
+    instance.post(
+      "/api/test/getresults",
       {pin},
       options
     )
@@ -79,8 +80,8 @@ function TestResults({ location }) {
   }
 
   const getprofile = (testID) => {
-    axios
-      .post("http://localhost:4000/api/test/getStudentProfile", { testID })
+    instance
+      .post("/api/test/getStudentProfile", { testID })
       .then((res) => {
         const { state, city, projectName, gender,attempts } = res.data;
         setData((prevData) => {
@@ -213,8 +214,8 @@ function TestResults({ location }) {
       attempts
     };
   
-    axios
-      .post("http://localhost:4000/api/test/studentProfile", requestData, options)
+    instance
+      .post("/api/test/studentProfile", requestData, options)
       .then((res) => {
         console.log("success", res.data);
         setTestID(res.data.ID);
@@ -231,7 +232,7 @@ function TestResults({ location }) {
 
         console.log(submitData);
   
-        return axios.post("http://localhost:4000/api/test/submittest", submitData, options);
+        return instance.post("/api/test/submittest", submitData, options);
         
       })
       .then((res) => {

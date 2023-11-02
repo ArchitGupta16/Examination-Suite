@@ -4,6 +4,8 @@ import axios from "axios";
 import { Alert, Button, Card, Form, Modal, ListGroup, Nav,Accordion } from "react-bootstrap";
 import { useAlert } from "react-alert";
 import "../componentsStyles/Grade.css"
+import instance from "./AxiosInstance";
+
 function Grade({ location }) {
   const answers = location.state && location.state.student.result;
   const testPin = location.state && location.state.student.pin;
@@ -27,8 +29,8 @@ function Grade({ location }) {
   };
 
   const getQuestions = (testPin) => {
-    axios
-      .post("http://localhost:4000/api/test/getquestions", { pin: testPin }, options)
+    instance
+      .post("/api/test/getquestions", { pin: testPin }, options)
       .then((res) => {
         setData(res.data);
       })
@@ -56,8 +58,8 @@ function Grade({ location }) {
     Object.entries(updatedScores).forEach(([index, score]) => {
       individual[index] = Number(score);
     });
-    axios
-      .put("http://localhost:4000/api/test/updateScore", {
+    instance
+      .put("/api/test/updateScore", {
         pin: testPin,
         aadhaar: aadhaar,
         score: updatedScore * 100,

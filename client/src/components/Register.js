@@ -6,6 +6,7 @@ import { useHistory } from "react-router-dom";
 import { useAlert } from 'react-alert'
 import { Form, Button, FloatingLabel } from "react-bootstrap";
 import Login from "./Login";
+import instance from "./AxiosInstance";
 
 function Register(props) {
   const [name, setname] = useState("");
@@ -36,10 +37,10 @@ function Register(props) {
       },
     };
 
-    axios
-      .post("http://localhost:4000/api/user/add", { name, email, password }, options)
+    instance
+      .post("/api/user/add", { name, email, password }, options)
       .then((res) => {
-        alert.show("account created", { type: "error" });
+        alert.show("account created", { type: "success" });
         history.push('/login');
       })
       .catch((err) => {

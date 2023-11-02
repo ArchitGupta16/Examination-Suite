@@ -6,6 +6,7 @@ import { useHistory } from "react-router-dom";
 import { useAlert } from 'react-alert'
 import { Modal, Form, Button, FloatingLabel } from "react-bootstrap";
 import Register from "./Register.js";
+import instance from "./AxiosInstance";
 
 function Login(props) {
   const [email, setEmail] = useState("");
@@ -37,8 +38,8 @@ function Login(props) {
       },
     };
 
-    axios
-      .post("http://localhost:4000/api/user/login", { email, password }, options)
+    instance
+      .post("/api/user/login", { email, password }, options)
       .then((res) => {
         console.log(res);
         localStorage.setItem("loggedin", true);

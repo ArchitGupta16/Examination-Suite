@@ -4,6 +4,7 @@ import { Button, Card, Form, Modal,Nav,ListGroup,hr , Container} from "react-boo
 import "../componentsStyles/EditTest.css";
 import axios from "axios";
 import { useAlert } from "react-alert";
+import instance from "./AxiosInstance";
 
 function EditTest() {
   let history = useHistory();
@@ -29,8 +30,9 @@ function EditTest() {
   const getQuestions = () => {
     const { testdetails } = location.state;
     const pin = testdetails.pin;
-    axios
-      .post("http://localhost:4000/api/test/getquestions", { pin })
+    console.log(pin);
+    instance
+      .post("/api/test/getquestions", { pin })
       .then((res) => {
         setQuestions(res.data.map((question) => ({ ...question, isModified: false })));
         console.log(questions);
@@ -112,8 +114,8 @@ function EditTest() {
   const handleDeleteQuestion = (questionId) => {
     console.log(questionId);
     const datatoDelete = { id: questionId };
-    axios
-      .delete("http://localhost:4000/api/adminQuestion/deleteQuestion", { data: datatoDelete })
+    instance
+      .delete("/api/adminQuestion/deleteQuestion", { data: datatoDelete })
       .then((res) => {
         alert.show("Question Deleted", { type: "success" });
         getQuestions();
@@ -126,8 +128,8 @@ function EditTest() {
   const handleUpdateQuestion = (questionId) => {
     console.log("update question", modifiedQuestion);
     if (modifiedQuestion!==null){
-    axios
-      .put("http://localhost:4000/api/adminQuestion/updateQuestion", { modifiedQuestion })
+    instance
+      .put("/api/adminQuestion/updateQuestion", { modifiedQuestion })
       .then((res) => {
         alert.show("Question Updated", { type: "success" });
         getQuestions();
@@ -150,8 +152,8 @@ function EditTest() {
       difficulty: "",
     });
     setShowAddModal(false);
-    axios
-      .post("http://localhost:4000/api/adminQuestion/addQuestion", { newQuestion })
+    instance
+      .post("/api/adminQuestion/addQuestion", { newQuestion })
       .then((res) => {
         alert.show("Question Added", { type: "success" });
         getQuestions();

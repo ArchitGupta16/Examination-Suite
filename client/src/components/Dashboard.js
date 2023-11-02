@@ -4,6 +4,7 @@ import axios from "axios";
 import { Alert, Button, Card, Form, Modal, Badge } from "react-bootstrap";
 import "../componentsStyles/Dashboard.css";
 import { useAlert } from "react-alert";
+import instance from "./AxiosInstance";
 
 
 function Dashboard(props) {
@@ -29,8 +30,8 @@ function Dashboard(props) {
     },
   };
   const getResults = (pin) => {
-    axios.post(
-      "http://localhost:4000/api/test/getresults",
+    instance.post(
+      "/api/test/getresults",
       {pin},
       options
     )
@@ -43,8 +44,8 @@ function Dashboard(props) {
     })
   }
   const getQuestions=(pin)=>{
-    axios.post(
-      "http://localhost:4000/api/test/getquestions",
+    instance.post(
+      "/api/test/getquestions",
       {pin}
     )
     .then((res) => {
@@ -60,8 +61,8 @@ function Dashboard(props) {
   }
 
   useEffect(() => {
-    axios
-      .post("http://localhost:4000/api/test/gettests", {}, options)
+    instance
+      .post("/api/test/gettests", {}, options)
       .then((res) => {
         setTests(res.data);
       })
@@ -75,9 +76,9 @@ function Dashboard(props) {
 
   const onSubmit = (event) => {
     event.preventDefault();
-    axios
+    instance
       .post(
-        "http://localhost:4000/api/test/addtest",
+        "/api/test/addtest",
         { topic, amount, time, expiry, created: new Date(), imageUrl: imageUrl },
         options
       )
